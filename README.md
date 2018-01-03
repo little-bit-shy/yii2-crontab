@@ -1,15 +1,7 @@
-<p>
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
-    </a>
-    <h3>Yii 2 Restful Api</h3>
-    <p>
-        居于yii2开发的restful风格api
-    </p>
-    <br>
-</p>
+[<img src="https://avatars0.githubusercontent.com/u/993323" height="100px">](https://github.com/yiisoft)
 
-<h3>安装</h3>
-<p>
-    php composer.phar install
-</p>
+#### Yii 2 Restful Api
+居于yii2开发的restful风格api
+
+#### 如何安装
+首先执行`php composer.phar install`命令对项目进行安装操作
