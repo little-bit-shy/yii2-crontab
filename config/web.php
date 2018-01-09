@@ -7,10 +7,6 @@ $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'aliases' => [
-        '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
-    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -24,7 +20,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'v1/site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -43,15 +39,13 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
+        //路由配置
+        'urlManager' => require(__DIR__ . '/urlManager.php'),
     ],
+    //模块相关配置
+    'modules' => require(__DIR__ . '/modules.php'),
+    //别名定义
+    'aliases' => require(__DIR__ . '/aliases.php'),
     'params' => $params,
 ];
 
