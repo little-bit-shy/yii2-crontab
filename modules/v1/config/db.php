@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'class' => 'yii\db\Connection',
+    'class' => \yii\db\Connection::className(),
     'dsn' => 'mysql:host=127.0.0.1;dbname=yii2restful',
     'username' => 'root',
     'password' => '',
