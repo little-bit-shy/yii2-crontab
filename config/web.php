@@ -6,6 +6,10 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    // 设置目标语言为中文
+    'language' => 'zh-CN',
+    // 设置源语言为英语
+    'sourceLanguage' => 'en-US',
     'bootstrap' => ['log'],
     'components' => [
         'request' => [

@@ -14,6 +14,10 @@ $config = [
         'request' => require(__DIR__ . '/request.php'),
         //响应相关配置
         'response' => require(__DIR__ . '/response.php'),
+        //缓存相关配置
+        'cache' => require(__DIR__ . '/cache.php'),
+        //国际化处理
+        'i18n' => require(__DIR__ . '/i18n.php'),
     ],
     'params' => require(__DIR__ . '/params.php'),
 ];

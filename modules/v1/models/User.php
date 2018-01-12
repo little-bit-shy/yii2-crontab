@@ -4,6 +4,7 @@ namespace v1\models;
 
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
+use yii\db\Connection;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
@@ -82,6 +83,7 @@ class User extends ActiveRecord implements Linkable
                 'defaultPageSize' => 10,
             ]
         ]);
+
         return $activeDataProvider;
     }
 
