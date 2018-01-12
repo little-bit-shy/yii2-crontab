@@ -19,10 +19,8 @@ namespace v1\controllers;
 use Yii;
 
 use yii\filters\Cors;
-use yii\web\Response;
 
 use v1\models\User;
-use yii\data\ActiveDataProvider;
 
 use yii\filters\RateLimiter;
 use yii\rest\Controller;

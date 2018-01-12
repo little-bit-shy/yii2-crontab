@@ -2,12 +2,15 @@
 
 namespace v1\models;
 
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
-use yii\db\Connection;
 use yii\helpers\Url;
+use yii\web\BadRequestHttpException;
 use yii\web\Link;
 use yii\web\Linkable;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * 以下为测试数据
@@ -80,7 +83,7 @@ class User extends ActiveRecord implements Linkable
         $activeDataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'defaultPageSize' => 10,
+                'defaultPageSize' => 1,
             ]
         ]);
 
@@ -89,8 +92,9 @@ class User extends ActiveRecord implements Linkable
 
     /**
      * 获取详细信息
-     * @param int $id 数据id
-     * @return \yii\db\ActiveQuery
+     * @param $id
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws NotFoundHttpException
      */
     public static function detail($id)
     {
@@ -98,6 +102,12 @@ class User extends ActiveRecord implements Linkable
         $query->with(['userCopy' => function (ActiveQuery $query) {
             $query->with('user.userCopy.userCopy');
         }]);
-        return $query->one();
+        $data = $query->one();
+        if (empty($data)) {
+            // 数据不存在
+            throw new NotFoundHttpException(Yii::t('app/error', 'not found'),123);
+        } else {
+            return $data;
+        }
     }
 }
