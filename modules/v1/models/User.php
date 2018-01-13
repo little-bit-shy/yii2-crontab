@@ -105,7 +105,7 @@ class User extends ActiveRecord implements Linkable
         $data = $query->one();
         if (empty($data)) {
             // 数据不存在
-            throw new NotFoundHttpException(Yii::t('app/error', 'not found'),123);
+            throw new NotFoundHttpException(Yii::t('app/error', 'not found'));
         } else {
             return $data;
         }

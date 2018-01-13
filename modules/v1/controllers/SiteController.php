@@ -4,7 +4,6 @@ namespace v1\controllers;
 
 use Yii;
 use yii\captcha\CaptchaAction;
-use yii\rest\Controller;
 
 class SiteController extends Controller
 {
