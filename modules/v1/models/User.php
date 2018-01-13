@@ -6,11 +6,10 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\helpers\Url;
-use yii\web\BadRequestHttpException;
+use yii\web\IdentityInterface;
 use yii\web\Link;
 use yii\web\Linkable;
 use yii\web\NotFoundHttpException;
-use yii\web\Response;
 
 /**
  * 以下为测试数据
@@ -41,7 +40,7 @@ use yii\web\Response;
  * Class User
  * @package v1\models
  */
-class User extends ActiveRecord implements Linkable
+class User extends ActiveRecord implements Linkable, IdentityInterface
 {
     public static function tableName()
     {
@@ -109,5 +108,29 @@ class User extends ActiveRecord implements Linkable
         } else {
             return $data;
         }
+    }
+
+    /***************************** 登陆相关 *********************************/
+
+    public static function findIdentity($id)
+    {
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return User::findOne(['access_token' => $token]);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthKey()
+    {
+    }
+
+    public function validateAuthKey($authKey)
+    {
     }
 }

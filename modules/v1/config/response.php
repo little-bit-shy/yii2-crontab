@@ -11,10 +11,15 @@ return [
     'on beforeSend' => function ($event) {
         /** @var \yii\web\Response $response */
         $response = $event->sender;
+        $data = $response->data;
+
+        if (is_string($data)) {
+            // 如果是字符串不则做处理
+            return;
+        }
 
         // 异常数据处理
         if ($response->getIsSuccessful() == false) {
-            $data = $response->data;
             list($message, $code) = explode('|', $data['message']);
 
             // 避免污染异常处理器的传参

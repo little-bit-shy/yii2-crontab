@@ -10,8 +10,13 @@
 namespace v1\controllers;
 
 use Yii;
+use yii\filters\auth\QueryParamAuth;
 use yii\filters\Cors;
 use yii\filters\RateLimiter;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
+use yii\web\Request;
+use yii\web\Response;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -25,8 +30,15 @@ use yii\filters\RateLimiter;
  */
 class Controller extends \yii\rest\Controller
 {
-    //(当Controller继承于ActiveController时可使用)
-    //public $modelClass = 'v1\models\User';
+    /**
+     * authenticator验证场景
+     * 需要开启authenticator验证的action
+     * @return array
+     */
+    public function authenticatorActions()
+    {
+        return [];
+    }
 
 
     /**
@@ -38,13 +50,20 @@ class Controller extends \yii\rest\Controller
         'collectionEnvelope' => 'items',
     ];
 
+    /**
+     * @return array
+     */
     public function behaviors()
     {
         $behaviors = parent::behaviors();
         //为使用HTTP Basic Auth，可配置authenticator 行为
-        //$behaviors['authenticator'] = [
-        //   'class' => HttpBasicAuth::className(),
-        //];
+        $authenticatorAuctions = $this->authenticatorActions();
+        $action = $this->action;
+        if (ArrayHelper::isIn($action->id, $authenticatorAuctions)) {
+            $behaviors['authenticator'] = [
+                'class' => QueryParamAuth::className(),
+            ];
+        }
         //如果你系那个支持以上3个认证方式，可以使用CompositeAuth
         //authMethods 中每个单元应为一个认证方法名或配置数组。
         //findIdentityByAccessToken()方法的实现是系统定义的，
@@ -53,14 +72,14 @@ class Controller extends \yii\rest\Controller
         //在上述认证启用后，对于每个API请求，请求控制器都会在它的beforeAction() 步骤中对用户进行认证。
         //如果认证成功，控制器再执行其他检查(如频率限制，操作权限)，然后再执行操作， 授权用户信息可使用Yii::$app->user->identity获取.
         //如果认证失败，会发送一个HTTP状态码为401的响应，并带有其他相关信息头 (如HTTP 基本认证会有WWW-Authenticate 头信息).
-        /*$behaviors['authenticator'] = [
-            'class' => CompositeAuth::className(),
-            'authMethods' => [
-                HttpBasicAuth::className(),
-                HttpBearerAuth::className(),
-                QueryParamAuth::className(),
-            ],
-        ];*/
+        //$behaviors['authenticator'] = [
+        //    'class' => CompositeAuth::className(),
+        //    'authMethods' => [
+        //        HttpBasicAuth::className(),
+        //        HttpBearerAuth::className(),
+        //        QueryParamAuth::className(),
+        //    ],
+        //];
 
         //前提是开启了用户验证
         //一旦 identity 实现所需的接口，

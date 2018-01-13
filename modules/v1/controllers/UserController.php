@@ -18,10 +18,19 @@ namespace v1\controllers;
  */
 use Yii;
 use v1\models\User;
-use yii\web\HttpException;
 
 class UserController extends Controller
 {
+    /**
+     * authenticator验证场景
+     * 需要开启authenticator验证的action
+     * @return array
+     */
+    public function authenticatorActions()
+    {
+        return ['index', 'view'];
+    }
+
     /**
      * 访问方法设置
      * @return array
@@ -33,29 +42,6 @@ class UserController extends Controller
             'view' => ['GET', 'POST', 'HEAD'],
         ];
     }
-
-    /**
-     * 授权(当Controller继承于ActiveController时可使用)
-     * 通过RESTful APIs显示数据时，
-     * 经常需要检查当前用户是否有权限访问和操作所请求的资源，
-     * 在yii\rest\ActiveController中，
-     * 可覆盖yii\rest\ActiveController::checkAccess() 方法来完成权限检查。
-     * @param string $action
-     * @param null $model
-     * @param array $params
-     * @throws HttpException
-     */
-    /*public function checkAccess($action, $model = null, $params = [])
-    {
-        switch ($action) {
-            case "index":
-                //throw new HttpException(403);
-                break;
-            case "view":
-                //throw new HttpException(403);
-                break;
-        }
-    }*/
 
     /**
      * 返回列表数据
