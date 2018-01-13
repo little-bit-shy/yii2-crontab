@@ -4,6 +4,8 @@ namespace v1\models;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
@@ -75,16 +77,23 @@ class User extends ActiveRecord implements Linkable, IdentityInterface
      */
     public static function lists()
     {
-        $query = User::find();
-        $query->with(['userCopy' => function (ActiveQuery $query) {
-            $query->with(['user.userCopy.userCopy']);
-        }]);
-        $activeDataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'defaultPageSize' => 1,
-            ]
-        ]);
+        $activeDataProvider = User::getDb()->cache(function ($db) {
+            $query = User::find();
+            $query->with(['userCopy' => function (ActiveQuery $query) {
+                $query->with(['user.userCopy.userCopy']);
+            }]);
+            $pagination = new Pagination([
+                'defaultPageSize' => 3,
+                'totalCount' => $query->count()
+            ]);
+            $data = $query->offset($pagination->getOffset())
+                ->limit($pagination->getLimit())
+                ->all();
+            return new ArrayDataProvider([
+                'models' => $data,
+                'Pagination' => $pagination,
+            ]);
+        });
 
         return $activeDataProvider;
     }
@@ -97,11 +106,13 @@ class User extends ActiveRecord implements Linkable, IdentityInterface
      */
     public static function detail($id)
     {
-        $query = User::find()->where(['id' => $id]);
-        $query->with(['userCopy' => function (ActiveQuery $query) {
-            $query->with('user.userCopy.userCopy');
-        }]);
-        $data = $query->one();
+        $data = User::getDb()->cache(function ($db) use($id) {
+            $query = User::find()->where(['id' => $id]);
+            $query->with(['userCopy' => function (ActiveQuery $query) {
+                $query->with('user.userCopy.userCopy');
+            }]);
+            return $query->one();
+        });
         if (empty($data)) {
             // 数据不存在
             throw new NotFoundHttpException(Yii::t('app/error', 'not found'));
