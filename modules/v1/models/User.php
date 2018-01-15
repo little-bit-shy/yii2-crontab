@@ -2,11 +2,13 @@
 
 namespace v1\models;
 
+use v1\models\redis\RateLimit;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\db\ActiveQuery;
+use yii\filters\RateLimitInterface;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
 use yii\web\Link;
@@ -42,7 +44,7 @@ use yii\web\NotFoundHttpException;
  * Class User
  * @package v1\models
  */
-class User extends ActiveRecord implements Linkable, IdentityInterface
+class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimitInterface
 {
     public static function tableName()
     {
@@ -143,5 +145,68 @@ class User extends ActiveRecord implements Linkable, IdentityInterface
 
     public function validateAuthKey($authKey)
     {
+    }
+
+    /**
+     * 密码验证
+     * @param $password
+     * @return bool
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
+    }
+
+    /***************************** 请求频率 *********************************/
+
+    /**
+     * getRateLimit(): 返回允许的请求的最大数目及时间，例如，[100, 600] 表示在600秒内最多100次的API调用。
+     * @param \yii\web\Request $request
+     * @param \yii\base\Action $action
+     * @return array
+     */
+    public function getRateLimit($request, $action)
+    {
+        return [RateLimit::$rateLimit, RateLimit::$second];// $rateLimit requests per second
+    }
+
+    /**
+     * loadAllowance(): 返回剩余的允许的请求和相应的UNIX时间戳数 当最后一次速率限制检查时。
+     * @param \yii\web\Request $request
+     * @param \yii\base\Action $action
+     * @return array
+     */
+    public function loadAllowance($request, $action)
+    {
+        $id = \Yii::$app->getUser()->getId();//获取当前登录用户id
+        $uniqueId = $action->getUniqueId();
+        $rateLimit = RateLimit::find()->where([
+            'id' => $id,
+            'unique_id' => $uniqueId,
+        ])->one();//获取当前登录用户Api请求频率相关数据
+        return [
+            !empty($rateLimit->allowance) ? $rateLimit->allowance : 0,
+            !empty($rateLimit->allowance_updated_at) ? $rateLimit->allowance_updated_at : 0
+        ];
+    }
+
+    /**
+     * saveAllowance(): 保存允许剩余的请求数和当前的UNIX时间戳。
+     * @param \yii\web\Request $request
+     * @param \yii\base\Action $action
+     * @param int $allowance
+     * @param int $timestamp
+     */
+    public function saveAllowance($request, $action, $allowance, $timestamp)
+    {
+        //更新当前登录用户Api请求频率相关数据
+        $rateLimit = new RateLimit();
+        $id = Yii::$app->getUser()->getId();
+        $uniqueId = $action->getUniqueId();
+        $rateLimit->id = $id;
+        $rateLimit->unique_id = $uniqueId;
+        $rateLimit->allowance = $allowance;
+        $rateLimit->allowance_updated_at = $timestamp;
+        $rateLimit->save();
     }
 }

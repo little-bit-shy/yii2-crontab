@@ -16,19 +16,24 @@ namespace v1\controllers;
  * 可考虑将控制器类继承yii\rest\ActiveController，
  * 它会让你用最少的代码完成强大的RESTful APIs.
  */
+use v1\common\rewrite\yii2\filters\auth\QueryParamAuth;
 use Yii;
 use v1\models\User;
 
 class UserController extends Controller
 {
     /**
-     * authenticator验证场景
-     * 需要开启authenticator验证的action
+     * 定义相关行为
      * @return array
      */
-    public function authenticatorActions()
+    public function behaviors()
     {
-        return ['index', 'view'];
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::className(),
+            'authenticatorActions' => ['index', 'view']
+        ];
+        return $behaviors;
     }
 
     /**

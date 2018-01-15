@@ -4,19 +4,16 @@
  * User: xuguozhi
  * Date: 2017/1/17
  * Time: 14:29
- * Message: Restfuk风格Api测试控制器
+ * Message: Restfuk风格Api控制器
  */
 
 namespace v1\controllers;
 
+use v1\common\rewrite\yii2\filters\auth\QueryParamAuth;
 use Yii;
-use yii\filters\auth\QueryParamAuth;
 use yii\filters\Cors;
 use yii\filters\RateLimiter;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
-use yii\web\Request;
-use yii\web\Response;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -30,17 +27,6 @@ use yii\web\Response;
  */
 class Controller extends \yii\rest\Controller
 {
-    /**
-     * authenticator验证场景
-     * 需要开启authenticator验证的action
-     * @return array
-     */
-    public function authenticatorActions()
-    {
-        return [];
-    }
-
-
     /**
      * 有时你可能想通过直接在响应主体内包含分页信息来简化客户端的开发工作。
      * @var array
@@ -57,13 +43,11 @@ class Controller extends \yii\rest\Controller
     {
         $behaviors = parent::behaviors();
         //为使用HTTP Basic Auth，可配置authenticator 行为
-        $authenticatorAuctions = $this->authenticatorActions();
-        $action = $this->action;
-        if (ArrayHelper::isIn($action->id, $authenticatorAuctions)) {
-            $behaviors['authenticator'] = [
-                'class' => QueryParamAuth::className(),
-            ];
-        }
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::className(),
+            'authenticatorActions' => []
+        ];
+
         //如果你系那个支持以上3个认证方式，可以使用CompositeAuth
         //authMethods 中每个单元应为一个认证方法名或配置数组。
         //findIdentityByAccessToken()方法的实现是系统定义的，
