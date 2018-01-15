@@ -184,10 +184,13 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             'id' => $id,
             'unique_id' => $uniqueId,
         ])->one();//获取当前登录用户Api请求频率相关数据
-        return [
-            !empty($rateLimit->allowance) ? $rateLimit->allowance : 0,
-            !empty($rateLimit->allowance_updated_at) ? $rateLimit->allowance_updated_at : 0
-        ];
+
+        if($rateLimit == null){
+            // 当redis不存在数据时
+            return  [RateLimit::$rateLimit, time()];
+        }else{
+            return [$rateLimit->allowance, $rateLimit->allowance_updated_at];
+        }
     }
 
     /**
