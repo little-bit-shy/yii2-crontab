@@ -18,13 +18,8 @@ use yii\redis\ActiveRecord;
  */
 class RateLimit extends ActiveRecord
 {
-    public $id;
-    public $unique_id;
-    public $allowance;
-    public $allowance_updated_at;
-
     //Api在 $second 秒内能请求 $rateLimit 次
-    public static $rateLimit = 2;
+    public static $rateLimit = 1;
     public static $second = 1;
 
     public static function primaryKey()
