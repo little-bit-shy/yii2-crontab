@@ -108,7 +108,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      */
     public static function detail($id)
     {
-        $data = User::getDb()->cache(function ($db) use($id) {
+        $data = User::getDb()->cache(function ($db) use ($id) {
             $query = User::find()->where(['id' => $id]);
             $query->with(['userCopy' => function (ActiveQuery $query) {
                 $query->with('user.userCopy.userCopy');
@@ -185,10 +185,10 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             'unique_id' => $uniqueId,
         ])->one();//获取当前登录用户Api请求频率相关数据
 
-        if($rateLimit == null){
+        if ($rateLimit == null) {
             // 当redis不存在数据时
-            return  [RateLimit::$rateLimit, time()];
-        }else{
+            return [RateLimit::$rateLimit, time()];
+        } else {
             return [$rateLimit->allowance, $rateLimit->allowance_updated_at];
         }
     }
@@ -202,10 +202,11 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      */
     public function saveAllowance($request, $action, $allowance, $timestamp)
     {
-        //更新当前登录用户Api请求频率相关数据
-        $rateLimit = new RateLimit();
         $id = Yii::$app->getUser()->getId();
         $uniqueId = $action->getUniqueId();
+
+        //更新当前登录用户Api请求频率相关数据
+        $rateLimit = new RateLimit();
         $rateLimit->id = $id;
         $rateLimit->unique_id = $uniqueId;
         $rateLimit->allowance = $allowance;
