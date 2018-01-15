@@ -207,10 +207,13 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
         //更新当前登录用户Api请求频率相关数据
         $rateLimit = new RateLimit();
-        $rateLimit->id = $id;
-        $rateLimit->unique_id = $uniqueId;
-        $rateLimit->allowance = $allowance;
-        $rateLimit->allowance_updated_at = $timestamp;
+        $rateLimit->setScenario('save');
+        $rateLimit->setAttributes([
+            'id' => $id,
+            'unique_id' => $uniqueId,
+            'allowance' => $allowance,
+            'allowance_updated_at' => $timestamp
+        ]);
         $rateLimit->save();
     }
 }

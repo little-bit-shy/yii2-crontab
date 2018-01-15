@@ -35,4 +35,24 @@ class RateLimit extends ActiveRecord
     {
         return ['id', 'unique_id', 'allowance', 'allowance_updated_at'];
     }
+
+    /**
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function scenarios()
+    {
+        return [
+            'save' => ['id', 'unique_id', 'allowance', 'allowance_updated_at'],
+        ];
+    }
 }
