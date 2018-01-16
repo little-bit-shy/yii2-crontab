@@ -17,6 +17,7 @@ namespace v1\controllers;
  * 它会让你用最少的代码完成强大的RESTful APIs.
  */
 use v1\common\rewrite\yii2\filters\auth\QueryParamAuth;
+use v1\models\UserCopy;
 use Yii;
 use v1\models\User;
 
@@ -31,7 +32,7 @@ class UserController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'authenticatorActions' => ['index', 'view']
+            'authenticatorActions' => ['index', 'view', 'create']
         ];
         return $behaviors;
     }
@@ -67,5 +68,16 @@ class UserController extends Controller
     public function actionView($id)
     {
         return User::detail($id);
+    }
+
+    /**
+     * 添加数据
+     * @return bool
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionCreate()
+    {
+        return UserCopy::create(Yii::$app->request->getBodyParams());
     }
 }

@@ -37,22 +37,26 @@ class RateLimit extends ActiveRecord
     }
 
     /**
+     * 验证器
      * @return array
      */
     public function rules()
     {
         return [
-            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe'],
+            // saveAllowance
+            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe', 'on' => 'saveAllowance'],
+            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'required', 'on' => 'saveAllowance'],
         ];
     }
 
     /**
+     * 验证场景
      * @return array
      */
     public function scenarios()
     {
         return [
-            'save' => ['id', 'unique_id', 'allowance', 'allowance_updated_at'],
+            'saveAllowance' => ['id', 'unique_id', 'allowance', 'allowance_updated_at'],
         ];
     }
 }

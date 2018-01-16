@@ -2,7 +2,9 @@
 
 namespace v1\models;
 
+use v1\models\form\UserCopyForm;
 use yii\helpers\Url;
+use yii\web\HttpException;
 use yii\web\Link;
 use yii\web\Linkable;
 
@@ -11,6 +13,29 @@ class UserCopy extends ActiveRecord implements Linkable
     public static function tableName()
     {
         return '{{%user_copy}}';
+    }
+
+    /**
+     * 验证器
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            // create
+            [['username'], 'safe', 'on' => 'create'],
+        ];
+    }
+
+    /**
+     * 验证场景
+     * @return array
+     */
+    public function scenarios()
+    {
+        return [
+            'create' => ['username'],
+        ];
     }
 
     /**
@@ -59,4 +84,24 @@ class UserCopy extends ActiveRecord implements Linkable
     }
 
     /***************************** 增删改查 *********************************/
+
+    /**
+     * 添加数据
+     * @param $param
+     * @return bool
+     * @throws HttpException
+     */
+    public static function create($param)
+    {
+        $form = new UserCopyForm();
+        $form->setScenario('create');
+        if ($form->load([$form->formName() => $param]) && $form->validate()) {
+            $model = new UserCopy();
+            $model->setScenario('create');
+            $model->load([$model->formName() => $form->getAttributes()]);
+            return $model->save();
+        } else {
+            throw new HttpException(422, $form->getFirstError());
+        }
+    }
 }

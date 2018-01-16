@@ -2,6 +2,7 @@
 
 namespace v1\models;
 
+use v1\models\form\UserForm;
 use v1\models\redis\RateLimit;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -207,13 +208,13 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
         //更新当前登录用户Api请求频率相关数据
         $rateLimit = new RateLimit();
-        $rateLimit->setScenario('save');
-        $rateLimit->setAttributes([
+        $rateLimit->setScenario('saveAllowance');
+        $rateLimit->load([$rateLimit->formName() => [
             'id' => $id,
             'unique_id' => $uniqueId,
             'allowance' => $allowance,
-            'allowance_updated_at' => $timestamp
-        ]);
+            'allowance_updated_at' => $timestamp,
+        ]]);
         $rateLimit->save();
     }
 }
