@@ -19,9 +19,8 @@ namespace v1\controllers;
 use v1\common\rewrite\yii2\filters\auth\QueryParamAuth;
 use v1\models\UserCopy;
 use Yii;
-use v1\models\User;
 
-class UserController extends Controller
+class UserCopyController extends Controller
 {
     /**
      * 定义相关行为
@@ -55,7 +54,7 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
-        return User::lists();
+        return UserCopy::lists();
     }
 
 
@@ -67,7 +66,7 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
-        return User::detail($id);
+        return UserCopy::detail($id);
     }
 
     /**

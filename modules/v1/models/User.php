@@ -2,19 +2,13 @@
 
 namespace v1\models;
 
-use v1\models\form\UserForm;
 use v1\models\redis\RateLimit;
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\data\ArrayDataProvider;
-use yii\data\Pagination;
-use yii\db\ActiveQuery;
 use yii\filters\RateLimitInterface;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
 use yii\web\Link;
 use yii\web\Linkable;
-use yii\web\NotFoundHttpException;
 
 /**
  * 以下为测试数据
@@ -73,56 +67,6 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     }
 
     /***************************** 增删改查 *********************************/
-
-    /**
-     * 获取列表数据
-     * @return ActiveDataProvider
-     */
-    public static function lists()
-    {
-        $activeDataProvider = User::getDb()->cache(function ($db) {
-            $query = User::find();
-            $query->with(['userCopy' => function (ActiveQuery $query) {
-                $query->with(['user.userCopy.userCopy']);
-            }]);
-            $pagination = new Pagination([
-                'defaultPageSize' => 3,
-                'totalCount' => $query->count()
-            ]);
-            $data = $query->offset($pagination->getOffset())
-                ->limit($pagination->getLimit())
-                ->all();
-            return new ArrayDataProvider([
-                'models' => $data,
-                'Pagination' => $pagination,
-            ]);
-        });
-
-        return $activeDataProvider;
-    }
-
-    /**
-     * 获取详细信息
-     * @param $id
-     * @return array|null|\yii\db\ActiveRecord
-     * @throws NotFoundHttpException
-     */
-    public static function detail($id)
-    {
-        $data = User::getDb()->cache(function ($db) use ($id) {
-            $query = User::find()->where(['id' => $id]);
-            $query->with(['userCopy' => function (ActiveQuery $query) {
-                $query->with('user.userCopy.userCopy');
-            }]);
-            return $query->one();
-        });
-        if (empty($data)) {
-            // 数据不存在
-            throw new NotFoundHttpException(Yii::t('app/error', 'not found'));
-        } else {
-            return $data;
-        }
-    }
 
     /***************************** 登陆相关 *********************************/
 

@@ -4,9 +4,10 @@
  * 例如，请求POST /users意味着访问user/create动作。
  * 这可以很容易地通过配置urlManager应用程序组件来完成 如下所示：
  */
+
 return [
     'enablePrettyUrl' => true,
-    'enableStrictParsing' => true,
+    'enableStrictParsing' => false,
     'showScriptName' => false,
 //    'rules' => [
 //        [

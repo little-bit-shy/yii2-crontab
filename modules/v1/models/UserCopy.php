@@ -3,10 +3,15 @@
 namespace v1\models;
 
 use v1\models\form\UserCopyForm;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\data\Pagination;
+use yii\db\ActiveQuery;
 use yii\helpers\Url;
 use yii\web\HttpException;
 use yii\web\Link;
 use yii\web\Linkable;
+use yii\web\NotFoundHttpException;
 
 class UserCopy extends ActiveRecord implements Linkable
 {
@@ -84,6 +89,56 @@ class UserCopy extends ActiveRecord implements Linkable
     }
 
     /***************************** 增删改查 *********************************/
+
+    /**
+     * 获取详细信息
+     * @param $id
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws NotFoundHttpException
+     */
+    public static function detail($id)
+    {
+        $data = UserCopy::getDb()->cache(function ($db) use ($id) {
+            $query = UserCopy::find()->where(['id' => $id]);
+            $query->with(['userCopy' => function (ActiveQuery $query) {
+                $query->with('userCopy.userCopy.userCopy');
+            }]);
+            return $query->one();
+        });
+        if (empty($data)) {
+            // 数据不存在
+            throw new NotFoundHttpException();
+        } else {
+            return $data;
+        }
+    }
+
+    /**
+     * 获取列表数据
+     * @return ActiveDataProvider
+     */
+    public static function lists()
+    {
+        $activeDataProvider = UserCopy::getDb()->cache(function ($db) {
+            $query = UserCopy::find();
+            $query->with(['userCopy' => function (ActiveQuery $query) {
+                $query->with(['userCopy.userCopy.userCopy']);
+            }]);
+            $pagination = new Pagination([
+                'defaultPageSize' => 3,
+                'totalCount' => $query->count()
+            ]);
+            $data = $query->offset($pagination->getOffset())
+                ->limit($pagination->getLimit())
+                ->all();
+            return new ArrayDataProvider([
+                'models' => $data,
+                'Pagination' => $pagination,
+            ]);
+        });
+
+        return $activeDataProvider;
+    }
 
     /**
      * 添加数据
