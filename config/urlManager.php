@@ -7,7 +7,7 @@
 
 return [
     'enablePrettyUrl' => true,
-    'enableStrictParsing' => false,
+    'enableStrictParsing' => true,
     'showScriptName' => false,
 //    'rules' => [
 //        [
@@ -19,9 +19,9 @@ return [
 //    ],
     'rules' => [
         //通用rules
-        '<module:\w+>/<controller:\w+>/index/<page:\d+>' => '<module>/<controller>/index',
-        '<module:\w+>/<controller:\w+>/<id:\d+>' => '<module>/<controller>/view',
-        '<module:\w+>/<controller:\w+>/<action:\w+>' => '<module>/<controller>/<action>',
+        '<module:[\w-]+>/<controller:[\w-]+>/index/<page:\d+>' => '<module>/<controller>/index',
+        '<module:[\w-]+>/<controller:[\w-]+>/<id:\d+>' => '<module>/<controller>/view',
+        '<module:[\w-]+>/<controller:[\w-]+>/<action:[\w-]+>' => '<module>/<controller>/<action>',
     ]
 ];
 /**
