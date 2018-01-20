@@ -20,11 +20,11 @@ return [
 
         // 异常数据处理
         if ($response->getIsSuccessful() == false) {
-            list($message, $code) = explode('|', $data['message']);
-
             // 避免污染异常处理器的传参
-            if ($data['code'] != 0) {
-                $code = $data['code'];
+            $code = $data['code'];
+            $message = $data['message'];
+            if (strpos($message, '|')) {
+                list($message, $code) = explode('|', $message);
             }
 
             $response->data = array_merge($response->data, [
