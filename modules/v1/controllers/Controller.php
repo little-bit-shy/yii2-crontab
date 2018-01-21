@@ -9,11 +9,10 @@
 
 namespace v1\controllers;
 
-use v1\common\rewrite\yii2\filters\auth\QueryParamAuth;
 use Yii;
+use yii\filters\auth\QueryParamAuth;
 use yii\filters\Cors;
 use yii\filters\RateLimiter;
-use yii\helpers\ArrayHelper;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -45,7 +44,7 @@ class Controller extends \yii\rest\Controller
         //为使用HTTP Basic Auth，可配置authenticator 行为
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'authenticatorActions' => []
+            'optional' => []
         ];
 
         //如果你系那个支持以上3个认证方式，可以使用CompositeAuth

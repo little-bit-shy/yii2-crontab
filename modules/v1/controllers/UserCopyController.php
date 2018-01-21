@@ -16,9 +16,9 @@ namespace v1\controllers;
  * 可考虑将控制器类继承yii\rest\ActiveController，
  * 它会让你用最少的代码完成强大的RESTful APIs.
  */
-use v1\common\rewrite\yii2\filters\auth\QueryParamAuth;
 use v1\models\UserCopy;
 use Yii;
+use yii\filters\auth\QueryParamAuth;
 
 class UserCopyController extends Controller
 {
@@ -31,7 +31,7 @@ class UserCopyController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'authenticatorActions' => ['index', 'view', 'create']
+            'optional' => ['index']
         ];
         return $behaviors;
     }
