@@ -5,16 +5,21 @@
  * Date: 2018/1/21 0021
  * Time: 下午 14:02
  */
-namespace v1\commands;
+namespace app\commands;
 
 use Yii;
 use yii\console\Controller;
 
+/**
+ * Class RbacController
+ * rbac 权限管理初始化
+ * @package app\commands
+ */
 class RbacController extends Controller
 {
     public function actionInit()
     {
-        $auth = Yii::$app->authManager;
+        $auth = Yii::$app->getAuthManager();
 
         // 添加 "createPost" 权限
         $createPost = $auth->createPermission('createPost');

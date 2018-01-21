@@ -20,7 +20,18 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        'db' => [
+            'class' => \yii\db\Connection::className(),
+            'dsn' => 'mysql:host=127.0.0.1;dbname=yii2restful',
+            'username' => 'root',
+            'password' => '',
+            'charset' => 'utf8',
+            'tablePrefix' => 'yii2_'
+        ],
+        //rbac权限管理
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::className(),
+        ],
     ],
     'params' => $params,
     /*
