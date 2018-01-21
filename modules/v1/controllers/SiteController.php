@@ -24,6 +24,17 @@ class SiteController extends Controller
     }
 
     /**
+     * 访问方法设置
+     * @return array
+     */
+    protected function verbs()
+    {
+        return [
+            'captcha' => ['GET', 'POST'],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     public function actions()
