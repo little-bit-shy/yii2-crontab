@@ -1,0 +1,218 @@
+-- MySQL dump 10.13  Distrib 5.6.16, for Linux (i686)
+--
+-- Host: localhost    Database: yii2restful
+-- ------------------------------------------------------
+-- Server version	5.6.16
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `yii2_auth_assignment`
+--
+
+DROP TABLE IF EXISTS `yii2_auth_assignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yii2_auth_assignment` (
+  `item_name` varchar(64) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`item_name`,`user_id`),
+  KEY `auth_assignment_user_id_idx` (`user_id`),
+  CONSTRAINT `yii2_auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yii2_auth_assignment`
+--
+
+LOCK TABLES `yii2_auth_assignment` WRITE;
+/*!40000 ALTER TABLE `yii2_auth_assignment` DISABLE KEYS */;
+INSERT INTO `yii2_auth_assignment` VALUES ('admin','1',1516534428),('author','2',1516534428);
+/*!40000 ALTER TABLE `yii2_auth_assignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `yii2_auth_item`
+--
+
+DROP TABLE IF EXISTS `yii2_auth_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yii2_auth_item` (
+  `name` varchar(64) NOT NULL,
+  `type` smallint(6) NOT NULL,
+  `description` text,
+  `rule_name` varchar(64) DEFAULT NULL,
+  `data` blob,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`),
+  KEY `rule_name` (`rule_name`),
+  KEY `type` (`type`),
+  CONSTRAINT `yii2_auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `yii2_auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yii2_auth_item`
+--
+
+LOCK TABLES `yii2_auth_item` WRITE;
+/*!40000 ALTER TABLE `yii2_auth_item` DISABLE KEYS */;
+INSERT INTO `yii2_auth_item` VALUES ('admin',1,NULL,NULL,NULL,1516534428,1516534428),('author',1,NULL,NULL,NULL,1516534428,1516534428),('createPost',2,'Create a post',NULL,NULL,1516534428,1516534428),('updatePost',2,'Update post',NULL,NULL,1516534428,1516534428);
+/*!40000 ALTER TABLE `yii2_auth_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `yii2_auth_item_child`
+--
+
+DROP TABLE IF EXISTS `yii2_auth_item_child`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yii2_auth_item_child` (
+  `parent` varchar(64) NOT NULL,
+  `child` varchar(64) NOT NULL,
+  PRIMARY KEY (`parent`,`child`),
+  KEY `child` (`child`),
+  CONSTRAINT `yii2_auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `yii2_auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yii2_auth_item_child`
+--
+
+LOCK TABLES `yii2_auth_item_child` WRITE;
+/*!40000 ALTER TABLE `yii2_auth_item_child` DISABLE KEYS */;
+INSERT INTO `yii2_auth_item_child` VALUES ('admin','author'),('author','createPost'),('admin','updatePost');
+/*!40000 ALTER TABLE `yii2_auth_item_child` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `yii2_auth_rule`
+--
+
+DROP TABLE IF EXISTS `yii2_auth_rule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yii2_auth_rule` (
+  `name` varchar(64) NOT NULL,
+  `data` blob,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yii2_auth_rule`
+--
+
+LOCK TABLES `yii2_auth_rule` WRITE;
+/*!40000 ALTER TABLE `yii2_auth_rule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `yii2_auth_rule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `yii2_user`
+--
+
+DROP TABLE IF EXISTS `yii2_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yii2_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `phone` char(12) DEFAULT NULL COMMENT '手机',
+  `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `head` varchar(255) DEFAULT NULL COMMENT '头像',
+  `access_token` varchar(255) DEFAULT NULL COMMENT 'access-token',
+  `auth_key` varchar(32) DEFAULT NULL COMMENT '自动登录key',
+  `password_hash` varchar(255) DEFAULT NULL COMMENT '加密密码',
+  `password_reset_token` varchar(255) DEFAULT NULL COMMENT '重置密码token',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int(11) DEFAULT NULL COMMENT '更新时间',
+  `last_login_ip` char(20) DEFAULT NULL COMMENT '最近登录ip',
+  `last_login_at` int(11) DEFAULT NULL COMMENT '最近登陆时间',
+  `oauth2` varchar(255) DEFAULT 'self' COMMENT 'oauth2',
+  `oauth2_id` int(11) DEFAULT NULL COMMENT 'oauth2_id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `yii2restful_yii2_user_oauth2_oauth2_id` (`oauth2`,`oauth2_id`) USING BTREE COMMENT 'oauth2唯一索引',
+  UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
+  UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yii2_user`
+--
+
+LOCK TABLES `yii2_user` WRITE;
+/*!40000 ALTER TABLE `yii2_user` DISABLE KEYS */;
+INSERT INTO `yii2_user` VALUES (1,'1','root','','1','6lgGBSosfvH0c9_nZZP8DY6YiI4ycwDx','$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe',NULL,'1533356676@qq.com',1479371680,1479371680,NULL,NULL,'self',NULL),(2,'2','admin',NULL,'2','pA7DChvN6X22MWjc6W_9TYALKiduyftD','$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau',NULL,'3095764452@qq.com',1479371663,1479371680,NULL,NULL,'self',NULL),(9,'','little-bit-shy','https://avatars.githubusercontent.com/u/12792446?v=3','9',NULL,NULL,NULL,NULL,1484897023,1479371680,NULL,NULL,'github',12792446),(10,'15918793994',NULL,NULL,'y0gZlbBXGxOo4K--4_4jDNa_Byw2I-8V',NULL,'$2y$13$MpWF3HZWwe1CrcvpbwDLR.k2bRnr9VyvKCPYGaNjv8..S8Z.rkliS',NULL,NULL,1485158903,1485158903,'127.0.0.1',1485160819,'self',NULL),(12,'15918793991','fUrXC2rT',NULL,'6l4nL9fP7X7EXTw5ecedHjUhH9Kv12iv',NULL,'$2y$13$nLc17UBNeDhaRu5bFnJr8uAh2vyOt1/xYMmIVAuUNeLVmose7MkKm',NULL,NULL,1485160893,1485160893,NULL,NULL,'self',NULL),(13,'15918793992','mK0wLev6',NULL,'inORraxmoIqYOaaDL9qe6MqBZaf-C9Pl',NULL,'$2y$13$HghCFt1JWLsduv5bLQ13w.z/6W3Fzgz70qmgypNEFKlJH9P8b3xOy',NULL,NULL,1485161033,1485161033,NULL,NULL,'self',NULL),(14,'15918793993','BWko4Fiu',NULL,'0SqyoC7enijE3sDlTAVy1jmP8D9Krb2P',NULL,'$2y$13$fAbDXAo6MJ/uGCPeUcdExeQDQvZBYlCsfa23UUkS8lzv3/NufI2Lm',NULL,NULL,1485161050,1485161050,NULL,NULL,'self',NULL);
+/*!40000 ALTER TABLE `yii2_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `yii2_user_copy`
+--
+
+DROP TABLE IF EXISTS `yii2_user_copy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `yii2_user_copy` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `phone` char(12) DEFAULT NULL COMMENT '手机',
+  `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `head` varchar(255) DEFAULT NULL COMMENT '头像',
+  `access_token` varchar(255) DEFAULT NULL COMMENT 'access-token',
+  `auth_key` varchar(32) DEFAULT NULL COMMENT '自动登录key',
+  `password_hash` varchar(255) DEFAULT NULL COMMENT '加密密码',
+  `password_reset_token` varchar(255) DEFAULT NULL COMMENT '重置密码token',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int(11) DEFAULT NULL COMMENT '更新时间',
+  `last_login_ip` char(20) DEFAULT NULL COMMENT '最近登录ip',
+  `last_login_at` int(11) DEFAULT NULL COMMENT '最近登陆时间',
+  `oauth2` varchar(255) DEFAULT 'self' COMMENT 'oauth2',
+  `oauth2_id` int(11) DEFAULT NULL COMMENT 'oauth2_id',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `yii2restful_yii2_user_oauth2_oauth2_id` (`oauth2`,`oauth2_id`) USING BTREE COMMENT 'oauth2唯一索引',
+  UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
+  UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `yii2_user_copy`
+--
+
+LOCK TABLES `yii2_user_copy` WRITE;
+/*!40000 ALTER TABLE `yii2_user_copy` DISABLE KEYS */;
+INSERT INTO `yii2_user_copy` VALUES (1,'1','root','','1','6lgGBSosfvH0c9_nZZP8DY6YiI4ycwDx','$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe',NULL,'1533356676@qq.com',1479371680,1479371680,NULL,NULL,'self',NULL),(2,'2','admin',NULL,'2','pA7DChvN6X22MWjc6W_9TYALKiduyftD','$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau',NULL,'3095764452@qq.com',1479371663,1479371680,NULL,NULL,'self',NULL),(9,'','little-bit-shy','https://avatars.githubusercontent.com/u/12792446?v=3','9',NULL,NULL,NULL,NULL,1484897023,1479371680,NULL,NULL,'github',12792446),(10,'15918793994',NULL,NULL,'y0gZlbBXGxOo4K--4_4jDNa_Byw2I-8V',NULL,'$2y$13$MpWF3HZWwe1CrcvpbwDLR.k2bRnr9VyvKCPYGaNjv8..S8Z.rkliS',NULL,NULL,1485158903,1485158903,'127.0.0.1',1485160819,'self',NULL),(12,'15918793991','fUrXC2rT',NULL,'6l4nL9fP7X7EXTw5ecedHjUhH9Kv12iv',NULL,'$2y$13$nLc17UBNeDhaRu5bFnJr8uAh2vyOt1/xYMmIVAuUNeLVmose7MkKm',NULL,NULL,1485160893,1485160893,NULL,NULL,'self',NULL),(13,'15918793992','mK0wLev6',NULL,'inORraxmoIqYOaaDL9qe6MqBZaf-C9Pl',NULL,'$2y$13$HghCFt1JWLsduv5bLQ13w.z/6W3Fzgz70qmgypNEFKlJH9P8b3xOy',NULL,NULL,1485161033,1485161033,NULL,NULL,'self',NULL),(14,'15918793993','BWko4Fiu',NULL,'0SqyoC7enijE3sDlTAVy1jmP8D9Krb2P',NULL,'$2y$13$fAbDXAo6MJ/uGCPeUcdExeQDQvZBYlCsfa23UUkS8lzv3/NufI2Lm',NULL,NULL,1485161050,1485161050,NULL,NULL,'self',NULL);
+/*!40000 ALTER TABLE `yii2_user_copy` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-01-21  5:04:14
