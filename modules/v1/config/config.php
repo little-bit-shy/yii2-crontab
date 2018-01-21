@@ -18,6 +18,8 @@ $config = [
         'cache' => require(__DIR__ . '/cache.php'),
         //国际化处理
         'i18n' => require(__DIR__ . '/i18n.php'),
+        //rbac权限管理
+        'authManager' => require(__DIR__. '/authManager.php'),
     ],
     'params' => require(__DIR__ . '/params.php'),
 ];
