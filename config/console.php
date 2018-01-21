@@ -33,6 +33,10 @@ $config = [
             'class' => \yii\rbac\DbManager::className(),
         ],
     ],
+    //模块相关配置
+    'modules' => require(__DIR__ . '/modules.php'),
+    //别名定义
+    'aliases' => require(__DIR__ . '/aliases.php'),
     'params' => $params,
     /*
     'controllerMap' => [
