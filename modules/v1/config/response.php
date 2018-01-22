@@ -12,9 +12,8 @@ return [
         /** @var \yii\web\Response $response */
         $response = $event->sender;
         $data = $response->data;
-
-        if (is_string($data)) {
-            // 如果是字符串不则做处理
+        if (empty($data) || is_string($data)) {
+            // 如果是字符串则不做处理
             return;
         }
 

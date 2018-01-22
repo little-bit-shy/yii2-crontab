@@ -10,6 +10,7 @@ namespace app\commands;
 use app\components\AppRoutes;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\Console;
 
 /**
  * Class RbacController
@@ -48,5 +49,6 @@ class RbacController extends Controller
 
         // 将普通角色赋给 id等于1的用户
         // $auth->assign($ordinaryUser, 1);
+        $this->stdout(Yii::t('app\success', 'permission initialization is complete') ."\n", Console::BG_GREEN);
     }
 }

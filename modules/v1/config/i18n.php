@@ -5,7 +5,7 @@ return [
     'translations' => [
         'app*' => [
             'class' => 'yii\i18n\PhpMessageSource',
-            'basePath' => '@v1/config/messages',
+            'basePath' => '@app/config/messages',
             /*'fileMap' => [
                 'app/error' => 'error.php',
             ],*/

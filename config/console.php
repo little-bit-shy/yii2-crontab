@@ -1,11 +1,12 @@
 <?php
 
-$params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
-
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
+    // 设置目标语言为中文
+    'language' => 'zh-CN',
+    // 设置源语言为英语
+    'sourceLanguage' => 'en-US',
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'components' => [
@@ -37,7 +38,7 @@ $config = [
     'modules' => require(__DIR__ . '/modules.php'),
     //别名定义
     'aliases' => require(__DIR__ . '/aliases.php'),
-    'params' => $params,
+    'params' => require __DIR__ . '/params.php',
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.

@@ -39,7 +39,7 @@ class AppRoutes extends Object
     protected function getRouteRecrusive($module, &$result)
     {
         $token = "Get Route of '" . get_class($module) . "' with id '" . $module->uniqueId . "'";
-//        Yii::beginProfile($token, __METHOD__);
+        Yii::beginProfile($token, __METHOD__);
         try {
             foreach ($module->controllerMap as $id => $type) {
                 $this->getControllerActions($type, $id, $module, $result);
@@ -58,7 +58,7 @@ class AppRoutes extends Object
         } catch (\Exception $exc) {
             Yii::error($exc->getMessage(), __METHOD__);
         }
-//        Yii::endProfile($token, __METHOD__);
+        Yii::endProfile($token, __METHOD__);
     }
 
 
