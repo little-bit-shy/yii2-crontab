@@ -9,9 +9,6 @@
 
 namespace v1\models\redis;
 
-
-use yii\redis\ActiveRecord;
-
 /**
  * Class RateLimit
  * @package v1\models\redis
