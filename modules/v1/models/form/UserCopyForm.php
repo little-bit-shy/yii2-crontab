@@ -15,7 +15,6 @@ use Yii;
  * Class UserCopyForm
  * @package v1\models\form
  */
-
 class UserCopyForm extends Model
 {
     public $username;
@@ -52,7 +51,7 @@ class UserCopyForm extends Model
     public function attributeLabels()
     {
         return [
-            'username' => '用户名称'
+            'username' => Yii::t('app\attribute', 'username')
         ];
     }
 }
