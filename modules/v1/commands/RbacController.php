@@ -5,7 +5,7 @@
  * Date: 2018/1/21 0021
  * Time: 下午 14:02
  */
-namespace app\commands;
+namespace v1\commands;
 
 use app\components\AppRoutes;
 use Yii;
@@ -48,7 +48,7 @@ class RbacController extends Controller
         }
 
         // 将普通角色赋给 id等于1的用户
-        // $auth->assign($ordinaryUser, 1);
-        $this->stdout(Yii::t('app\success', 'permission initialization is complete') ."\n", Console::BG_GREEN);
+        $auth->assign($ordinaryUser, 1);
+        $this->stdout(Yii::t('app\success', 'permission initialization is complete') . "\n", Console::BG_GREEN);
     }
 }

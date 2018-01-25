@@ -8,7 +8,7 @@ $config = [
     // 设置源语言为英语
     'sourceLanguage' => 'en-US',
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'app\commands',
+    'controllerNamespace' => 'v1\commands',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -21,24 +21,15 @@ $config = [
                 ],
             ],
         ],
-        'db' => [
-            'class' => \yii\db\Connection::className(),
-            'dsn' => 'mysql:host=127.0.0.1;dbname=yii2restful',
-            'username' => 'root',
-            'password' => '',
-            'charset' => 'utf8',
-            'tablePrefix' => 'yii2_'
-        ],
+        'db' => require(__DIR__ . '/console_db.php'),
         //rbac权限管理
-        'authManager' => [
-            'class' => \yii\rbac\DbManager::className(),
-        ],
+        'authManager' => require(__DIR__ . '/console_authManager.php')
     ],
     //模块相关配置
-    'modules' => require(__DIR__ . '/modules.php'),
+    'modules' => require(__DIR__ . '/console_modules.php'),
     //别名定义
-    'aliases' => require(__DIR__ . '/aliases.php'),
-    'params' => require __DIR__ . '/params.php',
+    'aliases' => require(__DIR__ . '/console_aliases.php'),
+    'params' => require __DIR__ . '/console_params.php',
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.
