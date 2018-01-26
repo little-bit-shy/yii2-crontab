@@ -71,7 +71,11 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return User::findOne(['access_token' => $token]);
+        // 缓存时间600秒
+        $user = User::getDb()->cache(function ($db) use ($token) {
+            return User::findOne(['access_token' => $token]);
+        }, 600);
+        return $user;
     }
 
     public function getId()
