@@ -8,6 +8,7 @@
 namespace v1\commands;
 
 use app\components\AppRoutes;
+use v1\commands\rules\OrdinaryUserRule;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\Console;
@@ -31,7 +32,7 @@ class RbacController extends Controller
         // 删除所有已有权限相关数据
         $auth->removeAll();
 
-        // 添加 "ordinary_user" 角色，普通用户
+        // 添加 "ordinaryUser" 角色，普通用户
         $ordinaryUser = $auth->createRole('ordinaryUser');
         $auth->add($ordinaryUser);
 
@@ -48,7 +49,7 @@ class RbacController extends Controller
         }
 
         // 将普通角色赋给 id等于1的用户
-        $auth->assign($ordinaryUser, 1);
+        // $auth->assign($ordinaryUser, 1);
         $this->stdout(Yii::t('app\success', 'permission initialization is complete') . "\n", Console::BG_GREEN);
     }
 }

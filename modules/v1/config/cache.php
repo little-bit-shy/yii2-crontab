@@ -1,7 +1,10 @@
 <?php
 
 return [
-    'class' => \yii\caching\FileCache::className(),
-    'keyPrefix' => 'app_',
-    'defaultDuration' => 0
+    'class' => \yii\redis\Cache::className(),
+    'redis' => [
+        'hostname' => '127.0.0.1',
+        'port' => 6379,
+        'database' => 0,
+    ]
 ];

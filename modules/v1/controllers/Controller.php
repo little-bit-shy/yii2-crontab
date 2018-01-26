@@ -9,10 +9,14 @@
 
 namespace v1\controllers;
 
+use v1\models\User;
 use Yii;
+use yii\base\InlineAction;
+use yii\filters\AccessControl;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\Cors;
 use yii\filters\RateLimiter;
+use yii\rest\Action;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -80,6 +84,24 @@ class Controller extends \yii\rest\Controller
         //开启Cors跨域
         $behaviors['corsFilter'] = [
             'class' => Cors::className(),
+        ];
+
+        //rbac权限验证
+        $behaviors['access'] = [
+            'class' => AccessControl::className(),
+            'rules' => [
+                [
+                    'allow' => true,
+                    'matchCallback' => function ($rule, InlineAction $action) {
+                        $uniqueId = '/' . $action->getUniqueId();
+                        // 缓存时间600秒
+                        $can = User::getDb()->cache(function ($db) use ($uniqueId) {
+                            return Yii::$app->getUser()->can($uniqueId);
+                        }, 600);
+                        return $can;
+                    }
+                ],
+            ],
         ];
 
         return $behaviors;

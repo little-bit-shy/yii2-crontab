@@ -61,11 +61,6 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
     /***************************** 关联数据 *********************************/
 
-    public function getUserCopy()
-    {
-        return $this->hasOne(UserCopy::className(), ['id' => 'id']);
-    }
-
     /***************************** 增删改查 *********************************/
 
     /***************************** 登陆相关 *********************************/

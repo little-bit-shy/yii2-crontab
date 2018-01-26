@@ -66,8 +66,6 @@ class UserCopyController extends Controller
      */
     public function actionView($id)
     {
-        var_dump(Yii::$app->getUser()->can('ordinary_user'));
-        exit;
         return UserCopy::detail($id);
     }
 
