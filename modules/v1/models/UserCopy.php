@@ -2,7 +2,9 @@
 
 namespace v1\models;
 
+use Yii;
 use v1\models\form\UserCopyForm;
+use yii\caching\TagDependency;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
@@ -52,7 +54,7 @@ class UserCopy extends ActiveRecord implements Linkable
     public function getLinks()
     {
         return [
-            Link::REL_SELF => Url::to(['user_copy/view', 'id' => $this->id], true),
+            Link::REL_SELF => Url::to(['user-copy/view', 'id' => $this->id], true),
         ];
     }
 
@@ -75,6 +77,8 @@ class UserCopy extends ActiveRecord implements Linkable
     {
         return parent::extraFields();
     }
+
+    /***************************** 触发事件 *********************************/
 
     /***************************** 关联数据 *********************************/
 
@@ -104,7 +108,8 @@ class UserCopy extends ActiveRecord implements Linkable
                 $query->with('userCopy.userCopy.userCopy');
             }]);
             return $query->one();
-        });
+        }, self::$dataTimeOut, new TagDependency(['tags' => UserCopy::getDetailTag($id)]));
+
         if (empty($data)) {
             // 数据不存在
             throw new NotFoundHttpException();
@@ -125,7 +130,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 $query->with(['userCopy.userCopy.userCopy']);
             }]);
             $pagination = new Pagination([
-                'defaultPageSize' => 3,
+                'defaultPageSize' => 10,
                 'totalCount' => $query->count()
             ]);
             $data = $query->offset($pagination->getOffset())
@@ -135,7 +140,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 'models' => $data,
                 'Pagination' => $pagination,
             ]);
-        });
+        }, self::$dataTimeOut, new TagDependency(['tags' => UserCopy::getListTag()]));
 
         return $activeDataProvider;
     }

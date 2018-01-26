@@ -94,10 +94,9 @@ class Controller extends \yii\rest\Controller
                     'allow' => true,
                     'matchCallback' => function ($rule, InlineAction $action) {
                         $uniqueId = '/' . $action->getUniqueId();
-                        // 缓存时间600秒
                         $can = User::getDb()->cache(function ($db) use ($uniqueId) {
                             return Yii::$app->getUser()->can($uniqueId);
-                        }, 600);
+                        }, User::$dataTimeOut);
                         return $can;
                     }
                 ],
