@@ -78,6 +78,7 @@ class UserCopyController extends Controller
      */
     public function actionCreate()
     {
-        return UserCopy::create(Yii::$app->request->getBodyParams());
+        UserCopy::create(Yii::$app->request->getBodyParams());
+        return self::success(Yii::t('app/success', 'data added successfully'));
     }
 }

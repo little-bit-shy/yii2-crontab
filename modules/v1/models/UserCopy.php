@@ -108,7 +108,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 $query->with('userCopy.userCopy.userCopy');
             }]);
             return $query->one();
-        }, self::$dataTimeOut, new TagDependency(['tags' => UserCopy::getDetailTag($id)]));
+        }, self::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getDetailTag($id)]]));
 
         if (empty($data)) {
             // 数据不存在
@@ -140,7 +140,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 'models' => $data,
                 'Pagination' => $pagination,
             ]);
-        }, self::$dataTimeOut, new TagDependency(['tags' => UserCopy::getListTag()]));
+        }, self::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getListTag()]]));
 
         return $activeDataProvider;
     }
@@ -156,10 +156,14 @@ class UserCopy extends ActiveRecord implements Linkable
         $form = new UserCopyForm();
         $form->setScenario('create');
         if ($form->load([$form->formName() => $param]) && $form->validate()) {
-            $model = new UserCopy();
-            $model->setScenario('create');
-            $model->load([$model->formName() => $form->getAttributes()]);
-            return $model->save();
+            try {
+                $model = new UserCopy();
+                $model->setScenario('create');
+                $model->load([$model->formName() => $form->getAttributes()]);
+                $model->save();
+            } catch (\yii\db\Exception $e) {
+                throw new HttpException(500, Yii::t('app/error', 'server internal error'));
+            }
         } else {
             throw new HttpException(422, $form->getFirstError());
         }
