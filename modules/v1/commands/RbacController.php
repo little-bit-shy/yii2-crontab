@@ -24,6 +24,26 @@ class RbacController extends Controller
     private static $mod = 'v1';
 
     /**
+     * 初始化的权限
+     * @var array
+     */
+    private static $roles = [
+        // 普通用户
+        'ordinaryUser' => [
+            // 拥有的权限
+            'permissions' => [
+                '/v1/*',
+                '/v1/site/*',
+                '/v1/site/captcha',
+                '/v1/user-copy/*',
+                '/v1/user-copy/create',
+                '/v1/user-copy/index',
+                '/v1/user-copy/view',
+            ]
+        ]
+    ];
+
+    /**
      * yii rbac/init
      */
     public function actionInit()
@@ -32,20 +52,27 @@ class RbacController extends Controller
         // 删除所有已有权限相关数据
         $auth->removeAll();
 
-        // 添加 "ordinaryUser" 角色，普通用户
-        $ordinaryUser = $auth->createRole('ordinaryUser');
-        $auth->add($ordinaryUser);
-
-        // 获取项目所有 actions
+        // 获取项目所有权限
         $appRoutes = new AppRoutes();
         $appRoutes = $appRoutes->getAppRoutes(self::$mod);
         foreach ($appRoutes as $key => $value) {
-            // 添加权限
             $permission = $auth->createPermission($value);
             $permission->description = $value;
             $auth->add($permission);
-            // 将权限赋给 "ordinary_user" 角色
-            $auth->addChild($ordinaryUser, $permission);
+        }
+
+        // 添加所有角色
+        $roles = static::$roles;
+        foreach ($roles as $key => $value) {
+            $name = $key;
+            $role = $auth->createRole($name);
+            $auth->add($role);
+            // 赋予角色权限
+            $permissions = $value['permissions'];
+            foreach ($permissions as $k => $v) {
+                $permission = $auth->getPermission($v);
+                $auth->addChild($role, $permission);
+            }
         }
 
         // 将普通角色赋给 id等于1的用户
