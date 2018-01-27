@@ -45,6 +45,7 @@ class UserCopyController extends Controller
         return [
             'index' => ['GET', 'POST', 'HEAD'],
             'view' => ['GET', 'POST', 'HEAD'],
+            'create' => ['POST'],
         ];
     }
 
