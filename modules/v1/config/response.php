@@ -12,14 +12,13 @@ return [
         /** @var \yii\web\Response $response */
         $response = $event->sender;
         $data = $response->data;
-        if (empty($data) || is_string($data)) {
-            // 如果是字符串则不做处理
-            return;
-        }
 
-        // 异常数据处理
-        if ($response->getIsSuccessful() == false) {
-            // 避免污染异常处理器的传参
+        // 处理code、message
+        if (
+            isset($data['type']) // 存在type
+            && class_exists($data['type']) // type是个类
+            && is_subclass_of($data['type'], '\yii\base\Exception') // type 继承自\yii\base\Exception
+        ) {
             $code = $data['code'];
             $message = $data['message'];
             if (strpos($message, '|')) {
@@ -37,7 +36,7 @@ return [
             'success' => $response->getIsSuccessful(),
             'data' => $response->data,
         ];
-        // 放在后面，避免污染IsSuccessful
-        $response->statusCode = 200;
+        // 放在后面，避免污染IsSuccessfulz
+        $response->setStatusCode(200);
     }
 ];

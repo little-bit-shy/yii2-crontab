@@ -8,5 +8,5 @@
 
 return [
     'permission initialization is complete' => '权限初始化完成',
-    'data added successfully' => '数据添加成功',
+     'data added successfully' => '数据添加成功|0',
 ];

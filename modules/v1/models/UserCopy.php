@@ -167,5 +167,6 @@ class UserCopy extends ActiveRecord implements Linkable
         } else {
             throw new HttpException(422, $form->getFirstError());
         }
+        throw new HttpException(200, Yii::t('app/success', 'data added successfully'));
     }
 }

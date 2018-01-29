@@ -19,6 +19,7 @@ namespace v1\controllers;
 use v1\models\UserCopy;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
+use yii\web\HttpException;
 
 class UserCopyController extends Controller
 {
@@ -78,7 +79,6 @@ class UserCopyController extends Controller
      */
     public function actionCreate()
     {
-        UserCopy::create(Yii::$app->request->getBodyParams());
-        return self::success(Yii::t('app/success', 'data added successfully'));
+        return UserCopy::create(Yii::$app->request->getBodyParams());
     }
 }

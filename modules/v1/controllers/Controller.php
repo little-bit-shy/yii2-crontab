@@ -123,21 +123,4 @@ class Controller extends \yii\rest\Controller
         $actions = parent::actions();
         return $actions;
     }
-
-
-    /**
-     * @param $message
-     * @param int $code
-     * @return array
-     */
-    public static function success($message, $code = 0)
-    {
-        return [
-            'name' => 'success',
-            'message' => $message,
-            'code' => $code,
-            'status' => 200,
-            'type' => 'success'
-        ];
-    }
 }
