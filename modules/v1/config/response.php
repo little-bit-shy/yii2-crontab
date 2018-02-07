@@ -13,6 +13,10 @@ return [
         $response = $event->sender;
         $data = $response->data;
 
+	if(is_string($data)){
+	    return;
+	}
+
         // 处理code、message
         if (
             isset($data['type']) // 存在type
