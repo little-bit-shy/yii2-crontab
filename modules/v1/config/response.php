@@ -12,8 +12,8 @@ return [
         /** @var \yii\web\Response $response */
         $response = $event->sender;
         $data = $response->data;
-
-	if(is_string($data)){
+	
+	if(empty($data)){
 	    return;
 	}
 
