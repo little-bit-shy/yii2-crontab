@@ -6,6 +6,9 @@
 #### 如何安装
 首先执行`php composer.phar install`命令对项目进行安装操作
 
+#### 运行环境
+`nginx、redis、mysql、php`
+
 #### Nginx路由优化配置
 ```bash
 server {
