@@ -7,7 +7,10 @@
 首先执行`php composer.phar install`命令对项目进行安装操作
 
 #### 运行环境
-`nginx、redis、mysql、php`
+Php 7.1.9  
+Nginx 1.13.7  
+Redis 4.0.8  
+Mysql 5.6.16
 
 #### Nginx路由优化配置
 ```bash
