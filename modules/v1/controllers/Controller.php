@@ -17,6 +17,7 @@ use yii\filters\auth\QueryParamAuth;
 use yii\filters\Cors;
 use yii\filters\RateLimiter;
 use yii\rest\Action;
+use yii\helpers\ArrayHelper;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -44,12 +45,12 @@ class Controller extends \yii\rest\Controller
      */
     public function behaviors()
     {
-        $behaviors = parent::behaviors();
-
-	//开启Cors跨域
-        $behaviors['corsFilter'] = [
-            'class' => Cors::className(),
-        ];
+        $behaviors = ArrayHelper::merge([
+	    //开启Cors跨域
+	    'corsFilter' => [
+	        'class' => Cors::className(),
+	    ]
+	], parent::behaviors());
 
         //为使用HTTP Basic Auth，可配置authenticator 行为
         $behaviors['authenticator'] = [
