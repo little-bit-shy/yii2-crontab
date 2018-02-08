@@ -45,6 +45,12 @@ class Controller extends \yii\rest\Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
+
+	//开启Cors跨域
+        $behaviors['corsFilter'] = [
+            'class' => Cors::className(),
+        ];
+
         //为使用HTTP Basic Auth，可配置authenticator 行为
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
@@ -79,11 +85,6 @@ class Controller extends \yii\rest\Controller
         $behaviors['rateLimiter'] = [
             'class' => RateLimiter::className(),
             'enableRateLimitHeaders' => true,
-        ];
-
-        //开启Cors跨域
-        $behaviors['corsFilter'] = [
-            'class' => Cors::className(),
         ];
 
         //rbac权限验证
