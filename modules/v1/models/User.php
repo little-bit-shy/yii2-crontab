@@ -62,6 +62,19 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     }
 
     /**
+     * 明确列出每个字段，适用于你希望数据表或模型属性
+     * url上加fields参数获取
+     * @return array
+     */
+    public function fields()
+    {
+	$fields = parent::fields();
+	unset($fields['password_hash']);
+        return $fields;
+    }
+
+
+    /**
      * 数据写操作后触发的事件
      * 缓存依赖清除
      * @param bool $insert
