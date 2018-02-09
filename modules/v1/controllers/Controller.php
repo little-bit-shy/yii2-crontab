@@ -46,11 +46,11 @@ class Controller extends \yii\rest\Controller
     public function behaviors()
     {
         $behaviors = ArrayHelper::merge([
-	    //开启Cors跨域
-	    'corsFilter' => [
-	        'class' => Cors::className(),
-	    ]
-	], parent::behaviors());
+            //开启Cors跨域
+            'corsFilter' => [
+                'class' => Cors::className(),
+            ]
+        ], parent::behaviors());
 
         //为使用HTTP Basic Auth，可配置authenticator 行为
         $behaviors['authenticator'] = [
@@ -95,10 +95,16 @@ class Controller extends \yii\rest\Controller
                 [
                     'allow' => true,
                     'matchCallback' => function ($rule, InlineAction $action) {
+                        // 游客登录不验证权限
+                        if (Yii::$app->getUser()->getIsGuest()) {
+                            return true;
+                        }
+                        // 权限验证
+                        $id = Yii::$app->getUser()->getId();
                         $uniqueId = '/' . $action->getUniqueId();
                         $can = User::getDb()->cache(function ($db) use ($uniqueId) {
                             return Yii::$app->getUser()->can($uniqueId);
-                        }, User::$dataTimeOut);
+                        }, User::$dataTimeOut, User::getDetailTag("/id/{$id}"));
                         return $can;
                     }
                 ],

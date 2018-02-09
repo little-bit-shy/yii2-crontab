@@ -5,6 +5,7 @@ namespace v1\models;
 
 use Yii;
 use yii\caching\TagDependency;
+use yii\db\Exception;
 
 class ActiveRecord extends \yii\db\ActiveRecord
 {
@@ -16,20 +17,24 @@ class ActiveRecord extends \yii\db\ActiveRecord
 
     /**
      * 获取列表数据缓存依赖标签
+     * @param string $identifying
      * @return string
      */
-    public static function getListTag()
+    public static function getListTag($identifying = '')
     {
-        return self::className();
+        $identifying = 'list_' . md5($identifying);
+        return self::className() . $identifying;
     }
 
     /**
      * 获取详细数据缓存依赖标签
+     * @param string $identifying
      * @return string
      */
-    public static function getDetailTag(int $id)
+    public static function getDetailTag($identifying = '')
     {
-        return self::className() . "/id/{$id}";
+        $identifying = 'detail_' . md5($identifying);
+        return self::className() . $identifying;
     }
 
     /**
@@ -73,16 +78,21 @@ class ActiveRecord extends \yii\db\ActiveRecord
      * 缓存依赖清除
      * @param bool $insert
      * @param array $changedAttributes
+     * @return bool|void
      */
     public function afterSave($insert, $changedAttributes)
     {
-        // 数据id
-        $id = $this->getAttribute('id');
-        // 列表数据缓存清除
-        TagDependency::invalidate(Yii::$app->getCache(), self::getListTag());
-        // 详细数据缓存清除
-        TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag($id));
-
-        return parent::afterSave($insert, $changedAttributes);
+        $afterSave = parent::afterSave($insert, $changedAttributes);
+        try {
+            // 数据id
+            $id = $this->getAttribute('id');
+            // 列表数据缓存清除
+            TagDependency::invalidate(Yii::$app->getCache(), self::getListTag());
+            // 详细数据缓存清除
+            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/id/{$id}"));
+        } catch (Exception $e) {
+            return false;
+        }
+        return $afterSave;
     }
 }

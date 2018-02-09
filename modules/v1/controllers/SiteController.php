@@ -2,6 +2,7 @@
 
 namespace v1\controllers;
 
+use v1\models\form\user\LoginForm;
 use Yii;
 use yii\captcha\CaptchaAction;
 use yii\filters\auth\QueryParamAuth;
@@ -18,7 +19,7 @@ class SiteController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['captcha']
+            'optional' => ['captcha', 'login']
         ];
         return $behaviors;
     }
@@ -31,6 +32,7 @@ class SiteController extends Controller
     {
         return [
             'captcha' => ['GET', 'POST'],
+            'login' => ['POST'],
         ];
     }
 
@@ -45,5 +47,14 @@ class SiteController extends Controller
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
+    }
+
+    /**
+     * 用户登录
+     */
+    public function actionLogin()
+    {
+        $loginForm = new  LoginForm();
+        return $loginForm->login(Yii::$app->request->getBodyParams());
     }
 }

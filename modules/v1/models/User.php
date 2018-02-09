@@ -4,6 +4,8 @@ namespace v1\models;
 
 use v1\models\redis\RateLimit;
 use Yii;
+use yii\caching\TagDependency;
+use yii\db\Exception;
 use yii\filters\RateLimitInterface;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
@@ -59,6 +61,28 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
         ];
     }
 
+    /**
+     * 数据写操作后触发的事件
+     * 缓存依赖清除
+     * @param bool $insert
+     * @param array $changedAttributes
+     * @return bool|void
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        $afterSave = parent::afterSave($insert, $changedAttributes);
+        try {
+            // 数据id
+            $id = $this->getAttribute('id');
+            // 详细数据缓存清除
+            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/access_token/{$id}"));
+            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/username/{$id}"));
+        } catch (Exception $e) {
+            return false;
+        }
+        return $afterSave;
+    }
+
     /***************************** 关联数据 *********************************/
 
     /***************************** 增删改查 *********************************/
@@ -73,7 +97,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $user = User::getDb()->cache(function ($db) use ($token) {
             return User::findOne(['access_token' => $token]);
-        }, self::$dataTimeOut);
+        }, self::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
         return $user;
     }
 
@@ -98,6 +122,21 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     public function validatePassword($password)
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password_hash);
+    }
+
+    /**
+     * 通过用户名称获取用户详细信息
+     * @param $username
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function findIdentityByUsername($username)
+    {
+        $user = User::getDb()->cache(function ($db) use ($username) {
+            return User::findOne(['username' => $username]);
+        }, self::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
+        return $user;
     }
 
     /***************************** 请求频率 *********************************/
