@@ -18,6 +18,7 @@ use yii\filters\Cors;
 use yii\filters\RateLimiter;
 use yii\rest\Action;
 use yii\helpers\ArrayHelper;
+use yii\caching\TagDependency;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -104,7 +105,7 @@ class Controller extends \yii\rest\Controller
                         $uniqueId = '/' . $action->getUniqueId();
                         $can = User::getDb()->cache(function ($db) use ($uniqueId) {
                             return Yii::$app->getUser()->can($uniqueId);
-                        }, User::$dataTimeOut, User::getDetailTag("/id/{$id}"));
+                        }, User::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/id/{$id}")]]));
                         return $can;
                     }
                 ],

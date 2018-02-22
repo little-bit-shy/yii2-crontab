@@ -22,7 +22,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public static function getListTag($identifying = '')
     {
-        $identifying = 'list_' . md5($identifying);
+        $identifying = '\\list\\' . md5($identifying);
         return self::className() . $identifying;
     }
 
@@ -33,8 +33,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public static function getDetailTag($identifying = '')
     {
-        $identifying = 'detail_' . md5($identifying);
-        return self::className() . $identifying;
+        $identifying = '\\detail\\' . md5($identifying);
+	return self::className() . $identifying;
     }
 
     /**
