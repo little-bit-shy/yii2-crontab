@@ -9,6 +9,7 @@
 
 namespace v1\controllers;
 
+use v1\models\form\UserCopyForm;
 use v1\models\UserCopy;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
@@ -71,6 +72,6 @@ class UserCopyController extends Controller
      */
     public function actionCreate()
     {
-        return UserCopy::create(Yii::$app->request->getBodyParams());
+        return UserCopyForm::create(Yii::$app->request->getBodyParams());
     }
 }

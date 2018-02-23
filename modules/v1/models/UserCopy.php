@@ -102,13 +102,13 @@ class UserCopy extends ActiveRecord implements Linkable
      */
     public static function detail($id)
     {
-        $data = UserCopy::getDb()->cache(function ($db) use ($id) {
+        $data = ActiveRecord::getDb()->cache(function ($db) use ($id) {
             $query = UserCopy::find()->where(['id' => $id]);
             $query->with(['userCopy' => function (ActiveQuery $query) {
                 $query->with('userCopy.userCopy.userCopy');
             }]);
             return $query->one();
-        }, self::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getDetailTag("/id/{$id}")]]));
+        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getDetailTag("/id/{$id}")]]));
 
         if (empty($data)) {
             // 数据不存在
@@ -143,30 +143,5 @@ class UserCopy extends ActiveRecord implements Linkable
         }, self::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getListTag("")]]));
 
         return $activeDataProvider;
-    }
-
-    /**
-     * 添加数据
-     * @param $param
-     * @return bool
-     * @throws HttpException
-     */
-    public static function create($param)
-    {
-        $form = new UserCopyForm();
-        $form->setScenario('create');
-        if ($form->load([$form->formName() => $param]) && $form->validate()) {
-            try {
-                $model = new UserCopy();
-                $model->setScenario('create');
-                $model->load([$model->formName() => $form->getAttributes()]);
-                $model->save();
-            } catch (\yii\db\Exception $e) {
-                throw new HttpException(500, Yii::t('app/error', 'server internal error'));
-            }
-        } else {
-            throw new HttpException(422, $form->getFirstError());
-        }
-        throw new HttpException(200, Yii::t('app/success', 'data added successfully'));
     }
 }

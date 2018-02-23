@@ -8,7 +8,9 @@
 
 namespace v1\models\form;
 
+use v1\models\UserCopy;
 use Yii;
+use yii\web\HttpException;
 
 /**
  * 表单模型
@@ -53,5 +55,32 @@ class UserCopyForm extends Model
         return [
             'username' => Yii::t('app\attribute', 'username')
         ];
+    }
+
+    /***************************** 表单操作 *********************************/
+
+    /**
+     * 添加数据
+     * @param $param
+     * @return bool
+     * @throws HttpException
+     */
+    public static function create($param)
+    {
+        $form = new UserCopyForm();
+        $form->setScenario('create');
+        if ($form->load([$form->formName() => $param]) && $form->validate()) {
+            try {
+                $model = new UserCopy();
+                $model->setScenario('create');
+                $model->load([$model->formName() => $form->getAttributes()]);
+                $model->save();
+            } catch (\yii\db\Exception $e) {
+                throw new HttpException(500, Yii::t('app/error', 'server internal error'));
+            }
+        } else {
+            throw new HttpException(422, $form->getFirstError());
+        }
+        throw new HttpException(200, Yii::t('app/success', 'data added successfully'));
     }
 }

@@ -9,8 +9,8 @@
 
 namespace v1\controllers;
 
+use v1\models\ActiveRecord;
 use v1\models\rbac\AuthItem;
-use v1\models\User;
 use Yii;
 use yii\base\InlineAction;
 use yii\filters\AccessControl;
@@ -102,9 +102,9 @@ class Controller extends \yii\rest\Controller
                         }
                         // 权限验证
                         $uniqueId = '/' . $action->getUniqueId();
-                        $can = User::getDb()->cache(function ($db) use ($uniqueId) {
+                        $can = ActiveRecord::getDb()->cache(function ($db) use ($uniqueId) {
                             return Yii::$app->getUser()->can($uniqueId);
-                        }, AuthItem::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag()]]));
+                        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag()]]));
                         return $can;
                     }
                 ],

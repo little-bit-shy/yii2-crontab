@@ -106,9 +106,9 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        $user = User::getDb()->cache(function ($db) use ($token) {
+        $user = ActiveRecord::getDb()->cache(function ($db) use ($token) {
             return User::findOne(['access_token' => $token]);
-        }, self::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
+        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
         return $user;
     }
 
@@ -144,9 +144,9 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      */
     public static function findIdentityByUsername($username)
     {
-        $user = User::getDb()->cache(function ($db) use ($username) {
+        $user = ActiveRecord::getDb()->cache(function ($db) use ($username) {
             return User::findOne(['username' => $username]);
-        }, self::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
+        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
         return $user;
     }
 

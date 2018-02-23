@@ -8,6 +8,7 @@
 
 namespace v1\models\form\rbac;
 
+use v1\models\ActiveRecord;
 use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
@@ -89,7 +90,7 @@ class AuthItemIndexForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemIndexForm->getAttributes();
-            $activeDataProvider = AuthItem::getDb()->cache(function ($db) use ($attributes) {
+            $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
                 $query = AuthItem::find();
                 // 数据类型过滤
                 $query->andFilterWhere([
@@ -111,7 +112,7 @@ class AuthItemIndexForm extends Model
                     'models' => $data,
                     'Pagination' => $pagination,
                 ]);
-            }, AuthItem::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
+            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
 
             return $activeDataProvider;
         } else {
