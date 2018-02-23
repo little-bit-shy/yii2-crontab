@@ -9,4 +9,6 @@
 return [
     'username' => '用户名称',
     'password' => '用户密码',
+    'type' => '类型',
+    'name' => '名称',
 ];

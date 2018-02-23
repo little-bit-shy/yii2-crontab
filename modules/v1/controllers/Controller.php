@@ -4,11 +4,12 @@
  * User: xuguozhi
  * Date: 2017/1/17
  * Time: 14:29
- * Message: Restfuk风格Api控制器
+ * Message: 控制器基类
  */
 
 namespace v1\controllers;
 
+use v1\models\rbac\AuthItem;
 use v1\models\User;
 use Yii;
 use yii\base\InlineAction;
@@ -16,7 +17,6 @@ use yii\filters\AccessControl;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\Cors;
 use yii\filters\RateLimiter;
-use yii\rest\Action;
 use yii\helpers\ArrayHelper;
 use yii\caching\TagDependency;
 
@@ -101,11 +101,10 @@ class Controller extends \yii\rest\Controller
                             return true;
                         }
                         // 权限验证
-                        $id = Yii::$app->getUser()->getId();
                         $uniqueId = '/' . $action->getUniqueId();
                         $can = User::getDb()->cache(function ($db) use ($uniqueId) {
                             return Yii::$app->getUser()->can($uniqueId);
-                        }, User::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/id/{$id}")]]));
+                        }, AuthItem::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag()]]));
                         return $can;
                     }
                 ],

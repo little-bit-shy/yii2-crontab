@@ -1,4 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: xuguozhi
+ * Date: 2017/1/17
+ * Time: 14:29
+ * Message: 用户登录相关操作控制器
+ */
 
 namespace v1\controllers;
 
