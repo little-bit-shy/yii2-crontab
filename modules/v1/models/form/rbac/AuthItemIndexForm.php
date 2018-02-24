@@ -34,10 +34,10 @@ class AuthItemIndexForm extends Model
     public function rules()
     {
         return [
-            [['type', 'name'], 'safe', 'on' => 'index'],
-            [['name'], 'trim', 'on' => 'index'],
-            [['type'], 'default', 'value' => 2, 'on' => 'index'],
-            [['type'], 'in', 'range' => [1, 2]],
+            [['type', 'name'], 'safe', 'on' => 'all-lists'],
+            [['name'], 'trim', 'on' => 'all-lists'],
+            [['type'], 'default', 'value' => 2, 'on' => 'all-lists'],
+            [['type'], 'in', 'range' => [1, 2], 'on' => 'all-lists'],
         ];
     }
 
@@ -48,7 +48,7 @@ class AuthItemIndexForm extends Model
     public function scenarios()
     {
         return [
-            'index' => [
+            'all-lists' => [
                 'type',
                 'name',
             ]
@@ -72,49 +72,45 @@ class AuthItemIndexForm extends Model
     /***************************** 获取数据 *********************************/
 
     /**
-     * 获取列表数据
+     * 获取所有列表数据
      * @param $param
      * @return mixed
      * @throws HttpException
      * @throws \Exception
      * @throws \Throwable
      */
-    public static function lists($param)
+    public static function allLists($param)
     {
         // 表单模型实例化
         $authItemIndexForm = new AuthItemIndexForm();
         // 场景定义
-        $authItemIndexForm->setScenario('index');
+        $authItemIndexForm->setScenario('all-lists');
         // 验证数据是否合法
         if ($authItemIndexForm->load([$authItemIndexForm->formName() => $param]) && $authItemIndexForm->validate()) {
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemIndexForm->getAttributes();
-            $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
+            $dataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
                 $query = AuthItem::find();
+                $query->select(['name']);
                 // 数据类型过滤
                 $query->andFilterWhere([
                     'type' => $attributes['type'],
                 ]);
                 // 权限、角色名称过滤
                 $query->andFilterWhere(['like', 'name', $attributes['name']]);
-                // 数据总数统计
-                $count = $query->count();
-                // 分页数据准备
-                $pagination = new Pagination([
-                    'defaultPageSize' => $count,
-                    'totalCount' => $count
-                ]);
-                // 数据获取
+                // 获取数据
                 $data = $query->all();
+                // 数据重构
+                $dataProvider = [];
+                foreach ($data as $key => $value) {
+                    $dataProvider[$value['name']] = $value['name'];
+                }
                 // 结果数据返回
-                return new ArrayDataProvider([
-                    'models' => $data,
-                    'Pagination' => $pagination,
-                ]);
+                return $dataProvider;
             }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
 
-            return $activeDataProvider;
+            return $dataProvider;
         } else {
             // 数据不合法
             throw new HttpException(422, $authItemIndexForm->getFirstError());

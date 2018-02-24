@@ -9,6 +9,7 @@
 
 namespace v1\controllers;
 
+use app\components\AppRoutes;
 use v1\models\form\rbac\AuthItemIndexForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
@@ -24,7 +25,7 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['index']
+            'optional' => ['all-lists', 'project-directory']
         ];
         return $behaviors;
     }
@@ -36,18 +37,30 @@ class AuthItemController extends Controller
     protected function verbs()
     {
         return [
-            'index' => ['POST'],
+            'all-lists' => ['POST'],
+            'project-directory' => ['GET', 'POST'],
         ];
     }
 
     /**
-     * 返回列表数据
+     * 返回所有列表数据
      * @return mixed
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex()
+    public function actionAllLists()
     {
-        return AuthItemIndexForm::lists(Yii::$app->request->getBodyParams());
+        return AuthItemIndexForm::allLists(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 返回项目目录列表数据
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionProjectDirectory()
+    {
+        return (new AppRoutes())->getAppRoutes();
     }
 }
