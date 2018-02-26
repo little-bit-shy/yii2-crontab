@@ -13,14 +13,12 @@ use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
 use yii\caching\TagDependency;
-use yii\data\ArrayDataProvider;
-use yii\data\Pagination;
 use yii\web\HttpException;
 
 /**
  * 表单模型
  * Class AuthItemIndexForm
- * @package v1\models\form
+ * @package v1\models\form\rbac
  */
 class AuthItemIndexForm extends Model
 {
@@ -116,5 +114,4 @@ class AuthItemIndexForm extends Model
             throw new HttpException(422, $authItemIndexForm->getFirstError());
         }
     }
-
 }

@@ -10,7 +10,9 @@
 namespace v1\controllers;
 
 use app\components\AppRoutes;
+use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemIndexForm;
+use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 
@@ -25,7 +27,7 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['all-lists', 'project-directory']
+            'optional' => ['all-lists', 'project-directory', 'add-permissions', 'remove-permissions']
         ];
         return $behaviors;
     }
@@ -39,6 +41,8 @@ class AuthItemController extends Controller
         return [
             'all-lists' => ['POST'],
             'project-directory' => ['GET', 'POST'],
+            'add-permissions' => ['POST'],
+            'remove-permissions' => ['POST'],
         ];
     }
 
@@ -62,5 +66,25 @@ class AuthItemController extends Controller
     public function actionProjectDirectory()
     {
         return (new AppRoutes())->getAppRoutes();
+    }
+
+    /**
+     * 添加权限
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddPermissions()
+    {
+        return AuthItemAddPermissionsForm::addPermissions(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 删除权限
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionRemovePermissions()
+    {
+        return AuthItemRemovePermissionsForm::removePermissions(Yii::$app->request->getBodyParams());
     }
 }
