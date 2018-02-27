@@ -11,6 +11,7 @@ namespace v1\controllers;
 
 use app\components\AppRoutes;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
+use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use Yii;
@@ -27,7 +28,7 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['all-lists', 'project-directory', 'add-permissions', 'remove-permissions']
+            'optional' => ['index', 'all-lists', 'project-directory', 'add-permissions', 'remove-permissions']
         ];
         return $behaviors;
     }
@@ -39,11 +40,22 @@ class AuthItemController extends Controller
     protected function verbs()
     {
         return [
+            'index' => ['POST'],
             'all-lists' => ['POST'],
             'project-directory' => ['GET', 'POST'],
             'add-permissions' => ['POST'],
             'remove-permissions' => ['POST'],
         ];
+    }
+
+    /**
+     * 返回列表数据
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionIndex()
+    {
+        return AuthItemIndexForm::lists(Yii::$app->request->getBodyParams());
     }
 
     /**
@@ -54,7 +66,7 @@ class AuthItemController extends Controller
      */
     public function actionAllLists()
     {
-        return AuthItemIndexForm::allLists(Yii::$app->request->getBodyParams());
+        return AuthItemAllListsForm::allLists(Yii::$app->request->getBodyParams());
     }
 
     /**

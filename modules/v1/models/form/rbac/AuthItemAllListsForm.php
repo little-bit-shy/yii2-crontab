@@ -13,16 +13,14 @@ use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
 use yii\caching\TagDependency;
-use yii\data\ArrayDataProvider;
-use yii\data\Pagination;
 use yii\web\HttpException;
 
 /**
  * 表单模型
- * Class AuthItemIndexForm
+ * Class AuthItemAllListsForm
  * @package v1\models\form\rbac
  */
-class AuthItemIndexForm extends Model
+class AuthItemAllListsForm extends Model
 {
     public $type;
     public $name;
@@ -34,9 +32,10 @@ class AuthItemIndexForm extends Model
     public function rules()
     {
         return [
-            [['name'], 'safe', 'on' => 'index'],
-            [['name'], 'string', 'on' => 'index'],
-            [['name'], 'trim', 'on' => 'index'],
+            [['type', 'name'], 'safe', 'on' => 'all-lists'],
+            [['name'], 'trim', 'on' => 'all-lists'],
+            [['type'], 'default', 'value' => 2, 'on' => 'all-lists'],
+            [['type'], 'in', 'range' => [1, 2], 'on' => 'all-lists'],
         ];
     }
 
@@ -47,8 +46,9 @@ class AuthItemIndexForm extends Model
     public function scenarios()
     {
         return [
-            'index' => [
-                'name'
+            'all-lists' => [
+                'type',
+                'name',
             ]
         ];
     }
@@ -60,6 +60,7 @@ class AuthItemIndexForm extends Model
     public function attributeLabels()
     {
         return [
+            'type' => Yii::t('app\attribute', 'type'),
             'name' => Yii::t('app\attribute', 'name'),
         ];
     }
@@ -69,19 +70,19 @@ class AuthItemIndexForm extends Model
     /***************************** 获取数据 *********************************/
 
     /**
-     * 获取列表数据
+     * 获取所有列表数据
      * @param $param
      * @return mixed
      * @throws HttpException
      * @throws \Exception
      * @throws \Throwable
      */
-    public static function lists($param)
+    public static function allLists($param)
     {
         // 表单模型实例化
-        $authItemIndexForm = new AuthItemIndexForm();
+        $authItemIndexForm = new AuthItemAllListsForm();
         // 场景定义
-        $authItemIndexForm->setScenario('index');
+        $authItemIndexForm->setScenario('all-lists');
         // 验证数据是否合法
         if ($authItemIndexForm->load([$authItemIndexForm->formName() => $param]) && $authItemIndexForm->validate()) {
             // 数据合法
@@ -89,25 +90,22 @@ class AuthItemIndexForm extends Model
             $attributes = $authItemIndexForm->getAttributes();
             $dataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
                 $query = AuthItem::find();
+                $query->select(['name']);
                 // 数据类型过滤
                 $query->andFilterWhere([
                     'type' => $attributes['type'],
                 ]);
                 // 权限、角色名称过滤
                 $query->andFilterWhere(['like', 'name', $attributes['name']]);
+                // 获取数据
+                $data = $query->all();
+                // 数据重构
+                $dataProvider = [];
+                foreach ($data as $key => $value) {
+                    $dataProvider[$value['name']] = $value['name'];
+                }
                 // 结果数据返回
-                $pagination = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $query->count()
-                ]);
-                $data = $query->offset($pagination->getOffset())
-                    ->limit($pagination->getLimit())
-                    ->all();
-                return new ArrayDataProvider([
-                    'models' => $data,
-                    'Pagination' => $pagination,
-                ]);
-
+                return $dataProvider;
             }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
 
             return $dataProvider;
