@@ -66,32 +66,29 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      */
     public function fields()
     {
-	$fields = parent::fields();
-	unset($fields['password_hash']);
+        $fields = parent::fields();
+        unset($fields['password_hash']);
         return $fields;
     }
 
 
     /**
-     * 数据写操作后触发的事件
      * 缓存依赖清除
-     * @param bool $insert
-     * @param array $changedAttributes
-     * @return bool|void
+     * @return bool
      */
-    public function afterSave($insert, $changedAttributes)
+    public function tagDependencyInvalidate()
     {
-        $afterSave = parent::afterSave($insert, $changedAttributes);
         try {
-            // 数据id
-            $id = $this->getAttribute('id');
+            // 数据
+            $access_token = $this->getAttribute('access_token');
+            $username = $this->getAttribute('username');
             // 详细数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/access_token/{$id}"));
-            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/username/{$id}"));
+            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/access_token/{$access_token}"));
+            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/username/{$username}"));
         } catch (Exception $e) {
             return false;
         }
-        return $afterSave;
+        return parent::tagDependencyInvalidate();
     }
 
     /***************************** 关联数据 *********************************/

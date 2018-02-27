@@ -98,6 +98,8 @@ class AuthItemAddPermissionsForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemAddPermissionsForm->getAttributes();
+            // 顺便清除缓存依赖对应的子数据
+            (new AuthItem())->tagDependencyInvalidate();
 
             $auth = Yii::$app->getAuthManager();
             $permission = $auth->createPermission($attributes['name']);
