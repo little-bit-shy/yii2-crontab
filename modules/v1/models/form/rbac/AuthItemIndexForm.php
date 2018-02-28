@@ -50,6 +50,7 @@ class AuthItemIndexForm extends Model
     {
         return [
             'index' => [
+                'type',
                 'name'
             ]
         ];
