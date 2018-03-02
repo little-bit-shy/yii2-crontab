@@ -14,6 +14,7 @@ use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
+use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 
@@ -28,7 +29,7 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['index', 'all-lists', 'project-directory', 'add-permissions', 'remove-permissions']
+            'optional' => ['index', 'all-lists', 'project-directory', 'add-permissions', 'remove-permissions', 'update-permissions']
         ];
         return $behaviors;
     }
@@ -45,6 +46,7 @@ class AuthItemController extends Controller
             'project-directory' => ['GET', 'POST'],
             'add-permissions' => ['POST'],
             'remove-permissions' => ['POST'],
+            'update-permissions' => ['POST'],
         ];
     }
 
@@ -99,4 +101,15 @@ class AuthItemController extends Controller
     {
         return AuthItemRemovePermissionsForm::removePermissions(Yii::$app->request->getBodyParams());
     }
+
+    /**
+     * 添加权限
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionUpdatePermissions()
+    {
+        return AuthItemUpdatePermissionsForm::updatePermissions(Yii::$app->request->getBodyParams());
+    }
+
 }

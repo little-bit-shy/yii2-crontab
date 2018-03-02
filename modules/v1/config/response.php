@@ -12,10 +12,10 @@ return [
         /** @var \yii\web\Response $response */
         $response = $event->sender;
         $data = $response->data;
-	
-	if(empty($data)){
-	    return;
-	}
+
+        if (empty($data)) {
+            return;
+        }
 
         // 处理code、message
         if (

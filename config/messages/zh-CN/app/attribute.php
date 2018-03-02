@@ -11,4 +11,9 @@ return [
     'password' => '用户密码',
     'type' => '类型',
     'name' => '名称',
+    'description' => '简介',
+    'rule_name' => '规则',
+    'data' => '数据',
+    'created_at' => '创建时间',
+    'updated_at' => '修改时间',
 ];

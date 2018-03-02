@@ -24,6 +24,8 @@ class AuthItem extends ActiveRecord implements Linkable
         return [
             // create
             [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe', 'on' => 'create'],
+            // update
+            [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe', 'on' => 'update'],
         ];
     }
 
@@ -35,6 +37,7 @@ class AuthItem extends ActiveRecord implements Linkable
     {
         return [
             'create' => ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'],
+            'update' => ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'],
         ];
     }
 
