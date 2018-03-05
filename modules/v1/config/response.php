@@ -13,16 +13,11 @@ return [
         $response = $event->sender;
         $data = $response->data;
 
-        if (empty($data)) {
+        if ($response->getIsEmpty()) {
             return;
         }
-
         // 处理code、message
-        if (
-            isset($data['type']) // 存在type
-            && class_exists($data['type']) // type是个类
-            && is_subclass_of($data['type'], '\yii\base\Exception') // type 继承自\yii\base\Exception
-        ) {
+        if (Yii::$app->getErrorHandler()->exception !== null) {
             $code = $data['code'];
             $message = $data['message'];
             if (strpos($message, '|')) {
