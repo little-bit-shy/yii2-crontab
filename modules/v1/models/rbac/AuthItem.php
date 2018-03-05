@@ -64,7 +64,7 @@ class AuthItem extends ActiveRecord implements Linkable
     {
         return ArrayHelper::merge(parent::fields(), [
             'data' => function ($model) {
-                return bin2hex($model->data);
+                return gzuncompress($model->data);
             },
             'created_at' => function ($model) {
                 return date("Y-m-d H:i:s", $model->created_at);
