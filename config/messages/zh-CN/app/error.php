@@ -12,4 +12,5 @@ return [
     'the user does not exist' => '用户不存在|10002',
     'user password error' => '用户密码错误|10003',
     'permissions name error' => '权限名称不合法|10004',
+    'rule name error' => '规则名称不合法|10005',
 ];
