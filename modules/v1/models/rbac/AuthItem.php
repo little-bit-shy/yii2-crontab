@@ -4,6 +4,7 @@ namespace v1\models\rbac;
 
 use v1\models\ActiveRecord;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
@@ -61,9 +62,9 @@ class AuthItem extends ActiveRecord implements Linkable
      */
     public function fields()
     {
-        return array(parent::fields(), [
+        return ArrayHelper::merge(parent::fields(), [
             'data' => function ($model) {
-                return unserialize($model->data);
+                return bin2hex($model->data);
             },
             'created_at' => function ($model) {
                 return date("Y-m-d H:i:s", $model->created_at);
