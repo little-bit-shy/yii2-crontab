@@ -61,7 +61,17 @@ class AuthItem extends ActiveRecord implements Linkable
      */
     public function fields()
     {
-        return parent::fields();
+        return array(parent::fields(), [
+            'data' => function ($model) {
+                return unserialize($model->data);
+            },
+            'created_at' => function ($model) {
+                return date("Y-m-d H:i:s", $model->created_at);
+            },
+            'updated_at' => function ($model) {
+                return date("Y-m-d H:i:s", $model->updated_at);
+            },
+        ]);
     }
 
     /**
