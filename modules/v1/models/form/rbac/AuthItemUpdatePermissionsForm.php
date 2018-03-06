@@ -62,7 +62,7 @@ class AuthItemUpdatePermissionsForm extends Model
      */
     public function validateRuleName($attribute, $params)
     {
-        if (empty($this->$attribute) || !(class_exists($this->$attribute) && is_subclass_of($this->$attribute, '\yii\rbac\Rule'))) {
+        if ($this->$attribute == "" || !(class_exists($this->$attribute) && is_subclass_of($this->$attribute, '\yii\rbac\Rule'))) {
             $this->addError($attribute, Yii::t('app/error', 'rule name error'));
         }
     }
