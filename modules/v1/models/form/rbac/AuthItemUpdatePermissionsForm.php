@@ -38,7 +38,7 @@ class AuthItemUpdatePermissionsForm extends Model
             [['name', 'description', 'rule_name', 'data'], 'string', 'on' => 'update-permissions'],
             [['name'], 'required', 'on' => 'update-permissions'],
             [['name'], 'exist', 'targetClass' => AuthItem::className(), 'on' => 'update-permissions'],
-            [['rule_name'], 'validateRuleName', 'skipOnEmpty' => false, 'on' => 'update-permissions'],
+            [['rule_name'], 'validateRuleName', 'skipOnEmpty' => true, 'on' => 'update-permissions'],
         ];
     }
 
