@@ -38,7 +38,7 @@ class AuthItemUpdatePermissionsForm extends Model
             [['name', 'description', 'rule_name', 'data'], 'string', 'on' => 'update-permissions'],
             [['name'], 'required', 'on' => 'update-permissions'],
             [['name'], 'exist', 'targetClass' => AuthItem::className(), 'on' => 'update-permissions'],
-            [['rule_name'], 'validateRuleName', 'skipOnEmpty' => true, 'on' => 'update-permissions'],
+            [['rule_name'], 'validateRuleName', 'skipOnEmpty' => false, 'on' => 'update-permissions'],
         ];
     }
 
@@ -62,7 +62,7 @@ class AuthItemUpdatePermissionsForm extends Model
      */
     public function validateRuleName($attribute, $params)
     {
-        if (!(class_exists($this->$attribute) && is_subclass_of($this->$attribute, '\yii\rbac\Rule'))) {
+        if ($this->$attribute !== null && !(class_exists($this->$attribute) && is_subclass_of($this->$attribute, '\yii\rbac\Rule'))) {
             $this->addError($attribute, Yii::t('app/error', 'rule name error'));
         }
     }
