@@ -36,20 +36,7 @@ class AuthItemAddPermissionsForm extends Model
             [['name'], 'string', 'on' => 'add-permissions'],
             [['name'], 'trim', 'on' => 'add-permissions'],
             [['name'], 'unique', 'targetClass' => AuthItem::className(), 'on' => 'add-permissions'],
-            [['name'], 'validateName', 'skipOnEmpty' => true, 'skipOnError' => true, 'on' => 'add-permissions'],
-        ];
-    }
-
-    /**
-     * 场景
-     * @return array
-     */
-    public function scenarios()
-    {
-        return [
-            'add-permissions' => [
-                'name',
-            ]
+            [['name'], 'validateName', 'on' => 'add-permissions'],
         ];
     }
 
@@ -64,6 +51,19 @@ class AuthItemAddPermissionsForm extends Model
         if (!ArrayHelper::isIn($this->$attribute, $appRoutes)) {
             $this->addError($attribute, Yii::t('app/error', 'permissions name error'));
         }
+    }
+
+    /**
+     * 场景
+     * @return array
+     */
+    public function scenarios()
+    {
+        return [
+            'add-permissions' => [
+                'name',
+            ]
+        ];
     }
 
     /**
@@ -98,7 +98,7 @@ class AuthItemAddPermissionsForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemAddPermissionsForm->getAttributes();
-            // 顺便清除缓存依赖对应的子数据
+// 顺便清除缓存依赖对应的子数据
             (new AuthItem())->tagDependencyInvalidate();
 
             $auth = Yii::$app->getAuthManager();
