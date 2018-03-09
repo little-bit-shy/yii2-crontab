@@ -12,6 +12,7 @@ namespace v1\controllers;
 use app\components\AppRoutes;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
+use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
@@ -29,7 +30,11 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['index', 'all-lists', 'project-directory', 'add-permissions', 'remove-permissions', 'update-permissions']
+            'optional' => [
+                'index', 'all-lists', 'project-directory',
+                'add-permissions', 'remove-permissions', 'update-permissions',
+                'all-lists-with-level'
+            ]
         ];
         return $behaviors;
     }
@@ -47,6 +52,7 @@ class AuthItemController extends Controller
             'add-permissions' => ['POST'],
             'remove-permissions' => ['POST'],
             'update-permissions' => ['POST'],
+            'all-lists-with-level' => ['POST'],
         ];
     }
 
@@ -110,6 +116,17 @@ class AuthItemController extends Controller
     public function actionUpdatePermissions()
     {
         return AuthItemUpdatePermissionsForm::updatePermissions(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 返回所有列表数据（数据重构后添加了层次结构）
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAllListsWithLevel()
+    {
+        return AuthItemAllListsWithLevelForm::allListsWithLevel(Yii::$app->request->getBodyParams());
     }
 
 }
