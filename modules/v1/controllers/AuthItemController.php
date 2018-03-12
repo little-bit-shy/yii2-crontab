@@ -119,7 +119,7 @@ class AuthItemController extends Controller
     }
 
     /**
-     * 返回所有列表数据（数据重构后添加了层次结构）111
+     * 返回所有列表数据（数据重构后添加了层次结构）
      * @return mixed
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
