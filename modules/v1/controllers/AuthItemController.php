@@ -108,8 +108,7 @@ class AuthItemController extends Controller
         return AuthItemRemovePermissionsForm::removePermissions(Yii::$app->request->getBodyParams());
     }
 
-    /**
-     * 添加权限
+    /**添加权限
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
@@ -119,7 +118,7 @@ class AuthItemController extends Controller
     }
 
     /**
-     * 返回所有列表数据（数据重构后添加了层次结构）
+     * 返回所有权限列表数据（数据重构后添加了层次结构）
      * @return mixed
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException

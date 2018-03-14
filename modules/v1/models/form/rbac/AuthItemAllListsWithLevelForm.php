@@ -8,11 +8,13 @@
 
 namespace v1\models\form\rbac;
 
+use app\components\ArrayHelper;
 use v1\models\ActiveRecord;
 use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
 use yii\caching\TagDependency;
+use yii\helpers\StringHelper;
 use yii\web\HttpException;
 
 /**
@@ -33,7 +35,7 @@ class AuthItemAllListsWithLevelForm extends Model
         return [
             [['type'], 'safe', 'on' => 'all-lists-with-level'],
             [['type'], 'default', 'value' => 2, 'on' => 'all-lists-with-level'],
-            [['type'], 'in', 'range' => [1, 2], 'on' => 'all-lists-with-level'],
+            [['type'], 'in', 'range' => [2], 'on' => 'all-lists-with-level'],
         ];
     }
 
@@ -92,7 +94,26 @@ class AuthItemAllListsWithLevelForm extends Model
                     'type' => $attributes['type'],
                 ]);
                 // 获取数据
-                $dataProvider = $query->all();
+                $dataProvider = $query->asArray()->all();
+                // 数据重构（增加层次结构）
+                $dataProvider = ArrayHelper::index($dataProvider, 'name', [function () {
+                    return "/*";
+                }, function ($authItem) {
+                    $explode = StringHelper::explode($authItem['name'], '/', true, true);
+                    $permission = null;
+                    if (isset($explode[1])) {
+                        $permission = "/{$explode[0]}/*";
+                    }
+                    return $permission;
+                }, function ($authItem) {
+                    $explode = StringHelper::explode($authItem['name'], '/', true, true);
+                    $permission = null;
+                    if (isset($explode[2])) {
+                        $permission = "/{$explode[0]}/{$explode[1]}/*";
+                    }
+                    return $permission;
+                }]);
+
                 // 结果数据返回
                 return $dataProvider;
             }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
