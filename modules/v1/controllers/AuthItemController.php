@@ -10,14 +10,17 @@
 namespace v1\controllers;
 
 use app\components\AppRoutes;
+use v1\models\form\rbac\actionAllListsWithRole;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
+use v1\models\form\user\LoginForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
+use yii\helpers\ArrayHelper;
 
 class AuthItemController extends Controller
 {
@@ -33,7 +36,7 @@ class AuthItemController extends Controller
             'optional' => [
                 'index', 'all-lists', 'project-directory',
                 'add-permissions', 'remove-permissions', 'update-permissions',
-                'all-lists-with-level'
+                'all-lists-with-level', 'all-lists-with-role',
             ]
         ];
         return $behaviors;
@@ -53,6 +56,7 @@ class AuthItemController extends Controller
             'remove-permissions' => ['POST'],
             'update-permissions' => ['POST'],
             'all-lists-with-level' => ['POST'],
+            'all-lists-with-role' => ['POST'],
         ];
     }
 
@@ -108,7 +112,8 @@ class AuthItemController extends Controller
         return AuthItemRemovePermissionsForm::removePermissions(Yii::$app->request->getBodyParams());
     }
 
-    /**添加权限
+    /**
+     * 修改权限
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
@@ -126,6 +131,17 @@ class AuthItemController extends Controller
     public function actionAllListsWithLevel()
     {
         return AuthItemAllListsWithLevelForm::allListsWithLevel(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 返回角色下的所有权限列表数据
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAllListsWithRole()
+    {
+        return ActionAllListsWithRole::allListsWithRole(Yii::$app->request->getBodyParams());
     }
 
 }
