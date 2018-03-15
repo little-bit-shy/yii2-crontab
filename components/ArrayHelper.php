@@ -32,12 +32,8 @@ class ArrayHelper extends BaseArrayHelper
 
             foreach ($groups as $group) {
                 $value = static::getValue($element, $group);
-                if (!array_key_exists($value, $lastArray)) {
-                    $lastArray[$value] = [];
-                }
-                if (empty($value)) {
-                    $lastArray = $lastArray[$value];
-                }else{
+
+                if ($value !== null) {
                     $lastArray = &$lastArray[$value];
                 }
             }
