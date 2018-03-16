@@ -96,24 +96,7 @@ class AuthItemAllListsWithLevelForm extends Model
                 // 获取数据
                 $dataProvider = $query->asArray()->all();
                 // 数据重构（增加层次结构）
-                $dataProvider = ArrayHelper::menu($dataProvider, 'name', [function () {
-                    $permission = "/*";
-                    return $permission;
-                }, function ($authItem) {
-                    $explode = StringHelper::explode($authItem['name'], '/', true, true);
-                    $permission = null;
-                    if (isset($explode[1])) {
-                        $permission = "/{$explode[0]}/*";
-                    }
-                    return $permission;
-                }, function ($authItem) {
-                    $explode = StringHelper::explode($authItem['name'], '/', true, true);
-                    $permission = null;
-                    if (isset($explode[2])) {
-                        $permission = "/{$explode[0]}/{$explode[1]}/*";
-                    }
-                    return $permission;
-                }]);
+                $dataProvider = ArrayHelper::menu($dataProvider, 'name');
 
                 // 结果数据返回
                 return $dataProvider;

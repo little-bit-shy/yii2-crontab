@@ -17,43 +17,61 @@ class ArrayHelper extends BaseArrayHelper
 {
     /**
      * 建立层次结构
-     * @param array $array
-     * @param \Closure|null|string $key
-     * @param array $groups
-     * @return array
      */
-    public static function menu($array, $key, $groups = [])
+    public static function menu($array, $key)
     {
         $result = [];
-        $groups = (array)$groups;
-
         foreach ($array as $element) {
             $lastArray = &$result;
-
-            foreach ($groups as $group) {
-                $value = static::getValue($element, $group);
-
-                if ($value !== null) {
-                    $lastArray = &$lastArray[$value];
-                }
+            $explode = StringHelper::explode($element[$key], '/');
+            if ($explode[1] === '*') {
+                continue;
             }
-
-            if ($key === null) {
-                if (!empty($groups)) {
-                    $lastArray[] = $element;
-                }
-            } else {
-                $value = static::getValue($element, $key);
-                if ($value !== null) {
-                    if (is_float($value)) {
-                        $value = StringHelper::floatToString($value);
-                    }
-                    $lastArray[$value] = $element;
-                }
+            $parent = '/' . $explode[1] . '/*';
+            if ($element[$key] === $parent) {
+                $data = self::submenu($array, $element, $key, $parent);
+                $lastArray[] = $data;
             }
             unset($lastArray);
         }
-
         return $result;
+    }
+
+    /**
+     * 获取子菜单
+     */
+    public static function submenu($array, $element, $key, $parent)
+    {
+        $lastResult = $element;
+        // 初步分配子数据
+        $explode = StringHelper::explode($parent, '/');
+        foreach ($array as $key => $value) {
+            $implode = implode($explode, '\/');
+            if (preg_match("/^{$implode}/", $value['name'])) {
+                if ($parent !== $value['name']) {
+                    $result = &$lastResult['children'][];
+                    $result = $value;
+                }
+            }
+            unset($result);
+        }
+
+        // 处理子菜单数据
+        foreach ($lastResult['children'] as $key => $value) {
+            // 判断是否有需要处理的子菜单数据
+            $subExplode = StringHelper::explode($value['name'], '/');
+            $end = end($subExplode);
+            if ($end !== '*') {
+                if (count($subExplode) !== count($explode)) {
+                    unset($lastResult['children'][$key]);
+                }
+            } else {
+//                $recursion = &$lastResult['children'][$key];
+//                $recursion = &$recursion['children'][];
+                self::submenu($array, $value, $key, $value['name']);
+            }
+        }
+
+        return $lastResult;
     }
 }
