@@ -16,13 +16,13 @@ use yii\helpers\StringHelper;
 class ArrayHelper extends BaseArrayHelper
 {
     /**
-     * 重建索引
+     * 建立层次结构
      * @param array $array
      * @param \Closure|null|string $key
      * @param array $groups
      * @return array
      */
-    public static function index($array, $key, $groups = [])
+    public static function menu($array, $key, $groups = [])
     {
         $result = [];
         $groups = (array)$groups;
