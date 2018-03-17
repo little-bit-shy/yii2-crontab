@@ -17,10 +17,8 @@ use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
-use v1\models\form\user\LoginForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
-use yii\helpers\ArrayHelper;
 
 class AuthItemController extends Controller
 {
@@ -63,7 +61,10 @@ class AuthItemController extends Controller
     /**
      * 返回列表数据
      * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
      */
     public function actionIndex()
     {
@@ -73,6 +74,8 @@ class AuthItemController extends Controller
     /**
      * 返回所有列表数据
      * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
@@ -83,9 +86,7 @@ class AuthItemController extends Controller
 
     /**
      * 返回项目目录列表数据
-     * @return mixed
-     * @throws \yii\base\InvalidConfigException
-     * @throws \yii\web\HttpException
+     * @return array
      */
     public function actionProjectDirectory()
     {
@@ -125,6 +126,8 @@ class AuthItemController extends Controller
     /**
      * 返回所有权限列表数据（数据重构后添加了层次结构）
      * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
@@ -136,6 +139,8 @@ class AuthItemController extends Controller
     /**
      * 返回角色下的所有权限列表数据
      * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
