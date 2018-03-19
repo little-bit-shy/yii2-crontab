@@ -13,7 +13,10 @@ use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\StringHelper;
+use yii\helpers\Url;
 use yii\web\HttpException;
+use yii\web\Request;
 
 /**
  * 表单模型
@@ -48,7 +51,7 @@ class AuthItemAddPermissionsForm extends Model
     public function validateName($attribute, $params)
     {
         $appRoutes = (new AppRoutes())->getAppRoutes();
-        if (!ArrayHelper::isIn($this->$attribute, $appRoutes)) {
+        if (!ArrayHelper::isIn($this->$attribute, $appRoutes) || preg_match('/\/\*/', $this->$attribute)) {
             $this->addError($attribute, Yii::t('app/error', 'permissions name error'));
         }
     }

@@ -12,7 +12,6 @@ use app\components\ArrayHelper;
 use v1\models\ActiveRecord;
 use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
-use v1\models\User;
 use Yii;
 use yii\caching\TagDependency;
 use yii\helpers\StringHelper;
@@ -23,7 +22,7 @@ use yii\web\HttpException;
  * Class actionAllListsWithRole
  * @package v1\models\form\rbac
  */
-class actionAllListsWithRole extends Model
+class ActionAllListsWithRole extends Model
 {
     public $name;
     public $user;
