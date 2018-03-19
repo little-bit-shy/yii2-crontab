@@ -10,7 +10,7 @@
 namespace v1\controllers;
 
 use app\components\AppRoutes;
-use v1\models\form\rbac\actionAllListsWithRole;
+use v1\models\form\rbac\ActionAllListsWithRole;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
