@@ -17,6 +17,9 @@ class ArrayHelper extends BaseArrayHelper
 {
     /**
      * 建立树状结构
+     * @param $array
+     * @param $key
+     * @return array
      */
     public static function menu($array, $key)
     {

@@ -51,7 +51,7 @@ class AuthItemAddPermissionsForm extends Model
     public function validateName($attribute, $params)
     {
         $appRoutes = (new AppRoutes())->getAppRoutes();
-        if (!ArrayHelper::isIn($this->$attribute, $appRoutes) || preg_match('/\/\*/', $this->$attribute)) {
+        if (!ArrayHelper::isIn($this->$attribute, $appRoutes)) {
             $this->addError($attribute, Yii::t('app/error', 'permissions name error'));
         }
     }

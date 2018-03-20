@@ -14,7 +14,6 @@ use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
 use yii\caching\TagDependency;
-use yii\helpers\StringHelper;
 use yii\web\HttpException;
 
 /**
@@ -93,25 +92,6 @@ class ActionAllListsWithRole extends Model
                 // 获取数据
                 $auth = Yii::$app->getAuthManager();
                 $dataProvider = $auth->getPermissionsByRole($attributes['name']);
-
-                // 数据重构（增加层次结构）
-                $dataProvider = ArrayHelper::index($dataProvider, 'name', [function () {
-                    return "/*";
-                }, function ($authItem) {
-                    $explode = StringHelper::explode($authItem->name, '/', true, true);
-                    $permission = null;
-                    if (isset($explode[1])) {
-                        $permission = "/{$explode[0]}/*";
-                    }
-                    return $permission;
-                }, function ($authItem) {
-                    $explode = StringHelper::explode($authItem->name, '/', true, true);
-                    $permission = null;
-                    if (isset($explode[2])) {
-                        $permission = "/{$explode[0]}/{$explode[1]}/*";
-                    }
-                    return $permission;
-                }]);
 
                 // 结果数据返回
                 return $dataProvider;
