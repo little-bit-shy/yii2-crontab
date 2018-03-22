@@ -4,7 +4,6 @@
  * User: xuguozhi
  * Date: 2016/11/8
  * Time: 15:42
- * @author xuguoliang <1044748759@qq.com>
  * @desc 树状结构
  */
 
