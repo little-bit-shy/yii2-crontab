@@ -12,6 +12,7 @@ use app\components\ArrayHelper;
 use v1\models\ActiveRecord;
 use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
+use v1\models\rbac\AuthItemChild;
 use Yii;
 use yii\caching\TagDependency;
 use yii\web\HttpException;
@@ -21,7 +22,7 @@ use yii\web\HttpException;
  * Class actionAllListsWithRole
  * @package v1\models\form\rbac
  */
-class ActionAllListsWithRole extends Model
+class AuthItemAllListsWithRoleForm extends Model
 {
     public $name;
     public $user;
@@ -80,7 +81,7 @@ class ActionAllListsWithRole extends Model
     public static function allListsWithRole($param)
     {
         // 表单模型实例化
-        $actionAllListsWithRole = new ActionAllListsWithRole();
+        $actionAllListsWithRole = new AuthItemAllListsWithRoleForm();
         // 场景定义
         $actionAllListsWithRole->setScenario('all-lists-with-role');
         // 验证数据是否合法
@@ -95,7 +96,7 @@ class ActionAllListsWithRole extends Model
 
                 // 结果数据返回
                 return $dataProvider;
-            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
+            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag(""), AuthItemChild::getDetailTag("/parent/{$attributes['name']}")]]));
 
             return $dataProvider;
         } else {

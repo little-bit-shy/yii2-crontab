@@ -10,7 +10,9 @@
 namespace v1\controllers;
 
 use app\components\AppRoutes;
-use v1\models\form\rbac\ActionAllListsWithRole;
+use v1\models\form\rbac\AuthItemAddRoleForm;
+use v1\models\form\rbac\AuthItemAddRolePermissionsForm;
+use v1\models\form\rbac\AuthItemAllListsWithRoleForm;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
@@ -34,7 +36,7 @@ class AuthItemController extends Controller
             'optional' => [
                 'index', 'all-lists', 'project-directory',
                 'add-permissions', 'remove-permissions', 'update-permissions',
-                'all-lists-with-level', 'all-lists-with-role',
+                'all-lists-with-level', 'all-lists-with-role', 'add-role', 'add-role-permissions'
             ]
         ];
         return $behaviors;
@@ -55,6 +57,8 @@ class AuthItemController extends Controller
             'update-permissions' => ['POST'],
             'all-lists-with-level' => ['POST'],
             'all-lists-with-role' => ['POST'],
+            'add-role' => ['POST'],
+            'add-role-permissions' => ['POST'],
         ];
     }
 
@@ -146,7 +150,28 @@ class AuthItemController extends Controller
      */
     public function actionAllListsWithRole()
     {
-        return ActionAllListsWithRole::allListsWithRole(Yii::$app->request->getBodyParams());
+        return AuthItemAllListsWithRoleForm::allListsWithRole(Yii::$app->request->getBodyParams());
     }
 
+    /**
+     * 添加角色
+     * @throws \Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddRole()
+    {
+        return AuthItemAddRoleForm::addRole(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 为角色添加的权限
+     * @throws \Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddRolePermissions()
+    {
+        return AuthItemAddRolePermissionsForm::addRolePermissions(Yii::$app->request->getBodyParams());
+    }
 }

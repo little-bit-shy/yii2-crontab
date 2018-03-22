@@ -62,8 +62,8 @@ class UserCopyForm extends Model
     /**
      * 添加数据
      * @param $param
-     * @return bool
      * @throws HttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public static function create($param)
     {

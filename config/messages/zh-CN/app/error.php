@@ -13,4 +13,6 @@ return [
     'user password error' => '用户密码错误|10003',
     'permissions name error' => '权限名称不合法|10004',
     'rule name error' => '规则名称不合法|10005',
+    'role or name error' => '角色或名称不合法|10006',
+    'the data exist' => '数据已存在|10007',
 ];

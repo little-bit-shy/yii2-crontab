@@ -17,4 +17,5 @@ return [
     'created_at' => '创建时间',
     'updated_at' => '修改时间',
     'user' => '用户信息',
+    'role' => '角色',
 ];

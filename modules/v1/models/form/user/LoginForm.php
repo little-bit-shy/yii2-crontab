@@ -70,6 +70,8 @@ class LoginForm extends Model
      * 验证用户名是否合法
      * @param $attribute
      * @param $params
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function validateUsername($attribute, $params)
     {
@@ -83,6 +85,8 @@ class LoginForm extends Model
      * 验证用户密码是否合法
      * @param $attribute
      * @param $params
+     * @throws \Exception
+     * @throws \Throwable
      */
     public function validatePassword($attribute, $params)
     {
@@ -99,6 +103,11 @@ class LoginForm extends Model
      * @param $param
      * @return User
      * @throws HttpException
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
+     *
+     *
      */
     public function login($param)
     {
@@ -117,6 +126,8 @@ class LoginForm extends Model
      * 通过用户名称获取用户信息
      * @param $username
      * @return User
+     * @throws \Exception
+     * @throws \Throwable
      */
     private function getUser($username)
     {
