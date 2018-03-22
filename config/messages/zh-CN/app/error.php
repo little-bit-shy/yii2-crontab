@@ -15,4 +15,5 @@ return [
     'rule name error' => '规则名称不合法|10005',
     'role or name error' => '角色或名称不合法|10006',
     'the data exist' => '数据已存在|10007',
+    'the data not exist' => '数据不存在|10008',
 ];
