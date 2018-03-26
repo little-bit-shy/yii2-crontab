@@ -29,11 +29,12 @@ class AuthItemAddRoleForm extends Model
     public function rules()
     {
         return [
-            [['name'], 'safe', 'on' => 'add-role'],
+            [['name', 'description', 'rule_name', 'data'], 'safe', 'on' => 'add-role'],
             [['name'], 'required', 'on' => 'add-role'],
-            [['name'], 'string', 'on' => 'add-role'],
+            [['name', 'description', 'rule_name', 'data'], 'string', 'on' => 'add-role'],
             [['name'], 'trim', 'on' => 'add-role'],
             [['name'], 'unique', 'targetClass' => AuthItem::className(), 'on' => 'add-role'],
+            [['rule_name'], 'validateRuleName', 'skipOnEmpty' => false, 'on' => 'add-role'],
         ];
     }
 
@@ -45,9 +46,21 @@ class AuthItemAddRoleForm extends Model
     {
         return [
             'add-role' => [
-                'name',
+                'name', 'description', 'rule_name', 'data'
             ]
         ];
+    }
+
+    /**
+     * 验证rule_name参数是否合法
+     * @param $attribute
+     * @param $params
+     */
+    public function validateRuleName($attribute, $params)
+    {
+        if ($this->$attribute !== null && !(class_exists($this->$attribute) && is_subclass_of($this->$attribute, '\yii\rbac\Rule'))) {
+            $this->addError($attribute, Yii::t('app/error', 'rule name error'));
+        }
     }
 
     /**
@@ -58,6 +71,9 @@ class AuthItemAddRoleForm extends Model
     {
         return [
             'name' => Yii::t('app\attribute', 'name'),
+            'description' => Yii::t('app\attribute', 'description'),
+            'rule_name' => Yii::t('app\attribute', 'rule_name'),
+            'data' => Yii::t('app\attribute', 'data'),
         ];
     }
 
