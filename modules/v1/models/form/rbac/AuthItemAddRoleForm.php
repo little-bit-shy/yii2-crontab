@@ -107,6 +107,9 @@ class AuthItemAddRoleForm extends Model
 
             $auth = Yii::$app->getAuthManager();
             $role = $auth->createRole($attributes['name']);
+            $role->description = $attributes['description'];
+            $role->ruleName = $attributes['rule_name'];
+            $role->data = $attributes['data'];
             if ($auth->add($role)) {
                 throw new HttpException(200, Yii::t('app/success', 'data added successfully'));
             } else {
