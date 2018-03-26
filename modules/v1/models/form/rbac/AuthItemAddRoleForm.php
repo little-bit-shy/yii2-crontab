@@ -21,6 +21,9 @@ use yii\web\HttpException;
 class AuthItemAddRoleForm extends Model
 {
     public $name;
+    public $description;
+    public $rule_name;
+    public $data;
 
     /**
      * 验证规则
