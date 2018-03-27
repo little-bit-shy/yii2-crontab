@@ -11,6 +11,7 @@ namespace v1\controllers;
 
 use v1\models\ActiveRecord;
 use v1\models\rbac\AuthItem;
+use v1\models\rbac\AuthItemChild;
 use Yii;
 use yii\base\InlineAction;
 use yii\filters\AccessControl;
@@ -104,7 +105,9 @@ class Controller extends \yii\rest\Controller
                         $uniqueId = '/' . $action->getUniqueId();
                         $can = ActiveRecord::getDb()->cache(function ($db) use ($uniqueId) {
                             return Yii::$app->getUser()->can($uniqueId);
-                        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag()]]));
+                        }, ActiveRecord::$dataTimeOut, new TagDependency([
+                            'tags' => [AuthItem::getListTag(), AuthItemChild::getListTag()]
+                        ]));
                         return $can;
                     }
                 ],
