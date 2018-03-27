@@ -39,22 +39,8 @@ class AuthItemRemovePermissionsForm extends Model
             [['name'], 'required', 'on' => 'remove-permissions'],
             [['name'], 'string', 'on' => 'remove-permissions'],
             [['name'], 'trim', 'on' => 'remove-permissions'],
-//            [['name'], 'validateName', 'on' => 'remove-permissions'],
         ];
     }
-
-    /**
-     * 验证name参数是否合法
-     * @param $attribute
-     * @param $params
-     */
-//    public function validateName($attribute, $params)
-//    {
-//        $appRoutes = (new AppRoutes())->getAppRoutes();
-//        if (!ArrayHelper::isIn($this->$attribute, $appRoutes)) {
-//            $this->addError($attribute, Yii::t('app/error', 'permissions name error'));
-//        }
-//    }
 
     /**
      * 场景
