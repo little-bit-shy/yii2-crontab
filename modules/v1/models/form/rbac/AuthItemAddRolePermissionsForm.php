@@ -38,8 +38,8 @@ class AuthItemAddRolePermissionsForm extends Model
             [['name', 'role'], 'required', 'on' => 'add-role-permissions'],
             [['name', 'role'], 'string', 'on' => 'add-role-permissions'],
             [['name', 'role'], 'trim', 'on' => 'add-role-permissions'],
-            [['name'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['name' => 'name'], 'on' => 'add-role-permissions'],
-            [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'on' => 'add-role-permissions'],
+            [['name'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['name' => 'name'], 'filter' => ['type' => 2], 'on' => 'add-role-permissions'],
+            [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'filter' => ['type' => 1], 'on' => 'add-role-permissions'],
             [['name'], 'validateNameAndRole', 'on' => 'add-role-permissions']
         ];
     }

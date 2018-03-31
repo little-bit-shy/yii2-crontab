@@ -40,7 +40,7 @@ class AuthItemAddUserRoleForm extends Model
             [['role'], 'string', 'on' => 'add-user-role'],
             [['role'], 'trim', 'on' => 'add-user-role'],
             [['user_id'], 'exist', 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id'], 'on' => 'add-user-role'],
-            [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'on' => 'add-user-role'],
+            [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'filter' => ['type' => 1], 'on' => 'add-user-role'],
             [['user_id'], 'validateUserIdAndRole', 'on' => 'add-user-role']
         ];
     }
