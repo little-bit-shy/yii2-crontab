@@ -102,7 +102,7 @@ class AuthItemAllListsForm extends Model
                 // 数据重构
                 $dataProvider = [];
                 foreach ($data as $key => $value) {
-                    $dataProvider[$value['name']] = $value['name'];
+                    $dataProvider[$value['name']] = $value;
                 }
                 // 结果数据返回
                 return $dataProvider;
