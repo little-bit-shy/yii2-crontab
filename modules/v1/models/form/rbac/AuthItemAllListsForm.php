@@ -90,7 +90,6 @@ class AuthItemAllListsForm extends Model
             $attributes = $authItemIndexForm->getAttributes();
             $dataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
                 $query = AuthItem::find();
-                $query->select(['name']);
                 // 数据类型过滤
                 $query->andFilterWhere([
                     'type' => $attributes['type'],
