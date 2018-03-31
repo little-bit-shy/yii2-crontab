@@ -17,6 +17,7 @@ use v1\models\form\rbac\AuthItemAllListsWithRoleForm;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
+use v1\models\form\rbac\AuthItemAllRoleWithUserForm;
 use v1\models\form\rbac\AuthItemDeleteRolePermissionsForm;
 use v1\models\form\rbac\AuthItemDeleteUserRoleForm;
 use v1\models\form\rbac\AuthItemIndexForm;
@@ -42,7 +43,7 @@ class AuthItemController extends Controller
                 'add-permissions', 'remove-permissions', 'update-permissions',
                 'all-lists-with-level', 'all-lists-with-role',
                 'add-role', 'add-role-permissions', 'delete-role-permissions',
-                'user-lists', 'add-user-role', 'delete-user-role'
+                'user-lists', 'add-user-role', 'delete-user-role', 'all-role-with-user'
             ]
         ];
         return $behaviors;
@@ -69,6 +70,7 @@ class AuthItemController extends Controller
             'user-lists' => ['POST'],
             'add-user-role' => ['POST'],
             'delete-user-role' => ['POST'],
+            'all-role-with-user' => ['POST'],
         ];
     }
 
@@ -230,5 +232,18 @@ class AuthItemController extends Controller
     public function actionDeleteUserRole()
     {
         return AuthItemDeleteUserRoleForm::deleteUserRole(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 返回用户下的所有角色列表数据
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAllRoleWithUser()
+    {
+        return AuthItemAllRoleWithUserForm::allRoleWithUser(Yii::$app->request->getBodyParams());
     }
 }
