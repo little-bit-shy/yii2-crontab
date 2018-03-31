@@ -18,6 +18,7 @@ use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
 use v1\models\form\rbac\AuthItemDeleteRolePermissionsForm;
+use v1\models\form\rbac\AuthItemDeleteUserRoleForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
@@ -41,7 +42,7 @@ class AuthItemController extends Controller
                 'add-permissions', 'remove-permissions', 'update-permissions',
                 'all-lists-with-level', 'all-lists-with-role',
                 'add-role', 'add-role-permissions', 'delete-role-permissions',
-                'user-lists', 'add-user-role', 'delete-uer-role'
+                'user-lists', 'add-user-role', 'delete-user-role'
             ]
         ];
         return $behaviors;
@@ -67,7 +68,7 @@ class AuthItemController extends Controller
             'delete-role-permissions' => ['POST'],
             'user-lists' => ['POST'],
             'add-user-role' => ['POST'],
-            'delete-uer-role' => ['POST'],
+            'delete-user-role' => ['POST'],
         ];
     }
 
@@ -108,6 +109,7 @@ class AuthItemController extends Controller
 
     /**
      * 添加权限
+     * @throws \Exception
      * @throws \yii\base\InvalidConfigException
      * @throws \yii\web\HttpException
      */
@@ -217,5 +219,16 @@ class AuthItemController extends Controller
     public function actionAddUserRole()
     {
         return AuthItemAddUserRoleForm::addUserRole(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 删除为用户分配的角色
+     * @throws \Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionDeleteUserRole()
+    {
+        return AuthItemDeleteUserRoleForm::deleteUserRole(Yii::$app->request->getBodyParams());
     }
 }
