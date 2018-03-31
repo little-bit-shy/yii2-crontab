@@ -11,7 +11,10 @@ namespace v1\models\form\rbac;
 use app\components\AppRoutes;
 use v1\models\ActiveRecord;
 use v1\models\form\Model;
+use v1\models\rbac\AuthAssignment;
 use v1\models\rbac\AuthItem;
+use v1\models\rbac\AuthItemChild;
+use v1\models\rbac\AuthRule;
 use Yii;
 use yii\caching\TagDependency;
 use yii\data\ArrayDataProvider;
@@ -88,7 +91,11 @@ class AuthItemRemovePermissionsForm extends Model
             // 过滤后的合法数据
             $attributes = $authItemRemovePermissionsForm->getAttributes();
             // 顺便清除缓存依赖对应的子数据
+            // 顺便清除缓存依赖对应的子数据
             (new AuthItem())->tagDependencyInvalidate();
+            (new AuthItemChild())->tagDependencyInvalidate();
+            (new AuthAssignment())->tagDependencyInvalidate();
+            (new AuthRule())->tagDependencyInvalidate();
 
             $auth = Yii::$app->getAuthManager();
             $permission = $auth->createPermission($attributes['name']);

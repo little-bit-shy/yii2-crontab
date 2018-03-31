@@ -9,17 +9,15 @@
 namespace v1\models\rbac;
 
 use v1\models\ActiveRecord;
-use Yii;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
-class AuthItem extends ActiveRecord implements Linkable
+class AuthAssignment extends ActiveRecord implements Linkable
 {
     public static function tableName()
     {
-        return '{{%auth_item}}';
+        return '{{%auth_assignment}}';
     }
 
     /**
@@ -29,10 +27,6 @@ class AuthItem extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            // create
-            [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe', 'on' => 'create'],
-            // update
-            [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe', 'on' => 'update'],
         ];
     }
 
@@ -43,8 +37,6 @@ class AuthItem extends ActiveRecord implements Linkable
     public function scenarios()
     {
         return [
-            'create' => ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'],
-            'update' => ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'],
         ];
     }
 
@@ -57,7 +49,7 @@ class AuthItem extends ActiveRecord implements Linkable
     public function getLinks()
     {
         return [
-            Link::REL_SELF => Url::to(['auth-item/view', 'name' => $this->name], true),
+            Link::REL_SELF => Url::to(['auth-assignment/view', 'user_id' => $this->name], true),
         ];
     }
 
@@ -68,18 +60,7 @@ class AuthItem extends ActiveRecord implements Linkable
      */
     public function fields()
     {
-        return ArrayHelper::merge(parent::fields(), [
-            'data' => function ($model) {
-                $data = unserialize($model->data);
-                return empty($data) ? null : $data;
-            },
-            'created_at' => function ($model) {
-                return date("Y-m-d H:i:s", $model->created_at);
-            },
-            'updated_at' => function ($model) {
-                return date("Y-m-d H:i:s", $model->updated_at);
-            },
-        ]);
+        return parent::fields();
     }
 
     /**

@@ -18,4 +18,5 @@ return [
     'updated_at' => '修改时间',
     'user' => '用户信息',
     'role' => '角色',
+    'user_id' => '用户id',
 ];

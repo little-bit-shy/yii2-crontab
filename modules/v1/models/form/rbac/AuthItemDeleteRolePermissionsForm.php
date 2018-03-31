@@ -9,8 +9,10 @@
 namespace v1\models\form\rbac;
 
 use v1\models\form\Model;
+use v1\models\rbac\AuthAssignment;
 use v1\models\rbac\AuthItem;
 use v1\models\rbac\AuthItemChild;
+use v1\models\rbac\AuthRule;
 use Yii;
 use yii\web\HttpException;
 
@@ -108,6 +110,9 @@ class AuthItemDeleteRolePermissionsForm extends Model
             $attributes = $authItemDeleteRolePermissionsForm->getAttributes();
             // 顺便清除缓存依赖对应的子数据
             (new AuthItem())->tagDependencyInvalidate();
+            (new AuthItemChild())->tagDependencyInvalidate();
+            (new AuthAssignment())->tagDependencyInvalidate();
+            (new AuthRule())->tagDependencyInvalidate();
 
             $auth = Yii::$app->getAuthManager();
             $permission = $auth->createRole($attributes['name']);

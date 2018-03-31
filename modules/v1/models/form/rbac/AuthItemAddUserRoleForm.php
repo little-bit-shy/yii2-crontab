@@ -19,12 +19,12 @@ use yii\web\HttpException;
 
 /**
  * 表单模型
- * Class AuthItemAddRolePermissionsForm
+ * Class AuthItemAddUserRoleForm
  * @package v1\models\form\rbac
  */
-class AuthItemAddRolePermissionsForm extends Model
+class AuthItemAddUserRoleForm extends Model
 {
-    public $name;
+    public $user_id;
     public $role;
 
     /**
@@ -34,13 +34,14 @@ class AuthItemAddRolePermissionsForm extends Model
     public function rules()
     {
         return [
-            [['name', 'role'], 'safe', 'on' => 'add-role-permissions'],
-            [['name', 'role'], 'required', 'on' => 'add-role-permissions'],
-            [['name', 'role'], 'string', 'on' => 'add-role-permissions'],
-            [['name', 'role'], 'trim', 'on' => 'add-role-permissions'],
-            [['name'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['name' => 'name'], 'on' => 'add-role-permissions'],
-            [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'on' => 'add-role-permissions'],
-            [['name'], 'validateNameAndRole', 'on' => 'add-role-permissions']
+            [['user_id', 'role'], 'safe', 'on' => 'add-user-role'],
+            [['user_id', 'role'], 'required', 'on' => 'add-user-role'],
+            [['user_id'], 'integer', 'on' => 'add-user-role'],
+            [['role'], 'string', 'on' => 'add-user-role'],
+            [['role'], 'trim', 'on' => 'add-user-role'],
+            [['user_id'], 'exist', 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id'], 'on' => 'add-user-role'],
+            [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'on' => 'add-user-role'],
+            [['user_id'], 'validateUserIdAndRole', 'on' => 'add-user-role']
         ];
     }
 
@@ -51,35 +52,27 @@ class AuthItemAddRolePermissionsForm extends Model
     public function scenarios()
     {
         return [
-            'add-role-permissions' => [
-                'name',
+            'add-user-role' => [
+                'user_id',
                 'role'
             ]
         ];
     }
 
     /**
-     * 验证权限、角色关系是否合法
+     * 验证用户、角色关系是否合法
      * @param $attribute
      * @param $params
      */
-    public function validateNameAndRole($attribute, $params)
+    public function validateUserIdAndRole($attribute, $params)
     {
         // 是否已存在该数据
-        $authItemChild = AuthItemChild::find()->where([
-            'parent' => $this->role,
-            'child' => $this->name,
+        $authAssignment = AuthAssignment::find()->where([
+            'user_id' => $this->user_id,
+            'item_name' => $this->role,
         ])->exists();
-        if($authItemChild){
+        if($authAssignment){
             $this->addError($attribute, Yii::t('app/error', 'the data exist'));
-        }
-
-        // 验证权限、角色关系是否合法
-        $auth = Yii::$app->getAuthManager();
-        $role = $auth->createRole($this->role);
-        $permission = $auth->createPermission($this->name);
-        if (!$auth->canAddChild($role, $permission)) {
-            $this->addError($attribute, Yii::t('app/error', 'role or name error'));
         }
     }
 
@@ -90,7 +83,7 @@ class AuthItemAddRolePermissionsForm extends Model
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('app\attribute', 'name'),
+            'user_id' => Yii::t('app\attribute', 'user_id'),
             'role' => Yii::t('app\attribute', 'role'),
         ];
     }
@@ -100,23 +93,23 @@ class AuthItemAddRolePermissionsForm extends Model
     /***************************** 获取数据 *********************************/
 
     /**
-     * 为角色添加权限
+     * 为用户分配角色
      * @param $param
      * @throws HttpException
      * @throws \Exception
      * @throws \yii\base\InvalidConfigException
      */
-    public static function addRolePermissions($param)
+    public static function addUserRole($param)
     {
         // 表单模型实例化
-        $authItemAddRolePermissionsForm = new AuthItemAddRolePermissionsForm();
+        $authItemAddUserRoleForm = new AuthItemAddUserRoleForm();
         // 场景定义
-        $authItemAddRolePermissionsForm->setScenario('add-role-permissions');
+        $authItemAddUserRoleForm->setScenario('add-user-role');
         // 验证数据是否合法
-        if ($authItemAddRolePermissionsForm->load([$authItemAddRolePermissionsForm->formName() => $param]) && $authItemAddRolePermissionsForm->validate()) {
+        if ($authItemAddUserRoleForm->load([$authItemAddUserRoleForm->formName() => $param]) && $authItemAddUserRoleForm->validate()) {
             // 数据合法
             // 过滤后的合法数据
-            $attributes = $authItemAddRolePermissionsForm->getAttributes();
+            $attributes = $authItemAddUserRoleForm->getAttributes();
             // 顺便清除缓存依赖对应的子数据
             (new AuthItem())->tagDependencyInvalidate();
             (new AuthItemChild())->tagDependencyInvalidate();
@@ -124,16 +117,15 @@ class AuthItemAddRolePermissionsForm extends Model
             (new AuthRule())->tagDependencyInvalidate();
 
             $auth = Yii::$app->getAuthManager();
-            $permission = $auth->createRole($attributes['name']);
             $role = $auth->createRole($attributes['role']);
-            if ($auth->addChild($role, $permission)) {
+            if ($auth->assign($role, $attributes['user_id'])) {
                 throw new HttpException(200, Yii::t('app/success', 'data added successfully'));
             } else {
                 throw new HttpException(500, Yii::t('app/error', 'server internal error'));
             }
         } else {
             // 数据不合法
-            throw new HttpException(422, $authItemAddRolePermissionsForm->getFirstError());
+            throw new HttpException(422, $authItemAddUserRoleForm->getFirstError());
         }
     }
 

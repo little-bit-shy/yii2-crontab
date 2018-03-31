@@ -12,6 +12,7 @@ namespace v1\controllers;
 use app\components\AppRoutes;
 use v1\models\form\rbac\AuthItemAddRoleForm;
 use v1\models\form\rbac\AuthItemAddRolePermissionsForm;
+use v1\models\form\rbac\AuthItemAddUserRoleForm;
 use v1\models\form\rbac\AuthItemAllListsWithRoleForm;
 use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
@@ -20,6 +21,7 @@ use v1\models\form\rbac\AuthItemDeleteRolePermissionsForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
+use v1\models\form\rbac\AuthItemUserListForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 
@@ -38,7 +40,8 @@ class AuthItemController extends Controller
                 'index', 'all-lists', 'project-directory',
                 'add-permissions', 'remove-permissions', 'update-permissions',
                 'all-lists-with-level', 'all-lists-with-role',
-                'add-role', 'add-role-permissions', 'delete-role-permissions'
+                'add-role', 'add-role-permissions', 'delete-role-permissions',
+                'user-lists', 'add-user-role', 'delete-uer-role'
             ]
         ];
         return $behaviors;
@@ -53,7 +56,7 @@ class AuthItemController extends Controller
         return [
             'index' => ['POST'],
             'all-lists' => ['POST'],
-            'project-directory' => ['GET', 'POST'],
+            'project-directory' => ['POST'],
             'add-permissions' => ['POST'],
             'remove-permissions' => ['POST'],
             'update-permissions' => ['POST'],
@@ -62,6 +65,9 @@ class AuthItemController extends Controller
             'add-role' => ['POST'],
             'add-role-permissions' => ['POST'],
             'delete-role-permissions' => ['POST'],
+            'user-lists' => ['POST'],
+            'add-user-role' => ['POST'],
+            'delete-uer-role' => ['POST'],
         ];
     }
 
@@ -188,5 +194,28 @@ class AuthItemController extends Controller
     public function actionDeleteRolePermissions()
     {
         return AuthItemDeleteRolePermissionsForm::deleteRolePermissions(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 返回用户列表数据
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionUserLists()
+    {
+        return AuthItemUserListForm::lists(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 为用户分配角色
+     * @throws \Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddUserRole()
+    {
+        return AuthItemAddUserRoleForm::addUserRole(Yii::$app->request->getBodyParams());
     }
 }
