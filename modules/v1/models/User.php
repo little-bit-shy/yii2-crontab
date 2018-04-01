@@ -13,25 +13,19 @@ use yii\web\Link;
 use yii\web\Linkable;
 
 /**
- * 以下为测试数据
  * CREATE TABLE `yii2_user` (
  * `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
  * `phone` char(12) DEFAULT NULL COMMENT '手机',
  * `username` varchar(255) DEFAULT NULL COMMENT '用户名',
  * `head` varchar(255) DEFAULT NULL COMMENT '头像',
  * `access_token` varchar(255) DEFAULT NULL COMMENT 'access-token',
- * `auth_key` varchar(32) DEFAULT NULL COMMENT '自动登录key',
  * `password_hash` varchar(255) DEFAULT NULL COMMENT '加密密码',
- * `password_reset_token` varchar(255) DEFAULT NULL COMMENT '重置密码token',
  * `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
  * `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
  * `updated_at` int(11) DEFAULT NULL COMMENT '更新时间',
  * `last_login_ip` char(20) DEFAULT NULL COMMENT '最近登录ip',
  * `last_login_at` int(11) DEFAULT NULL COMMENT '最近登陆时间',
- * `oauth2` varchar(255) DEFAULT 'self' COMMENT 'oauth2',
- * `oauth2_id` int(11) DEFAULT NULL COMMENT 'oauth2_id',
  * PRIMARY KEY (`id`),
- * UNIQUE KEY `yii2restful_yii2_user_oauth2_oauth2_id` (`oauth2`,`oauth2_id`) USING BTREE COMMENT 'oauth2唯一索引',
  * UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
  * UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
  * ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
