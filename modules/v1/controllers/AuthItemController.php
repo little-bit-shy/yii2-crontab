@@ -38,7 +38,7 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => ['add-user-role']
+            'optional' => []
         ];
         return $behaviors;
     }
