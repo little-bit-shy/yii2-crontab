@@ -13,6 +13,19 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
+/**
+ * CREATE TABLE `yii2_auth_assignment` (
+ * `item_name` varchar(64) NOT NULL,
+ * `user_id` varchar(64) NOT NULL,
+ * `created_at` int(11) DEFAULT NULL,
+ * PRIMARY KEY (`item_name`,`user_id`),
+ * KEY `auth_assignment_user_id_idx` (`user_id`),
+ * CONSTRAINT `yii2_auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+ * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ *
+ * Class AuthAssignment
+ * @package v1\models\rbac
+ */
 class AuthAssignment extends ActiveRecord implements Linkable
 {
     public static function tableName()
@@ -21,12 +34,13 @@ class AuthAssignment extends ActiveRecord implements Linkable
     }
 
     /**
-     * 验证器
+     * 验证规则
      * @return array
      */
     public function rules()
     {
         return [
+            [['item_name', 'user_id', 'created_at'], 'safe'],
         ];
     }
 

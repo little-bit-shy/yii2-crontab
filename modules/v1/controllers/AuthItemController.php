@@ -10,13 +10,14 @@
 namespace v1\controllers;
 
 use app\components\AppRoutes;
+use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAddRoleForm;
 use v1\models\form\rbac\AuthItemAddRolePermissionsForm;
+use v1\models\form\rbac\AuthItemAddUserForm;
 use v1\models\form\rbac\AuthItemAddUserRoleForm;
-use v1\models\form\rbac\AuthItemAllListsWithRoleForm;
-use v1\models\form\rbac\AuthItemAddPermissionsForm;
 use v1\models\form\rbac\AuthItemAllListsForm;
 use v1\models\form\rbac\AuthItemAllListsWithLevelForm;
+use v1\models\form\rbac\AuthItemAllListsWithRoleForm;
 use v1\models\form\rbac\AuthItemAllRoleWithUserForm;
 use v1\models\form\rbac\AuthItemDeleteRolePermissionsForm;
 use v1\models\form\rbac\AuthItemDeleteUserRoleForm;
@@ -38,7 +39,7 @@ class AuthItemController extends Controller
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'optional' => []
+            'optional' => ['add-user']
         ];
         return $behaviors;
     }
@@ -65,6 +66,7 @@ class AuthItemController extends Controller
             'add-user-role' => ['POST'],
             'delete-user-role' => ['POST'],
             'all-role-with-user' => ['POST'],
+            'add-user' => ['POST'],
         ];
     }
 
@@ -239,5 +241,15 @@ class AuthItemController extends Controller
     public function actionAllRoleWithUser()
     {
         return AuthItemAllRoleWithUserForm::allRoleWithUser(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 添加用户数据
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddUser()
+    {
+        return AuthItemAddUserForm::addUser(Yii::$app->request->getBodyParams());
     }
 }

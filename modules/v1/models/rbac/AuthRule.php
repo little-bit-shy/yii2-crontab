@@ -13,6 +13,18 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
+/**
+ * CREATE TABLE `yii2_auth_rule` (
+ * `name` varchar(64) NOT NULL,
+ * `data` blob,
+ * `created_at` int(11) DEFAULT NULL,
+ * `updated_at` int(11) DEFAULT NULL,
+ * PRIMARY KEY (`name`)
+ * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ *
+ * Class AuthRule
+ * @package v1\models\rbac
+ */
 class AuthRule extends ActiveRecord implements Linkable
 {
     public static function tableName()
@@ -27,6 +39,7 @@ class AuthRule extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
+            [['name', 'data', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 

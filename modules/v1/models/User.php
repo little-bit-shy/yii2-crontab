@@ -16,16 +16,17 @@ use yii\web\Linkable;
  * CREATE TABLE `yii2_user` (
  * `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
  * `phone` char(12) DEFAULT NULL COMMENT '手机',
- * `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+ * `username` varchar(255) NOT NULL COMMENT '用户名',
  * `head` varchar(255) DEFAULT NULL COMMENT '头像',
  * `access_token` varchar(255) DEFAULT NULL COMMENT 'access-token',
- * `password_hash` varchar(255) DEFAULT NULL COMMENT '加密密码',
+ * `password_hash` varchar(255) NOT NULL COMMENT '加密密码',
  * `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
  * `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
  * `updated_at` int(11) DEFAULT NULL COMMENT '更新时间',
  * `last_login_ip` char(20) DEFAULT NULL COMMENT '最近登录ip',
  * `last_login_at` int(11) DEFAULT NULL COMMENT '最近登陆时间',
  * PRIMARY KEY (`id`),
+ * UNIQUE KEY `yii2restful_yii2_user_username` (`username`),
  * UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
  * UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
  * ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
@@ -38,6 +39,17 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     public static function tableName()
     {
         return '{{%user}}';
+    }
+
+    /**
+     * 验证规则
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            [['id', 'phone', 'username', 'head', 'access_token', 'password_hash', 'email', 'created_at', 'updated_at', 'last_login_ip', 'last_login_at'], 'safe'],
+        ];
     }
 
     /**
@@ -191,7 +203,6 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
         //更新当前登录用户Api请求频率相关数据
         $rateLimit = new RateLimit();
-        $rateLimit->setScenario('saveAllowance');
         $rateLimit->load([$rateLimit->formName() => [
             'id' => $id,
             'unique_id' => $uniqueId,

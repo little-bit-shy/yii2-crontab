@@ -16,6 +16,19 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
+/**
+ * CREATE TABLE `yii2_auth_item_child` (
+ * `parent` varchar(64) NOT NULL,
+ * `child` varchar(64) NOT NULL,
+ * PRIMARY KEY (`parent`,`child`),
+ * KEY `child` (`child`),
+ * CONSTRAINT `yii2_auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+ * CONSTRAINT `yii2_auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+ * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ *
+ * Class AuthItemChild
+ * @package v1\models\rbac
+ */
 class AuthItemChild extends ActiveRecord implements Linkable
 {
     public static function tableName()
@@ -30,6 +43,7 @@ class AuthItemChild extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
+            [['parent', 'child'], 'safe'],
         ];
     }
 

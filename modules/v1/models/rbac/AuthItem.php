@@ -15,6 +15,24 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 
+/**
+ * CREATE TABLE `yii2_auth_item` (
+ * `name` varchar(64) NOT NULL,
+ * `type` smallint(6) NOT NULL,
+ * `description` text,
+ * `rule_name` varchar(64) DEFAULT NULL,
+ * `data` blob,
+ * `created_at` int(11) DEFAULT NULL,
+ * `updated_at` int(11) DEFAULT NULL,
+ * PRIMARY KEY (`name`),
+ * KEY `rule_name` (`rule_name`),
+ * KEY `type` (`type`),
+ * CONSTRAINT `yii2_auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `yii2_auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
+ * ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ *
+ * Class AuthItem
+ * @package v1\models\rbac
+ */
 class AuthItem extends ActiveRecord implements Linkable
 {
     public static function tableName()
@@ -29,10 +47,7 @@ class AuthItem extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            // create
-            [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe', 'on' => 'create'],
-            // update
-            [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe', 'on' => 'update'],
+            [['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -43,8 +58,6 @@ class AuthItem extends ActiveRecord implements Linkable
     public function scenarios()
     {
         return [
-            'create' => ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'],
-            'update' => ['name', 'type', 'description', 'rule_name', 'data', 'created_at', 'updated_at'],
         ];
     }
 

@@ -41,8 +41,7 @@ class RateLimit extends ActiveRecord
     {
         return [
             // saveAllowance
-            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe', 'on' => 'saveAllowance'],
-            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'required', 'on' => 'saveAllowance'],
+            [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe'],
         ];
     }
 
@@ -53,7 +52,6 @@ class RateLimit extends ActiveRecord
     public function scenarios()
     {
         return [
-            'saveAllowance' => ['id', 'unique_id', 'allowance', 'allowance_updated_at'],
         ];
     }
 }

@@ -19,4 +19,6 @@ return [
     'user' => '用户信息',
     'role' => '角色',
     'user_id' => '用户id',
+    'phone' => '手机号',
+    'email' => '邮箱',
 ];
