@@ -40,8 +40,8 @@ class AuthItemRemovePermissionsForm extends Model
         return [
             [['name'], 'safe', 'on' => 'remove-permissions'],
             [['name'], 'required', 'on' => 'remove-permissions'],
-            [['name'], 'string', 'on' => 'remove-permissions'],
             [['name'], 'trim', 'on' => 'remove-permissions'],
+            [['name'], 'string', 'on' => 'remove-permissions'],
         ];
     }
 

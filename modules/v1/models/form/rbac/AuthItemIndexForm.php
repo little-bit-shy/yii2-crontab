@@ -36,7 +36,6 @@ class AuthItemIndexForm extends Model
         return [
             [['type', 'name'], 'safe', 'on' => 'index'],
             [['name'], 'string', 'on' => 'index'],
-            [['name'], 'trim', 'on' => 'index'],
             [['type'], 'default', 'value' => 2, 'on' => 'index'],
             [['type'], 'in', 'range' => [1, 2], 'on' => 'index'],
         ];

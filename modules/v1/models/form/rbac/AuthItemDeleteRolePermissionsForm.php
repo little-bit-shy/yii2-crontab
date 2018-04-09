@@ -35,8 +35,8 @@ class AuthItemDeleteRolePermissionsForm extends Model
         return [
             [['name', 'role'], 'safe', 'on' => 'delete-role-permissions'],
             [['name', 'role'], 'required', 'on' => 'delete-role-permissions'],
-            [['name', 'role'], 'string', 'on' => 'delete-role-permissions'],
             [['name', 'role'], 'trim', 'on' => 'delete-role-permissions'],
+            [['name', 'role'], 'string', 'on' => 'delete-role-permissions'],
             [['name'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['name' => 'name'], 'filter' => ['type' => 2], 'on' => 'delete-role-permissions'],
             [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'filter' => ['type' => 1], 'on' => 'delete-role-permissions'],
             [['name'], 'validateNameAndRole', 'on' => 'delete-role-permissions']

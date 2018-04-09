@@ -36,9 +36,9 @@ class AuthItemDeleteUserRoleForm extends Model
         return [
             [['user_id', 'role'], 'safe', 'on' => 'delete-user-role'],
             [['user_id', 'role'], 'required', 'on' => 'delete-user-role'],
+            [['role'], 'trim', 'on' => 'delete-user-role'],
             [['user_id'], 'integer', 'on' => 'delete-user-role'],
             [['role'], 'string', 'on' => 'delete-user-role'],
-            [['role'], 'trim', 'on' => 'delete-user-role'],
             [['user_id'], 'exist', 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id'], 'on' => 'delete-user-role'],
             [['role'], 'exist', 'targetClass' => AuthItem::className(), 'targetAttribute' => ['role' => 'name'], 'filter' => ['type' => 1], 'on' => 'delete-user-role'],
             [['role'], 'validateNameAndRole', 'on' => 'delete-user-role']

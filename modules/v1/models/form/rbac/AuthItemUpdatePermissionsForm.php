@@ -40,6 +40,7 @@ class AuthItemUpdatePermissionsForm extends Model
             [['name', 'description', 'rule_name', 'data'], 'safe', 'on' => 'update-permissions'],
             [['name', 'description', 'rule_name', 'data'], 'string', 'on' => 'update-permissions'],
             [['name'], 'required', 'on' => 'update-permissions'],
+            [['name'], 'trim', 'on' => 'update-permissions'],
             [['name'], 'exist', 'targetClass' => AuthItem::className(), 'filter' => ['type' => 2], 'on' => 'update-permissions'],
             [['rule_name'], 'validateRuleName', 'skipOnEmpty' => false, 'on' => 'update-permissions'],
         ];

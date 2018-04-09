@@ -33,7 +33,6 @@ class AuthItemAllListsForm extends Model
     {
         return [
             [['type', 'name'], 'safe', 'on' => 'all-lists'],
-            [['name'], 'trim', 'on' => 'all-lists'],
             [['type'], 'default', 'value' => 2, 'on' => 'all-lists'],
             [['type'], 'in', 'range' => [1, 2], 'on' => 'all-lists'],
         ];

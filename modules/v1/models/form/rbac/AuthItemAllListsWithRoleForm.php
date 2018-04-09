@@ -36,8 +36,8 @@ class AuthItemAllListsWithRoleForm extends Model
         return [
             [['name'], 'safe', 'on' => 'all-lists-with-role'],
             [['name'], 'required', 'on' => 'all-lists-with-role'],
-            [['name'], 'string', 'on' => 'all-lists-with-role'],
             [['name'], 'trim', 'on' => 'all-lists-with-role'],
+            [['name'], 'string', 'on' => 'all-lists-with-role'],
         ];
     }
 

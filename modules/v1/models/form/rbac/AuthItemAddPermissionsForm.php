@@ -39,8 +39,8 @@ class AuthItemAddPermissionsForm extends Model
         return [
             [['name'], 'safe', 'on' => 'add-permissions'],
             [['name'], 'required', 'on' => 'add-permissions'],
-            [['name'], 'string', 'on' => 'add-permissions'],
             [['name'], 'trim', 'on' => 'add-permissions'],
+            [['name'], 'string', 'on' => 'add-permissions'],
             [['name'], 'unique', 'targetClass' => AuthItem::className(), 'filter' => ['type' => 2], 'on' => 'add-permissions'],
             [['name'], 'validateName', 'on' => 'add-permissions'],
         ];

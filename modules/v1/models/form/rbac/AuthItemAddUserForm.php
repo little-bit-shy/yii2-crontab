@@ -38,6 +38,9 @@ class AuthItemAddUserForm extends Model
                 return $value ?: null;
             }, 'on' => 'add-user'],
             [['username', 'password'], 'required', 'on' => 'add-user'],
+            [['password'], 'filter', 'filter' => function ($value) {
+                return Yii::$app->getSecurity()->generatePasswordHash($value);
+            }, 'on' => 'add-user'],
             [['phone', 'username', 'password', 'email'], 'string', 'on' => 'add-user'],
             [['email'], 'email', 'on' => 'add-user'],
             [['phone'], 'match', 'pattern' => '/^[1][34578][0-9]{9}$/', 'on' => 'add-user'],
@@ -99,7 +102,7 @@ class AuthItemAddUserForm extends Model
             $user = new User();
             $user->load([$user->formName() => [
                 'username' => $attributes['username'],
-                'password_hash' => Yii::$app->getSecurity()->generatePasswordHash($attributes['password']),
+                'password_hash' => $attributes['password'],
                 'phone' => $attributes['phone'],
                 'email' => $attributes['email'],
                 'created_at' => $time,
@@ -115,5 +118,4 @@ class AuthItemAddUserForm extends Model
             throw new HttpException(422, $authItemAddUserForm->getFirstError());
         }
     }
-
 }
