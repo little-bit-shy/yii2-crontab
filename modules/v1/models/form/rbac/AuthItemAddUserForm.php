@@ -33,9 +33,12 @@ class AuthItemAddUserForm extends Model
     {
         return [
             [['phone', 'username', 'password', 'email'], 'safe', 'on' => 'add-user'],
+            [['phone', 'username', 'password', 'email'], 'trim', 'on' => 'add-user'],
+            [['phone', 'email'], 'filter', 'filter' => function ($value) {
+                return $value ?: null;
+            }, 'on' => 'add-user'],
             [['username', 'password'], 'required', 'on' => 'add-user'],
             [['phone', 'username', 'password', 'email'], 'string', 'on' => 'add-user'],
-            [['phone', 'username', 'password', 'email'], 'trim', 'on' => 'add-user'],
             [['email'], 'email', 'on' => 'add-user'],
             [['phone'], 'match', 'pattern' => '/^[1][34578][0-9]{9}$/', 'on' => 'add-user'],
             [['phone', 'username', 'email'], 'unique', 'targetClass' => User::className(), 'on' => 'add-user'],
