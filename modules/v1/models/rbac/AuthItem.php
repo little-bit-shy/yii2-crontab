@@ -52,16 +52,6 @@ class AuthItem extends ActiveRecord implements Linkable
     }
 
     /**
-     * 验证场景
-     * @return array
-     */
-    public function scenarios()
-    {
-        return [
-        ];
-    }
-
-    /**
      * 资源类通过实现yii\web\Linkable 接口来支持HATEOAS，
      * 该接口包含方法 yii\web\Linkable::getLinks() 来返回 yii\web\Link 列表，
      * 典型情况下应返回包含代表本资源对象URL的 self 链接

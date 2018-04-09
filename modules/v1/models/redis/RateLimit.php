@@ -40,18 +40,7 @@ class RateLimit extends ActiveRecord
     public function rules()
     {
         return [
-            // saveAllowance
             [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe'],
-        ];
-    }
-
-    /**
-     * 验证场景
-     * @return array
-     */
-    public function scenarios()
-    {
-        return [
         ];
     }
 }
