@@ -28,8 +28,9 @@ use yii\web\Linkable;
  * PRIMARY KEY (`id`),
  * UNIQUE KEY `yii2restful_yii2_user_username` (`username`),
  * UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
- * UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
- * ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
+ * UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`),
+ * UNIQUE KEY `yii2restful_yii2_user_email` (`email`)
+ * ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='用户表';
  *
  * Class User
  * @package v1\models

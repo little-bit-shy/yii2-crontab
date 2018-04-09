@@ -149,8 +149,9 @@ CREATE TABLE `yii2_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `yii2restful_yii2_user_username` (`username`),
   UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
-  UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`),
+  UNIQUE KEY `yii2restful_yii2_user_email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -159,7 +160,7 @@ CREATE TABLE `yii2_user` (
 
 LOCK TABLES `yii2_user` WRITE;
 /*!40000 ALTER TABLE `yii2_user` DISABLE KEYS */;
-INSERT INTO `yii2_user` VALUES (1,'15918793994','root','https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg','y0gZlbBXGxOo4K--4_4jDNa_Byw2I-8V','$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe','1533356676@qq.com',1479371680,1479371680,'127.0.0.1',1479371680),(2,NULL,'admin','https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg','inORraxmoIqYOaaDL9qe6MqBZaf-C9Pl','$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau','3095764452@qq.com',1479371663,1479371680,NULL,NULL),(16,NULL,'2333',NULL,NULL,'$2y$13$vjjgx7GQeNqbZqTQ1BB4OOWWckBGrrOMSVK5SaYaEW/L7GtqLEK7u',NULL,1523242943,1523242943,NULL,NULL);
+INSERT INTO `yii2_user` VALUES (1,'15918793994','root','https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg','y0gZlbBXGxOo4K--4_4jDNa_Byw2I-8V','$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe','1533356676@qq.com',1479371680,1479371680,'127.0.0.1',1479371680),(2,NULL,'admin','https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg','inORraxmoIqYOaaDL9qe6MqBZaf-C9Pl','$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau','3095764452@qq.com',1479371663,1479371680,NULL,NULL);
 /*!40000 ALTER TABLE `yii2_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,4 +213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-08 20:17:29
+-- Dump completed on 2018-04-08 23:50:05
