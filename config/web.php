@@ -34,7 +34,9 @@ $config = [
             'traceLevel' => 0,
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
+                    'class' => yii\log\FileTarget::className(),
+                    'maxFileSize' => 102400,
+                    'maxLogFiles' => 20,
                     'logVars' => [],
                     'levels' => ['info', 'error', 'warning'],
                     'categories' => [

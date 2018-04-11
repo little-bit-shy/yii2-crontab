@@ -16,7 +16,7 @@ namespace v1\models\redis;
 class RateLimit extends ActiveRecord
 {
     //Api在 $second 秒内能请求 $rateLimit 次
-    public static $rateLimit = 1;
+    public static $rateLimit = 100;
     public static $second = 1;
 
     public static function primaryKey()
