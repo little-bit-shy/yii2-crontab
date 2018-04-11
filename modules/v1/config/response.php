@@ -35,6 +35,16 @@ return [
             'success' => $response->getIsSuccessful(),
             'data' => $response->data,
         ];
+
+        $log = [
+            "result" => $response->data
+        ];
+        if ($response->getIsSuccessful()) {
+            Yii::info(\yii\helpers\Json::encode(\yii\helpers\ArrayHelper::toArray($log)));
+        } else {
+            Yii::warning(\yii\helpers\Json::encode(\yii\helpers\ArrayHelper::toArray($log)));
+        }
+
         // 放在后面，避免污染IsSuccessfulz
         $response->setStatusCode(200);
     }

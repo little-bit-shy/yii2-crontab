@@ -31,11 +31,36 @@ $config = [
             'useFileTransport' => true,
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'levels' => ['info', 'error', 'warning'],
+                    'categories' => [
+                        'application',
+                    ],
+                    'prefix' => function ($message) {
+                        // 获取userid
+                        $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
+                        $userId = $user ? $user->getId(false) : '-';
+                        // 获取客户端ip
+                        $serverIp = Yii::$app->getRequest()->getUserIP();
+                        $serverIp = $serverIp ?: '-';
+                        // 获取会话信息
+                        $sessionId = (new \yii\web\Session())->getId();
+                        $sessionId = $sessionId ?: '-';
+                        // 获取路由
+                        $pathInfo = Yii::$app->getRequest()->getPathInfo();
+                        $pathInfo = $pathInfo ?: '-';
+                        // 获取请求头参数
+                        $queryParams = Yii::$app->getRequest()->getQueryString();
+                        $queryParams = $queryParams ?: '-';
+                        // 获取请求体参数
+                        $bodyParams = Yii::$app->getRequest()->getBodyParams();
+                        $bodyParams = $bodyParams ? \yii\helpers\Json::encode($bodyParams) : '-';
+                        return "[$userId][$serverIp][$sessionId][$pathInfo][$queryParams][$bodyParams]";
+                    }
                 ],
             ],
         ],
