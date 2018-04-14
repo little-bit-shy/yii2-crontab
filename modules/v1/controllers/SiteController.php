@@ -40,11 +40,12 @@ class SiteController extends Controller
         return [
             'captcha' => ['GET', 'POST'],
             'login' => ['POST'],
+            'all-permissions' => ['GET', 'POST'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * @return array
      */
     public function actions()
     {
@@ -58,10 +59,25 @@ class SiteController extends Controller
 
     /**
      * 用户登录
+     * @return \v1\models\User
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
      */
     public function actionLogin()
     {
         $loginForm = new  LoginForm();
         return $loginForm->login(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 获取当前用户所有的权限
+     * @return \yii\rbac\Permission[]
+     */
+    public function actionAllPermissions()
+    {
+        $auth = Yii::$app->getAuthManager();
+        return $auth->getPermissionsByUser(Yii::$app->getUser()->getId());
     }
 }
