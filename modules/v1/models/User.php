@@ -75,6 +75,15 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $fields = parent::fields();
         unset($fields['password_hash']);
+        $fields['created_at'] = function($model){
+            return date('Y-m-d H:i:s', $model->created_at);
+        };
+        $fields['updated_at'] = function($model){
+            return date('Y-m-d H:i:s', $model->updated_at);
+        };
+        $fields['last_login_at'] = function($model){
+            return date('Y-m-d H:i:s', $model->last_login_at);
+        };
         return $fields;
     }
 
@@ -142,7 +151,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     /**
      * 通过用户名称获取用户详细信息
      * @param $username
-     * @return mixed
+     * @return mixed|User
      * @throws \Exception
      * @throws \Throwable
      */
@@ -152,6 +161,24 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             return User::findOne(['username' => $username]);
         }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
         return $user;
+    }
+
+    /**
+     * 登陆操作
+     * @param $username
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function login($username){
+        $user = self::findIdentityByUsername($username);
+        $user->load([$user->formName()=>[
+            'last_login_ip' => Yii::$app->getRequest()->getUserIP(),
+            'last_login_at' => time(),
+            'access_token' => Yii::$app->getSecurity()->generateRandomString()
+        ]]);
+        $user->save();
+        return self::findIdentityByUsername($username);
     }
 
     /***************************** 请求频率 *********************************/
@@ -196,6 +223,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      * @param \yii\base\Action $action
      * @param int $allowance
      * @param int $timestamp
+     * @throws \yii\base\InvalidConfigException
      */
     public function saveAllowance($request, $action, $allowance, $timestamp)
     {

@@ -114,7 +114,7 @@ class LoginForm extends Model
         $loginForm = new LoginForm();
         $loginForm->setScenario('login');
         if ($loginForm->load([$loginForm->formName() => $param]) && $loginForm->validate()) {
-            return self::getUser($loginForm->username);
+            return User::login($loginForm->username);
         } else {
             throw new HttpException(422, $loginForm->getFirstError());
         }
@@ -125,13 +125,14 @@ class LoginForm extends Model
     /**
      * 通过用户名称获取用户信息
      * @param $username
+     * @param bool $ignoreExistingData 无视容器已有的数据
      * @return User
      * @throws \Exception
      * @throws \Throwable
      */
-    private function getUser($username)
+    private function getUser($username, $ignoreExistingData = false)
     {
-        if (empty(static::$_user)) {
+        if (empty(static::$_user) || $ignoreExistingData === true) {
             static::$_user = User::findIdentityByUsername($username);
         }
         return static::$_user;
