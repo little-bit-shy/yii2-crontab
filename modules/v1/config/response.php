@@ -12,8 +12,7 @@ return [
         /** @var \yii\web\Response $response */
         $response = $event->sender;
         $data = $response->data;
-
-        if ($response->getIsEmpty()) {
+        if ($response->getIsEmpty() || is_string($data)) {
             return;
         }
         // 处理code、message
