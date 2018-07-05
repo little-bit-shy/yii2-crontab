@@ -11,10 +11,10 @@
 namespace app\components;
 
 use yii\helpers\VarDumper;
-use yii\base\Object;
+use yii\base\BaseObject;
 use Yii;
 
-class AppRoutes extends Object
+class AppRoutes extends BaseObject
 {
     /**
      * Get list of application routes
