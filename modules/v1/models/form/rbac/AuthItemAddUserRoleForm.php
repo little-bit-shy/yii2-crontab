@@ -67,11 +67,8 @@ class AuthItemAddUserRoleForm extends Model
     public function validateUserIdAndRole($attribute, $params)
     {
         // 是否已存在该数据
-        $authAssignment = AuthAssignment::find()->where([
-            'user_id' => $this->user_id,
-            'item_name' => $this->role,
-        ])->exists();
-        if($authAssignment){
+        $authAssignment = AuthAssignment::exists(false, $this->user_id, $this->role);
+        if ($authAssignment) {
             $this->addError($attribute, Yii::t('app/error', 'the data exist'));
         }
     }

@@ -10,6 +10,9 @@ namespace v1\models\rbac;
 
 use v1\models\ActiveRecord;
 use Yii;
+use yii\caching\TagDependency;
+use yii\data\ArrayDataProvider;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Link;
@@ -100,4 +103,94 @@ class AuthItem extends ActiveRecord implements Linkable
     /***************************** 关联数据 *********************************/
 
     /***************************** 增删改查 *********************************/
+
+    /**
+     * 获取列表数据（全部）
+     * @param bool $cache
+     * @param $type
+     * @param $name
+     * @return array|mixed
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function dataProvider($cache = false, $type, $name)
+    {
+        switch ($cache) {
+            case true: // 使用缓存
+                return ActiveRecord::getDb()->cache(function ($db) use ($type, $name) {
+                    return self::getDataProvider($type, $name);
+                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
+                break;
+            case false: // 不使用缓存
+                return self::getDataProvider($type, $name);
+                break;
+        }
+    }
+
+    /**
+     * 获取列表数据（全部）
+     * @param $type
+     * @param $name
+     * @return array
+     */
+    private static function getDataProvider($type, $name)
+    {
+        $query = AuthItem::find();
+        // 数据类型过滤
+        $query->andFilterWhere(['type' => $type]);
+        // 权限、角色名称过滤
+        $query->andFilterWhere(['like', 'name', $name]);
+        // 结果数据返回
+        return $query->all();
+    }
+
+    /**
+     * 获取列表数据（分页）
+     * @param bool $cache
+     * @param $type
+     * @param $name
+     * @return mixed|ArrayDataProvider
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function arrayDataProvider($cache = false, $type, $name)
+    {
+        switch ($cache) {
+            case true: // 使用缓存
+                return ActiveRecord::getDb()->cache(function ($db) use ($type, $name) {
+                    return self::getArrayDataProvider($type, $name);
+                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
+                break;
+            case false: // 不使用缓存
+                return self::getArrayDataProvider($type, $name);
+                break;
+        }
+    }
+
+    /**
+     * 获取列表数据（分页）
+     * @param $type
+     * @param $name
+     * @return ArrayDataProvider
+     */
+    private static function getArrayDataProvider($type, $name)
+    {
+        $query = AuthItem::find();
+        // 数据类型过滤
+        $query->andFilterWhere(['type' => $type]);
+        // 权限、角色名称过滤
+        $query->andFilterWhere(['like', 'name', $name]);
+        // 结果数据返回
+        $pagination = new Pagination([
+            'defaultPageSize' => 20,
+            'totalCount' => $query->count()
+        ]);
+        $data = $query->offset($pagination->getOffset())
+            ->limit($pagination->getLimit())
+            ->all();
+        return new ArrayDataProvider([
+            'models' => $data,
+            'Pagination' => $pagination,
+        ]);
+    }
 }

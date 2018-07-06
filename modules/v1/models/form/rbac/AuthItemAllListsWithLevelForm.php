@@ -87,21 +87,10 @@ class AuthItemAllListsWithLevelForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemAllListsWithLevelForm->getAttributes();
-            $dataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
-                $query = AuthItem::find();
-                // 数据类型过滤
-                $query->andFilterWhere([
-                    'type' => $attributes['type'],
-                ]);
-                // 获取数据
-                $dataProvider = $query->asArray()->all();
-                // 数据重构（增加层次结构）
-                $dataProvider = ArrayHelper::menu($dataProvider, 'name');
-
-                // 结果数据返回
-                return $dataProvider;
-            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
-
+            // 获取数据
+            $dataProvider = ArrayHelper::toArray(AuthItem::dataProvider(true, $attributes['type'], null));
+            // 数据重构（增加层次结构）
+            $dataProvider = ArrayHelper::menu($dataProvider, 'name');
             return $dataProvider;
         } else {
             // 数据不合法

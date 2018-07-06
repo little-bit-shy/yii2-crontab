@@ -89,29 +89,8 @@ class AuthItemIndexForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemIndexForm->getAttributes();
-            $dataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
-                $query = AuthItem::find();
-                // 数据类型过滤
-                $query->andFilterWhere([
-                    'type' => $attributes['type'],
-                ]);
-                // 权限、角色名称过滤
-                $query->andFilterWhere(['like', 'name', $attributes['name']]);
-                // 结果数据返回
-                $pagination = new Pagination([
-                    'defaultPageSize' => 20,
-                    'totalCount' => $query->count()
-                ]);
-                $data = $query->offset($pagination->getOffset())
-                    ->limit($pagination->getLimit())
-                    ->all();
-                return new ArrayDataProvider([
-                    'models' => $data,
-                    'Pagination' => $pagination,
-                ]);
-
-            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
-
+            // 获取数据
+            $dataProvider = AuthItem::arrayDataProvider(true, $attributes['type'], $attributes['name']);
             return $dataProvider;
         } else {
             // 数据不合法

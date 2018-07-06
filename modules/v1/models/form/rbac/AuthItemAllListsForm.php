@@ -87,25 +87,11 @@ class AuthItemAllListsForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemIndexForm->getAttributes();
-            $dataProvider = ActiveRecord::getDb()->cache(function ($db) use ($attributes) {
-                $query = AuthItem::find();
-                // 数据类型过滤
-                $query->andFilterWhere([
-                    'type' => $attributes['type'],
-                ]);
-                // 权限、角色名称过滤
-                $query->andFilterWhere(['like', 'name', $attributes['name']]);
-                // 获取数据
-                $data = $query->all();
-                // 数据重构
-                $dataProvider = [];
-                foreach ($data as $key => $value) {
-                    $dataProvider[$value['name']] = $value;
-                }
-                // 结果数据返回
-                return $dataProvider;
-            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
-
+            $data = AuthItem::dataProvider(true, $attributes['type'], $attributes['name']);
+            $dataProvider = [];
+            foreach ($data as $key => $value) {
+                $dataProvider[$value['name']] = $value;
+            }
             return $dataProvider;
         } else {
             // 数据不合法

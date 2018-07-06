@@ -102,4 +102,41 @@ class AuthItemChild extends ActiveRecord implements Linkable
     /***************************** 关联数据 *********************************/
 
     /***************************** 增删改查 *********************************/
+
+    /**
+     * 判断是否已存在该数据
+     * @param bool $cache
+     * @param $parent
+     * @param $child
+     * @return bool|mixed
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function exists($cache = false, $parent, $child)
+    {
+        switch ($cache) {
+            case true: // 使用缓存
+                return ActiveRecord::getDb()->cache(function ($db) use ($parent, $child) {
+                    return self::getExists($parent, $child);
+                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
+                break;
+            case false: // 不使用缓存
+                return self::getExists($parent, $child);
+                break;
+        }
+    }
+
+    /**
+     * 判断是否已存在该数据
+     * @param $parent
+     * @param $child
+     * @return bool
+     */
+    private static function getExists($parent, $child)
+    {
+        return AuthItemChild::find()->where([
+            'parent' => $parent,
+            'child' => $child,
+        ])->exists();
+    }
 }

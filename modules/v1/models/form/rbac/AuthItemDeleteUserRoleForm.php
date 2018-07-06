@@ -67,10 +67,7 @@ class AuthItemDeleteUserRoleForm extends Model
     public function validateNameAndRole($attribute, $params)
     {
         // 是否已存在该数据
-        $authItemChild = AuthAssignment::find()->where([
-            'user_id' => $this->user_id,
-            'item_name' => $this->role,
-        ])->exists();
+        $authItemChild = AuthAssignment::exists(false, $this->user_id, $this->role);
         if(!$authItemChild){
             $this->addError($attribute, Yii::t('app/error', 'the data not exist'));
         }

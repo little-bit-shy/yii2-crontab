@@ -9,6 +9,7 @@
 namespace v1\models\rbac;
 
 use v1\models\ActiveRecord;
+use yii\caching\TagDependency;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
@@ -82,4 +83,41 @@ class AuthAssignment extends ActiveRecord implements Linkable
     /***************************** 关联数据 *********************************/
 
     /***************************** 增删改查 *********************************/
+
+    /**
+     * 判断是否已存在该数据
+     * @param bool $cache
+     * @param $user_id
+     * @param $item_name
+     * @return bool|mixed
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function exists($cache = false, $user_id, $item_name)
+    {
+        switch ($cache) {
+            case true: // 使用缓存
+                return ActiveRecord::getDb()->cache(function ($db) use ($user_id, $item_name) {
+                    return self::getExists($user_id, $item_name);
+                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
+                break;
+            case false: // 不使用缓存
+                return self::getExists($user_id, $item_name);
+                break;
+        }
+    }
+
+    /**
+     * 判断是否已存在该数据
+     * @param $user_id
+     * @param $item_name
+     * @return bool
+     */
+    private static function getExists($user_id, $item_name)
+    {
+        return AuthAssignment::find()->where([
+            'user_id' => $user_id,
+            'item_name' => $item_name,
+        ])->exists();
+    }
 }
