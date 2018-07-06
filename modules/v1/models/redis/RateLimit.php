@@ -43,4 +43,40 @@ class RateLimit extends ActiveRecord
             [['id', 'unique_id', 'allowance', 'allowance_updated_at'], 'safe'],
         ];
     }
+
+    /***************************** 增删改查 *********************************/
+
+    /**
+     * 获取当前登录用户Api请求频率相关数据
+     * @param $id
+     * @param $uniqueId
+     * @return array|null|\yii\redis\ActiveRecord
+     */
+    public static function one($id, $uniqueId)
+    {
+        return RateLimit::find()->where([
+            'id' => $id,
+            'unique_id' => $uniqueId,
+        ])->one();
+    }
+
+    /**
+     * 更新当前登录用户Api请求频率相关数据
+     * @param $id
+     * @param $uniqueId
+     * @param $allowance
+     * @param $timestamp
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function saveAllowance($id, $uniqueId, $allowance, $timestamp)
+    {
+        $rateLimit = new RateLimit();
+        $rateLimit->load([$rateLimit->formName() => [
+            'id' => $id,
+            'unique_id' => $uniqueId,
+            'allowance' => $allowance,
+            'allowance_updated_at' => $timestamp,
+        ]]);
+        $rateLimit->save();
+    }
 }

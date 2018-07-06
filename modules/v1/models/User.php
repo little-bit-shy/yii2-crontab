@@ -302,11 +302,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $id = \Yii::$app->getUser()->getId();//获取当前登录用户id
         $uniqueId = $action->getUniqueId();
-        $rateLimit = RateLimit::find()->where([
-            'id' => $id,
-            'unique_id' => $uniqueId,
-        ])->one();//获取当前登录用户Api请求频率相关数据
-
+        $rateLimit = RateLimit::one($id, $uniqueId);//获取当前登录用户Api请求频率相关数据
         if ($rateLimit == null) {
             // 当redis不存在数据时
             return [RateLimit::$rateLimit, time()];
@@ -329,13 +325,6 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
         $uniqueId = $action->getUniqueId();
 
         //更新当前登录用户Api请求频率相关数据
-        $rateLimit = new RateLimit();
-        $rateLimit->load([$rateLimit->formName() => [
-            'id' => $id,
-            'unique_id' => $uniqueId,
-            'allowance' => $allowance,
-            'allowance_updated_at' => $timestamp,
-        ]]);
-        $rateLimit->save();
+        RateLimit::saveAllowance($id, $uniqueId, $allowance, $timestamp);
     }
 }
