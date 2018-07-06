@@ -100,9 +100,8 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             // 数据
             $access_token = $this->getAttribute('access_token');
             $username = $this->getAttribute('username');
-            // 详细数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/access_token/{$access_token}"));
-            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/username/{$username}"));
+            // 数据缓存清除
+            TagDependency::invalidate(Yii::$app->getCache(), [self::getDetailTag("/access_token/{$access_token}"), self::getDetailTag("/username/{$username}")]);
         } catch (Exception $e) {
             return false;
         }

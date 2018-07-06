@@ -104,10 +104,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
         try {
             // 数据id
             $id = $this->getAttribute('id');
-            // 列表数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), self::getListTag());
-            // 详细数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/id/{$id}"));
+            // 数据缓存清除
+            TagDependency::invalidate(Yii::$app->getCache(), [self::getListTag(), self::getDetailTag("/id/{$id}")]);
         } catch (Exception $e) {
             return false;
         }

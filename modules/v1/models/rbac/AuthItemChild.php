@@ -70,7 +70,7 @@ class AuthItemChild extends ActiveRecord implements Linkable
             // 数据
             $parent = $this->getAttribute('parent');
             // 详细数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), self::getDetailTag("/parent/{$parent}"));
+            TagDependency::invalidate(Yii::$app->getCache(), [self::getDetailTag("/parent/{$parent}")]);
         } catch (Exception $e) {
             return false;
         }
