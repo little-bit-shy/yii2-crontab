@@ -66,22 +66,7 @@ class AuthItemUserListForm extends Model
      */
     public static function lists($param)
     {
-        $dataProvider = ActiveRecord::getDb()->cache(function ($db) {
-            $query = User::find();
-            // 结果数据返回
-            $pagination = new Pagination([
-                'defaultPageSize' => 20,
-                'totalCount' => $query->count()
-            ]);
-            $data = $query->offset($pagination->getOffset())
-                ->limit($pagination->getLimit())
-                ->all();
-            return new ArrayDataProvider([
-                'models' => $data,
-                'Pagination' => $pagination,
-            ]);
-        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getListTag("")]]));
-
+        $dataProvider = User::lists(true);
         return $dataProvider;
     }
 }

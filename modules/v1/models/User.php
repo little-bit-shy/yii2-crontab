@@ -5,6 +5,8 @@ namespace v1\models;
 use v1\models\redis\RateLimit;
 use Yii;
 use yii\caching\TagDependency;
+use yii\data\ArrayDataProvider;
+use yii\data\Pagination;
 use yii\db\Exception;
 use yii\filters\RateLimitInterface;
 use yii\helpers\Url;
@@ -75,13 +77,13 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $fields = parent::fields();
         unset($fields['password_hash']);
-        $fields['created_at'] = function($model){
+        $fields['created_at'] = function ($model) {
             return date('Y-m-d H:i:s', $model->created_at);
         };
-        $fields['updated_at'] = function($model){
+        $fields['updated_at'] = function ($model) {
             return date('Y-m-d H:i:s', $model->updated_at);
         };
-        $fields['last_login_at'] = function($model){
+        $fields['last_login_at'] = function ($model) {
             return date('Y-m-d H:i:s', $model->last_login_at);
         };
         return $fields;
@@ -111,18 +113,96 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
     /***************************** 增删改查 *********************************/
 
+    public static function lists($cache = false)
+    {
+        switch ($cache) {
+            case true:
+                $user = ActiveRecord::getDb()->cache(function ($db) {
+                    return self::getLists();
+                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getListTag("")]]));
+                return $user;
+                break;
+            case false:
+                return self::getLists();
+                break;
+        }
+    }
+
+    /**
+     * 获取用户列表数据
+     * @return ArrayDataProvider
+     */
+    private static function getLists()
+    {
+        $query = User::find();
+        // 结果数据返回
+        $pagination = new Pagination([
+            'defaultPageSize' => 20,
+            'totalCount' => $query->count()
+        ]);
+        $data = $query->offset($pagination->getOffset())
+            ->limit($pagination->getLimit())
+            ->all();
+        return new ArrayDataProvider([
+            'models' => $data,
+            'Pagination' => $pagination,
+        ]);
+    }
+
+    /**
+     * 添加用户
+     * @param $username
+     * @param $password_hash
+     * @param $phone
+     * @param $email
+     * @return bool
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function addUser($username, $password_hash, $phone, $email)
+    {
+        $time = time();
+        $user = new User();
+        $user->load([$user->formName() => [
+            'username' => $username,
+            'password_hash' => $password_hash,
+            'phone' => $phone,
+            'email' => $email,
+            'created_at' => $time,
+            'updated_at' => $time,
+        ]]);
+        return $user->save();
+    }
+
     /***************************** 登陆相关 *********************************/
 
     public static function findIdentity($id)
     {
     }
 
+    /**
+     * 获取用户信息
+     * @param mixed $token
+     * @param null $type
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
+     */
     public static function findIdentityByAccessToken($token, $type = null)
     {
         $user = ActiveRecord::getDb()->cache(function ($db) use ($token) {
-            return User::findOne(['access_token' => $token]);
+            return self::getFindIdentityByAccessToken($token);
         }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
         return $user;
+    }
+
+    /**
+     * 获取用户信息
+     * @param $token
+     * @return null|static
+     */
+    private static function getFindIdentityByAccessToken($token)
+    {
+        return User::findOne(['access_token' => $token]);
     }
 
     public function getId()
@@ -155,12 +235,29 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      * @throws \Exception
      * @throws \Throwable
      */
-    public static function findIdentityByUsername($username)
+    public static function findIdentityByUsername($cahce = false, $username)
     {
-        $user = ActiveRecord::getDb()->cache(function ($db) use ($username) {
-            return User::findOne(['username' => $username]);
-        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
-        return $user;
+        switch ($cahce) {
+            case true:
+                $user = ActiveRecord::getDb()->cache(function ($db) use ($username) {
+                    return User::getFindIdentityByUsername($username);
+                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
+                return $user;
+                break;
+            case false:
+                return User::getFindIdentityByUsername($username);
+                break;
+        }
+    }
+
+    /**
+     * 通过用户名称获取用户详细信息
+     * @param $username
+     * @return null|static
+     */
+    private static function getFindIdentityByUsername($username)
+    {
+        return User::findOne(['username' => $username]);
     }
 
     /**
@@ -170,15 +267,16 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      * @throws \Exception
      * @throws \Throwable
      */
-    public static function login($username){
-        $user = self::findIdentityByUsername($username);
-        $user->load([$user->formName()=>[
+    public static function login($username)
+    {
+        $user = self::findIdentityByUsername(false, $username);
+        $user->load([$user->formName() => [
             'last_login_ip' => Yii::$app->getRequest()->getUserIP(),
             'last_login_at' => time(),
             'access_token' => Yii::$app->getSecurity()->generateRandomString()
         ]]);
         $user->save();
-        return self::findIdentityByUsername($username);
+        return $user;
     }
 
     /***************************** 请求频率 *********************************/

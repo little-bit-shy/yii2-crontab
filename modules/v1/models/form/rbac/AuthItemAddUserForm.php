@@ -97,18 +97,8 @@ class AuthItemAddUserForm extends Model
             // 数据合法
             // 过滤后的合法数据
             $attributes = $authItemAddUserForm->getAttributes();
-
-            $time = time();
-            $user = new User();
-            $user->load([$user->formName() => [
-                'username' => $attributes['username'],
-                'password_hash' => $attributes['password'],
-                'phone' => $attributes['phone'],
-                'email' => $attributes['email'],
-                'created_at' => $time,
-                'updated_at' => $time,
-            ]]);
-            if ($user->save()) {
+            // 添加用户
+            if (User::addUser($attributes['username'], $attributes['password'], $attributes['phone'], $attributes['email'])) {
                 throw new HttpException(200, Yii::t('app/success', 'data added successfully'));
             } else {
                 throw new HttpException(500, Yii::t('app/error', 'server internal error'));
