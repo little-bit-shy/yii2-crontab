@@ -45,7 +45,7 @@ $config = [
                     'prefix' => function ($message) {
                         // 获取userid
                         $user = Yii::$app->has('user', true) ? Yii::$app->get('user') : null;
-                        $userId = $user ? $user->getId(false) : '-';
+                        $userId = $user ? (empty($user->getId(false)) ? '-' : $user->getId(false)) : '-';
                         // 获取客户端ip
                         $serverIp = Yii::$app->getRequest()->getUserIP();
                         $serverIp = $serverIp ?: '-';
