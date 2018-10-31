@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : 47.52.238.192
-Source Server Version : 50640
-Source Host           : 47.52.238.192:3306
+Source Server         : 192.168.1.233
+Source Server Version : 50642
+Source Host           : 192.168.1.233:3306
 Source Database       : yii2restful
 
 Target Server Type    : MYSQL
-Target Server Version : 50640
+Target Server Version : 50642
 File Encoding         : 65001
 
-Date: 2018-07-06 15:52:54
+Date: 2018-10-31 12:10:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -56,7 +56,7 @@ CREATE TABLE `yii2_auth_item` (
 -- ----------------------------
 -- Records of yii2_auth_item
 -- ----------------------------
-INSERT INTO `yii2_auth_item` VALUES ('/*', '2', '全部', null, null, '1530862609', '1530862619');
+INSERT INTO `yii2_auth_item` VALUES ('/*', '2', '全部', null, null, '1530862609', '1540546328');
 INSERT INTO `yii2_auth_item` VALUES ('/debug/*', '2', '/debug/*', null, null, '1522201146', '1522201146');
 INSERT INTO `yii2_auth_item` VALUES ('/debug/default/*', '2', '/debug/default/*', null, null, '1522201146', '1522201146');
 INSERT INTO `yii2_auth_item` VALUES ('/debug/default/db-explain', '2', '/debug/default/db-explain', null, null, '1522390662', '1522390662');
@@ -103,7 +103,7 @@ INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/*', '2', '某某某', null, 
 INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/create', '2', '添加数据', null, null, '1521007674', '1522052434');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/index', '2', '列表数据', null, null, '1521007674', '1522052446');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/view', '2', '详细数据', null, null, '1521007674', '1522052453');
-INSERT INTO `yii2_auth_item` VALUES ('ordinaryUser', '1', '普通用户', null, null, '1519288590', '1530860464');
+INSERT INTO `yii2_auth_item` VALUES ('ordinaryUser', '1', '普通用户', null, null, '1519288590', '1540546341');
 INSERT INTO `yii2_auth_item` VALUES ('root', '1', '超级管理员', null, 0x733A32373A22E89299E5A49AE683B3E58EBBE593AAE5B0B1E58EBBE593AA2E2E2E223B, '1522066042', '1530860469');
 
 -- ----------------------------
@@ -141,16 +141,23 @@ INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/add-role');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/add-role-permissions');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/add-user');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/add-user-role');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/all-lists');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/all-lists');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/all-lists-with-level');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/all-lists-with-level');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/all-lists-with-role');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/all-lists-with-role');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/all-role-with-user');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/all-role-with-user');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/delete-role-permissions');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/delete-user-role');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/project-directory');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/project-directory');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/remove-permissions');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/update-permissions');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/user-lists');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/user-lists');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/site/*');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/site/all-permissions');
@@ -185,6 +192,30 @@ CREATE TABLE `yii2_auth_rule` (
 INSERT INTO `yii2_auth_rule` VALUES ('\\v1\\rules\\AuthorRule', 0x4F3A31393A2276315C72756C65735C417574686F7252756C65223A333A7B733A343A226E616D65223B733A32303A225C76315C72756C65735C417574686F7252756C65223B733A393A22637265617465644174223B693A313532303231373038303B733A393A22757064617465644174223B693A313532303231373038303B7D, '1520217080', '1520217080');
 
 -- ----------------------------
+-- Table structure for yii2_task
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_task`;
+CREATE TABLE `yii2_task` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
+  `type` enum('1','2') NOT NULL DEFAULT '1' COMMENT '执行方式 1/执行一次 2/反复执行',
+  `year` int(4) unsigned NOT NULL DEFAULT '0' COMMENT '年',
+  `month` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '月',
+  `day` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '日',
+  `hour` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '小时',
+  `minute` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分钟',
+  `second` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '秒',
+  `switch` enum('1','2') NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
+  `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yii2_task
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for yii2_user
 -- ----------------------------
 DROP TABLE IF EXISTS `yii2_user`;
@@ -210,9 +241,9 @@ CREATE TABLE `yii2_user` (
 -- ----------------------------
 -- Records of yii2_user
 -- ----------------------------
-INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'ELF_USKHgyi-n6za3H9A0QvcV14oiClF', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '120.85.87.54', '1530782990');
-INSERT INTO `yii2_user` VALUES ('2', null, 'admin', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'Z77WMycirTQAYJXptVVA3Atsycbvv4c-', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', '3095764452@qq.com', '1479371663', '1479371680', '45.249.246.173', '1530799644');
-INSERT INTO `yii2_user` VALUES ('39', null, 'test', null, 'YTi1n2F41A1PR0CJFgLTOEwrFoE3jIGu', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '45.249.246.173', '1530799628');
+INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'E1hIggDxhJxn0m0BaUAFDsBZVyKL6Twy', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '192.168.1.49', '1540868239');
+INSERT INTO `yii2_user` VALUES ('2', null, 'admin', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'wzZjihAOtHW-eJlsEPLK5J_yK7Ge394R', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', '3095764452@qq.com', '1479371663', '1479371680', '118.114.10.132', '1531314307');
+INSERT INTO `yii2_user` VALUES ('39', null, 'test', null, 'PyqWHSkI6jv6jXWReJYS5x7Sgv2uaNw7', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1540546347');
 
 -- ----------------------------
 -- Table structure for yii2_user_copy
@@ -238,16 +269,9 @@ CREATE TABLE `yii2_user_copy` (
   UNIQUE KEY `yii2restful_yii2_user_oauth2_oauth2_id` (`oauth2`,`oauth2_id`) USING BTREE COMMENT 'oauth2唯一索引',
   UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
   UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of yii2_user_copy
 -- ----------------------------
-INSERT INTO `yii2_user_copy` VALUES ('1', '1', 'root', '', '1', '6lgGBSosfvH0c9_nZZP8DY6YiI4ycwDx', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', null, '1533356676@qq.com', '1479371680', '1479371680', null, null, 'self', null);
-INSERT INTO `yii2_user_copy` VALUES ('2', '2', 'admin', null, '2', 'pA7DChvN6X22MWjc6W_9TYALKiduyftD', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', null, '3095764452@qq.com', '1479371663', '1479371680', null, null, 'self', null);
-INSERT INTO `yii2_user_copy` VALUES ('9', '', 'little-bit-shy', 'https://avatars.githubusercontent.com/u/12792446?v=3', '9', null, null, null, null, '1484897023', '1479371680', null, null, 'github', '12792446');
-INSERT INTO `yii2_user_copy` VALUES ('10', '15918793994', null, null, 'y0gZlbBXGxOo4K--4_4jDNa_Byw2I-8V', null, '$2y$13$MpWF3HZWwe1CrcvpbwDLR.k2bRnr9VyvKCPYGaNjv8..S8Z.rkliS', null, null, '1485158903', '1485158903', '127.0.0.1', '1485160819', 'self', null);
-INSERT INTO `yii2_user_copy` VALUES ('12', '15918793991', 'fUrXC2rT', null, '6l4nL9fP7X7EXTw5ecedHjUhH9Kv12iv', null, '$2y$13$nLc17UBNeDhaRu5bFnJr8uAh2vyOt1/xYMmIVAuUNeLVmose7MkKm', null, null, '1485160893', '1485160893', null, null, 'self', null);
-INSERT INTO `yii2_user_copy` VALUES ('13', '15918793992', 'mK0wLev6', null, 'inORraxmoIqYOaaDL9qe6MqBZaf-C9Pl', null, '$2y$13$HghCFt1JWLsduv5bLQ13w.z/6W3Fzgz70qmgypNEFKlJH9P8b3xOy', null, null, '1485161033', '1485161033', null, null, 'self', null);
-INSERT INTO `yii2_user_copy` VALUES ('14', '15918793993', 'BWko4Fiu', null, '0SqyoC7enijE3sDlTAVy1jmP8D9Krb2P', null, '$2y$13$fAbDXAo6MJ/uGCPeUcdExeQDQvZBYlCsfa23UUkS8lzv3/NufI2Lm', null, null, '1485161050', '1485161050', null, null, 'self', null);
 SET FOREIGN_KEY_CHECKS=1;
