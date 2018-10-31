@@ -8,6 +8,8 @@
 
 namespace v1\models\form;
 
+use Yii;
+
 class Model extends \yii\base\Model
 {
     /**
