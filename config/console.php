@@ -8,7 +8,7 @@ $config = [
     // 设置源语言为英语
     'sourceLanguage' => 'en-US',
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'v1\commands',
+    'controllerNamespace' => 'app\commands',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -22,11 +22,7 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/console_db.php'),
-        //rbac权限管理
-        'authManager' => require(__DIR__ . '/console_authManager.php')
     ],
-    //模块相关配置
-    'modules' => require(__DIR__ . '/console_modules.php'),
     //别名定义
     'aliases' => require(__DIR__ . '/console_aliases.php'),
     'params' => require __DIR__ . '/console_params.php',
