@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50642
 File Encoding         : 65001
 
-Date: 2018-10-31 12:10:59
+Date: 2018-11-01 14:29:45
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -99,6 +99,11 @@ INSERT INTO `yii2_auth_item` VALUES ('/v1/site/*', '2', '基本操作', null, nu
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/all-permissions', '2', '获取当前用户已有权限', null, null, '1522066042', '1530775704');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/captcha', '2', '获取验证码', null, null, '1521007674', '1521619742');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/login', '2', '用户登录', null, null, '1521007674', '1521619750');
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/*', '2', '任务调度', null, null, '1540972296', '1540972331');
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/create', '2', '添加任务', null, null, '1540972295', '1540972341');
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/index', '2', '任务列表', null, null, '1540972295', '1540972356');
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/update', '2', '任务更新', null, null, '1540972296', '1540972368');
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/view', '2', '任务详情', null, null, '1540972295', '1540972386');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/*', '2', '某某某', null, null, '1521525747', '1521619769');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/create', '2', '添加数据', null, null, '1521007674', '1522052434');
 INSERT INTO `yii2_auth_item` VALUES ('/v1/user-copy/index', '2', '列表数据', null, null, '1521007674', '1522052446');
@@ -166,6 +171,12 @@ INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/site/captcha');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/site/captcha');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/site/login');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/site/login');
+INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/create');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/task/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/update');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/task/view');
+INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/view');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/user-copy/*');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/user-copy/create');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/user-copy/create');
@@ -209,11 +220,13 @@ CREATE TABLE `yii2_task` (
   `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yii2_task
 -- ----------------------------
+INSERT INTO `yii2_task` VALUES ('11', 'echo \"233333\"', '2', '2018', '11', '1', '16', '0', '0', '1', '2018-11-01 02:53:14', '2018-11-01 06:29:59');
+INSERT INTO `yii2_task` VALUES ('12', 'echo \'11111111\'', '2', '0', '0', '0', '0', '1', '5', '1', '2018-11-01 04:06:29', '2018-11-01 06:28:09');
 
 -- ----------------------------
 -- Table structure for yii2_user
@@ -241,9 +254,9 @@ CREATE TABLE `yii2_user` (
 -- ----------------------------
 -- Records of yii2_user
 -- ----------------------------
-INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'E1hIggDxhJxn0m0BaUAFDsBZVyKL6Twy', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '192.168.1.49', '1540868239');
+INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', '-1n0vKSNvIbtuwfYMLKR6H2u_xUvzfBB', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '192.168.1.49', '1540972949');
 INSERT INTO `yii2_user` VALUES ('2', null, 'admin', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'wzZjihAOtHW-eJlsEPLK5J_yK7Ge394R', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', '3095764452@qq.com', '1479371663', '1479371680', '118.114.10.132', '1531314307');
-INSERT INTO `yii2_user` VALUES ('39', null, 'test', null, 'PyqWHSkI6jv6jXWReJYS5x7Sgv2uaNw7', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1540546347');
+INSERT INTO `yii2_user` VALUES ('39', null, 'test', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'yMsPZF2Fy5By3bIqe9nsR166cYl4450_', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1540972898');
 
 -- ----------------------------
 -- Table structure for yii2_user_copy
