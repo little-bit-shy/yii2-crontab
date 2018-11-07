@@ -8,6 +8,7 @@
 
 namespace v1\models\form\task;
 
+use app\components\ParseCrontab;
 use v1\models\form\Model;
 use v1\models\task\Task;
 use Yii;
@@ -22,13 +23,7 @@ class TaskUpdateForm extends Model
 {
     public $id;
     public $command;
-    public $type;
-    public $year;
-    public $month;
-    public $day;
-    public $hour;
-    public $minute;
-    public $second;
+    public $rule;
     public $switch;
 
     /**
@@ -38,20 +33,27 @@ class TaskUpdateForm extends Model
     public function rules()
     {
         return [
-            [['id', 'command', 'type', 'year', 'month', 'day', 'hour', 'minute', 'second', 'switch'], 'safe', 'on' => 'update'],
-            [['id', 'command', 'year', 'month', 'day', 'hour', 'minute', 'second', 'type', 'switch'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'update'],
+            [['id', 'command', 'rule', 'switch'], 'safe', 'on' => 'update'],
+            [['id', 'command', 'rule', 'switch'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'update'],
             [['id'], 'integer', 'on' => 'update'],
             [['command'], 'trim', 'on' => 'update'],
-            [['command'], 'string', 'on' => 'update'],
-            [['type', 'switch'], 'in', 'range' => [1, 2], 'on' => 'update'],
-            [['year'], 'integer', 'min' => 0, 'max' => 9999, 'on' => 'update'],
-            [['month'], 'integer', 'min' => 0, 'max' => 12, 'on' => 'update'],
-            [['day'], 'integer', 'min' => 0, 'max' => 31, 'on' => 'update'],
-            [['hour'], 'integer', 'min' => 0, 'max' => 24, 'on' => 'update'],
-            [['minute'], 'integer', 'min' => 0, 'max' => 59, 'on' => 'update'],
-            [['second'], 'integer', 'min' => 0, 'max' => 59, 'on' => 'update'],
+            [['command', 'rule'], 'string', 'on' => 'update'],
+            [['switch'], 'in', 'range' => [1, 2], 'on' => 'update'],
+            [['rule'], 'validateRule', 'on' => 'update'],
             [['id'], 'exist', 'targetClass' => Task::className(), 'targetAttribute' => ['id' => 'id'], 'on' => 'update'],
         ];
+    }
+
+    /**
+     * 验证规则是否合法
+     * @param $attribute
+     * @param $params
+     */
+    public function validateRule($attribute, $params)
+    {
+        if (ParseCrontab::parse($this->$attribute) === false) {
+            $this->addError($attribute, Yii::t('app/error', 'rule error'));
+        };
     }
 
     /**
@@ -64,13 +66,7 @@ class TaskUpdateForm extends Model
             'update' => [
                 'id',
                 'command',
-                'type',
-                'year',
-                'month',
-                'day',
-                'hour',
-                'minute',
-                'second',
+                'rule',
                 'switch'
             ]
         ];
@@ -85,13 +81,7 @@ class TaskUpdateForm extends Model
         return [
             'id' => Yii::t('app\attribute', 'id'),
             'command' => Yii::t('app\attribute', 'command'),
-            'type' => Yii::t('app\attribute', 'type'),
-            'year' => Yii::t('app\attribute', 'year'),
-            'month' => Yii::t('app\attribute', 'month'),
-            'day' => Yii::t('app\attribute', 'day'),
-            'hour' => Yii::t('app\attribute', 'hour'),
-            'minute' => Yii::t('app\attribute', 'minute'),
-            'second' => Yii::t('app\attribute', 'second'),
+            'rule' => Yii::t('app\attribute', 'rule'),
             'switch' => Yii::t('app\attribute', 'switch'),
         ];
     }

@@ -8,6 +8,7 @@
 
 namespace v1\models\form\task;
 
+use app\components\ParseCrontab;
 use v1\models\form\Model;
 use v1\models\task\Task;
 use Yii;
@@ -22,13 +23,7 @@ use yii\web\HttpException;
 class TaskCreateForm extends Model
 {
     public $command;
-    public $type;
-    public $year;
-    public $month;
-    public $day;
-    public $hour;
-    public $minute;
-    public $second;
+    public $rule;
     public $switch;
 
     /**
@@ -38,19 +33,27 @@ class TaskCreateForm extends Model
     public function rules()
     {
         return [
-            [['command', 'type', 'year', 'month', 'day', 'hour', 'minute', 'second', 'switch'], 'safe', 'on' => 'create'],
-            [['command', 'year', 'month', 'day', 'hour', 'minute', 'second'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'create'],
+            [['command', 'rule', 'switch'], 'safe', 'on' => 'create'],
+            [['command', 'rule'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'create'],
             [['command'], 'trim', 'on' => 'create'],
             [['command'], 'string', 'on' => 'create'],
-            [['type', 'switch'], 'default', 'value' => 1, 'on' => 'create'],
-            [['type', 'switch'], 'in', 'range' => [1, 2], 'on' => 'create'],
-            [['year'], 'integer', 'min' => 0, 'max' => 9999, 'on' => 'create'],
-            [['month'], 'integer', 'min' => 0, 'max' => 12, 'on' => 'create'],
-            [['day'], 'integer', 'min' => 0, 'max' => 31, 'on' => 'create'],
-            [['hour'], 'integer', 'min' => 0, 'max' => 24, 'on' => 'create'],
-            [['minute'], 'integer', 'min' => 0, 'max' => 59, 'on' => 'create'],
-            [['second'], 'integer', 'min' => 0, 'max' => 59, 'on' => 'create'],
+            [['switch'], 'default', 'value' => 1, 'on' => 'create'],
+            [['switch'], 'in', 'range' => [1, 2], 'on' => 'create'],
+            [['rule'], 'string', 'on' => 'create'],
+            [['rule'], 'validateRule', 'on' => 'create'],
         ];
+    }
+
+    /**
+     * 验证规则是否合法
+     * @param $attribute
+     * @param $params
+     */
+    public function validateRule($attribute, $params)
+    {
+        if (ParseCrontab::parse($this->$attribute) === false) {
+            $this->addError($attribute, Yii::t('app/error', 'rule error'));
+        };
     }
 
     /**
@@ -62,13 +65,7 @@ class TaskCreateForm extends Model
         return [
             'create' => [
                 'command',
-                'type',
-                'year',
-                'month',
-                'day',
-                'hour',
-                'minute',
-                'second',
+                'rule',
                 'switch'
             ]
         ];
@@ -83,12 +80,7 @@ class TaskCreateForm extends Model
         return [
             'command' => Yii::t('app\attribute', 'command'),
             'type' => Yii::t('app\attribute', 'type'),
-            'year' => Yii::t('app\attribute', 'year'),
-            'month' => Yii::t('app\attribute', 'month'),
-            'day' => Yii::t('app\attribute', 'day'),
-            'hour' => Yii::t('app\attribute', 'hour'),
-            'minute' => Yii::t('app\attribute', 'minute'),
-            'second' => Yii::t('app\attribute', 'second'),
+            'rule' => Yii::t('app\attribute', 'rule'),
             'switch' => Yii::t('app\attribute', 'switch'),
         ];
     }

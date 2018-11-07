@@ -17,18 +17,12 @@ use yii\web\NotFoundHttpException;
  * CREATE TABLE `yii2_task` (
  * `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
  * `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
- * `type` enum('1','2') NOT NULL DEFAULT '1' COMMENT '执行方式 1/执行一次 2/反复执行',
- * `year` int(4) unsigned NOT NULL DEFAULT '0' COMMENT '年',
- * `month` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '月',
- * `day` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '日',
- * `hour` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '小时',
- * `minute` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分钟',
- * `second` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '秒',
+ * `rule` varchar(30) DEFAULT NULL COMMENT '规则',
  * `switch` enum('1','2') NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
  * `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
  * `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
  * PRIMARY KEY (`id`)
- * ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+ * ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
  *
  * Class Task
  * @package v1\models\task
@@ -47,8 +41,8 @@ class Task extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['command', 'type', 'year', 'month' ,'day', 'hour', 'minute', 'second', 'switch', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
-            [['command', 'type', 'year', 'month' ,'day', 'hour', 'minute', 'second', 'switch'], 'safe', 'on' => 'update'],
+            [['command', 'rule', 'switch', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
+            [['command', 'rule', 'switch'], 'safe', 'on' => 'update'],
         ];
     }
 
@@ -59,8 +53,8 @@ class Task extends ActiveRecord implements Linkable
     public function scenarios()
     {
         return [
-            'create' => ['command', 'type', 'year', 'month' ,'day', 'hour', 'minute', 'second', 'create_time', 'update_time', 'switch'],
-            'update' => ['command', 'type', 'year', 'month' ,'day', 'hour', 'minute', 'second', 'switch'],
+            'create' => ['command', 'rule', 'create_time', 'update_time', 'switch'],
+            'update' => ['command', 'rule', 'switch'],
         ];
     }
 

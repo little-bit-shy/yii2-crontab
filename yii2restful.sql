@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50642
 File Encoding         : 65001
 
-Date: 2018-11-01 14:29:45
+Date: 2018-11-07 10:58:28
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -209,13 +209,7 @@ DROP TABLE IF EXISTS `yii2_task`;
 CREATE TABLE `yii2_task` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
-  `type` enum('1','2') NOT NULL DEFAULT '1' COMMENT '执行方式 1/执行一次 2/反复执行',
-  `year` int(4) unsigned NOT NULL DEFAULT '0' COMMENT '年',
-  `month` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '月',
-  `day` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '日',
-  `hour` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '小时',
-  `minute` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '分钟',
-  `second` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '秒',
+  `rule` varchar(30) DEFAULT NULL COMMENT '规则',
   `switch` enum('1','2') NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
   `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
@@ -225,8 +219,8 @@ CREATE TABLE `yii2_task` (
 -- ----------------------------
 -- Records of yii2_task
 -- ----------------------------
-INSERT INTO `yii2_task` VALUES ('11', 'echo \"233333\"', '2', '2018', '11', '1', '16', '0', '0', '1', '2018-11-01 02:53:14', '2018-11-01 06:29:59');
-INSERT INTO `yii2_task` VALUES ('12', 'echo \'11111111\'', '2', '0', '0', '0', '0', '1', '5', '1', '2018-11-01 04:06:29', '2018-11-01 06:28:09');
+INSERT INTO `yii2_task` VALUES ('11', 'echo 123', '*/100 * * * * *', '2', '2018-11-01 02:53:14', '2018-11-07 02:54:19');
+INSERT INTO `yii2_task` VALUES ('12', 'echo \'11111111\'', null, '1', '2018-11-01 04:06:29', '2018-11-06 09:57:56');
 
 -- ----------------------------
 -- Table structure for yii2_user
@@ -254,9 +248,9 @@ CREATE TABLE `yii2_user` (
 -- ----------------------------
 -- Records of yii2_user
 -- ----------------------------
-INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', '-1n0vKSNvIbtuwfYMLKR6H2u_xUvzfBB', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '192.168.1.49', '1540972949');
+INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'd4ApeFgObx0TAYezoejfSInTjaxbvd1s', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '192.168.1.49', '1541557715');
 INSERT INTO `yii2_user` VALUES ('2', null, 'admin', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'wzZjihAOtHW-eJlsEPLK5J_yK7Ge394R', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', '3095764452@qq.com', '1479371663', '1479371680', '118.114.10.132', '1531314307');
-INSERT INTO `yii2_user` VALUES ('39', null, 'test', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'yMsPZF2Fy5By3bIqe9nsR166cYl4450_', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1540972898');
+INSERT INTO `yii2_user` VALUES ('39', null, 'test', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'Eiy_X0RjOIiv52V3EiPJSczapudAyKN5', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1541058232');
 
 -- ----------------------------
 -- Table structure for yii2_user_copy
@@ -282,7 +276,7 @@ CREATE TABLE `yii2_user_copy` (
   UNIQUE KEY `yii2restful_yii2_user_oauth2_oauth2_id` (`oauth2`,`oauth2_id`) USING BTREE COMMENT 'oauth2唯一索引',
   UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
   UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of yii2_user_copy

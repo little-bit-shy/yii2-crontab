@@ -25,10 +25,5 @@ return [
     'time' => '时间',
     'switch' => '开关',
     'id' => '编号',
-    'year' => '年',
-    'month' => '月',
-    'day' => '日',
-    'hour' => '时',
-    'minute' => '分',
-    'second' => '秒',
+    'rule' => '规则',
 ];
