@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50642
 File Encoding         : 65001
 
-Date: 2018-11-07 10:58:28
+Date: 2018-11-08 17:47:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -203,6 +203,25 @@ CREATE TABLE `yii2_auth_rule` (
 INSERT INTO `yii2_auth_rule` VALUES ('\\v1\\rules\\AuthorRule', 0x4F3A31393A2276315C72756C65735C417574686F7252756C65223A333A7B733A343A226E616D65223B733A32303A225C76315C72756C65735C417574686F7252756C65223B733A393A22637265617465644174223B693A313532303231373038303B733A393A22757064617465644174223B693A313532303231373038303B7D, '1520217080', '1520217080');
 
 -- ----------------------------
+-- Table structure for yii2_execute_task
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_execute_task`;
+CREATE TABLE `yii2_execute_task` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
+  `start_time` datetime DEFAULT NULL COMMENT '任务计划执行时间',
+  `execute_time` datetime DEFAULT NULL COMMENT '任务实际执行时间',
+  `status` enum('1','2','3','4') NOT NULL DEFAULT '1' COMMENT '执行状态 1/准备中 2/执行中 3/任务失败 4/已完成',
+  `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=90998 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yii2_execute_task
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for yii2_task
 -- ----------------------------
 DROP TABLE IF EXISTS `yii2_task`;
@@ -214,13 +233,14 @@ CREATE TABLE `yii2_task` (
   `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
   `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yii2_task
 -- ----------------------------
-INSERT INTO `yii2_task` VALUES ('11', 'echo 123', '*/100 * * * * *', '2', '2018-11-01 02:53:14', '2018-11-07 02:54:19');
-INSERT INTO `yii2_task` VALUES ('12', 'echo \'11111111\'', null, '1', '2018-11-01 04:06:29', '2018-11-06 09:57:56');
+INSERT INTO `yii2_task` VALUES ('11', 'echo 123', '*/1 * * * * *', '2', '2018-11-01 02:53:14', '2018-11-07 04:19:35');
+INSERT INTO `yii2_task` VALUES ('12', 'echo \'11111111\'', '*/1 * * * * *', '1', '2018-11-01 04:06:29', '2018-11-07 08:38:35');
+INSERT INTO `yii2_task` VALUES ('13', 'echo \'22222222\'', '*/1 * * * * *', '1', '2018-11-07 03:40:40', '2018-11-08 09:24:06');
 
 -- ----------------------------
 -- Table structure for yii2_user
@@ -250,7 +270,7 @@ CREATE TABLE `yii2_user` (
 -- ----------------------------
 INSERT INTO `yii2_user` VALUES ('1', '15918793994', 'root', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'd4ApeFgObx0TAYezoejfSInTjaxbvd1s', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', '1533356676@qq.com', '1479371680', '1479371680', '192.168.1.49', '1541557715');
 INSERT INTO `yii2_user` VALUES ('2', null, 'admin', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'wzZjihAOtHW-eJlsEPLK5J_yK7Ge394R', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', '3095764452@qq.com', '1479371663', '1479371680', '118.114.10.132', '1531314307');
-INSERT INTO `yii2_user` VALUES ('39', null, 'test', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'Eiy_X0RjOIiv52V3EiPJSczapudAyKN5', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1541058232');
+INSERT INTO `yii2_user` VALUES ('39', null, 'test', 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg', 'gUxMs_ySnfP5o5rAel3rBKZzt1N7M4hl', '$2y$13$.WmbK4IQ1Oj3TUIWIsdokee83OsZFjdWQq/t6910kudzVBb5kIOpi', null, '1530780629', '1530780629', '192.168.1.49', '1541575016');
 
 -- ----------------------------
 -- Table structure for yii2_user_copy
