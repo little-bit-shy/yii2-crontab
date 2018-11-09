@@ -48,6 +48,7 @@ class ServerController extends Controller
         $this->serv->on('workerStart', [$this, 'onWorkerStart']);
         $this->serv->on('pipeMessage', [$this, 'onPipeMessage']);
         $serv = $this->serv;
+
         // 准备任务数据
         $process = new swoole_process(function ($process) use ($serv) {
             Table::set($serv);
@@ -57,6 +58,7 @@ class ServerController extends Controller
         });
         $this->serv->addProcess($process);
 
+        // 分配任务数据
         $process = new swoole_process(function ($process) use ($serv) {
             $serv->tick(500, function () use ($serv) {
                 $clientList = [];
@@ -71,10 +73,19 @@ class ServerController extends Controller
                 foreach (Table::$table as $id => $task) {
                     if ($count > 0) {
                         $remaining = $id % $count;
-                        $serv->send($clientList[$remaining], json_encode($task)."\r\n");
+                        $serv->send($clientList[$remaining], json_encode($task) . "\r\n");
                         Table::$table->del($id);
                     }
                 }
+            });
+        });
+        $this->serv->addProcess($process);
+
+        // 处理超时任务
+        $process = new swoole_process(function ($process) use ($serv) {
+            ExecuteTask::fail();
+            $serv->tick(60000, function () use ($serv) {
+                ExecuteTask::fail();
             });
         });
         $this->serv->addProcess($process);

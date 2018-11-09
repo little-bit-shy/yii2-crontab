@@ -7,8 +7,9 @@
 
 namespace app\commands;
 
+use app\commands\task\ExecuteTask;
+use Swoole\Coroutine;
 use yii\console\Controller;
-use swoole_server;
 use swoole_client;
 
 /**
@@ -51,10 +52,7 @@ class ClientController extends Controller
      */
     public function onReceive($cli, $data)
     {
-        $task = json_decode($data, true);
-        if (!empty($task)) {
-            echo "收到任务：{$task['command']}\n";
-        }
+        ExecuteTask::execute($data);
     }
 
     /**

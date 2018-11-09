@@ -3,7 +3,6 @@ namespace app\commands\task;
 
 use app\components\ParseCrontab;
 use swoole_server;
-use swoole_process;
 use swoole_table;
 
 /**
@@ -16,7 +15,7 @@ class Table
     /** @var $table swoole_table */
     public static $table = null;
     public static $limit = 60;
-    private static $size = 1024;
+    private static $size = 65536;
     private static $columns = [
         ['id', swoole_table::TYPE_INT, 11],
         ['command', swoole_table::TYPE_STRING, 255],
