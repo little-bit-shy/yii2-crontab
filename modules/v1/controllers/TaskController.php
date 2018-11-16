@@ -10,6 +10,7 @@
 namespace v1\controllers;
 
 use v1\models\form\task\TaskCreateForm;
+use v1\models\form\task\TaskDeleteForm;
 use v1\models\form\task\TaskUpdateForm;
 use v1\models\task\Task;
 use Yii;
@@ -46,6 +47,8 @@ class TaskController extends Controller
             'index' => ['GET', 'POST', 'HEAD'],
             'view' => ['GET', 'POST', 'HEAD'],
             'create' => ['POST'],
+            'update' => ['POST'],
+            'delete' => ['POST'],
         ];
     }
 
@@ -89,5 +92,15 @@ class TaskController extends Controller
     public function actionUpdate()
     {
         return TaskUpdateForm::update(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 删除数据
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionDelete()
+    {
+        return TaskDeleteForm::delete(Yii::$app->request->getBodyParams());
     }
 }

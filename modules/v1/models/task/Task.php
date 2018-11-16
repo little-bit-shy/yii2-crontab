@@ -141,4 +141,15 @@ class Task extends ActiveRecord implements Linkable
 
         return $activeDataProvider;
     }
+
+    /**
+     * 删除数据
+     * @param $id
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public static function remove($id)
+    {
+        self::findOne($id)->delete();
+    }
 }
