@@ -13,12 +13,8 @@ use yii\console\Controller;
 use swoole_client;
 
 /**
- * This command echoes the first argument that you have entered.
- *
- * This command is provided as an example for you to learn how to create console commands.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * Class ClientController
+ * @package app\commands
  */
 class ClientController extends Controller
 {
@@ -26,10 +22,14 @@ class ClientController extends Controller
 
     public function actionIndex()
     {
-        $this->client = new swoole_client(SWOOLE_SOCK_TCP, SWOOLE_SOCK_ASYNC);
+        $this->client = new swoole_client(SWOOLE_SOCK_TCP | SWOOLE_SSL, SWOOLE_SOCK_ASYNC);
         $this->client->set([
             'open_eof_split' => true,
             'package_eof' => "\r\n",
+            'ssl_verify_peer' => true,
+            'ssl_cafile' => __DIR__ . '/task/ssl/server.crt',
+            'ssl_cert_file' => __DIR__ . '/task/ssl/client.crt',
+            'ssl_key_file' => __DIR__ . '/task/ssl/client.key',
         ]);
         $this->client->on('Error', [$this, 'onError']);
         $this->client->on('Connect', [$this, 'onConnect']);
@@ -52,6 +52,7 @@ class ClientController extends Controller
      */
     public function onReceive($cli, $data)
     {
+        echo $data;
         ExecuteTask::execute($data);
     }
 

@@ -9,18 +9,13 @@ namespace app\commands;
 
 use app\commands\task\ExecuteTask;
 use app\commands\task\Table;
-use app\commands\task\Task;
 use yii\console\Controller;
 use swoole_server;
 use swoole_process;
 
 /**
- * This command echoes the first argument that you have entered.
- *
- * This command is provided as an example for you to learn how to create console commands.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * Class ServerController
+ * @package app\commands
  */
 class ServerController extends Controller
 {
@@ -30,13 +25,15 @@ class ServerController extends Controller
     {
         // Swoole Table 初始化
         Table::init();
-        $this->serv = new swoole_server("127.0.0.1", 9501, SWOOLE_PROCESS);
+        $this->serv = new swoole_server("127.0.0.1", 9501, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
         $this->serv->set(array(
             'worker_num' => 8,
             'daemonize' => false,
             'task_worker_num' => 4, // 设置启动4个task进程
             'open_eof_split' => true,
             'package_eof' => "\r\n",
+            'ssl_cert_file' => __DIR__ . '/task/ssl/server.crt',
+            'ssl_key_file' => __DIR__ . '/task/ssl/server.key',
         ));
 
         $this->serv->on('Start', [$this, 'onStart']);
