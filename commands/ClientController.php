@@ -52,7 +52,6 @@ class ClientController extends Controller
      */
     public function onReceive($cli, $data)
     {
-        echo $data;
         ExecuteTask::execute($data);
     }
 
