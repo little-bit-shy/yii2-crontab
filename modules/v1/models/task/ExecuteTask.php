@@ -32,6 +32,8 @@ use yii\web\NotFoundHttpException;
  */
 class ExecuteTask extends ActiveRecord implements Linkable
 {
+    public static $dataTimeOut = 1;
+
     public static function tableName()
     {
         return '{{%execute_task}}';
