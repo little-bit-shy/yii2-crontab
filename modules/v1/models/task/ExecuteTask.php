@@ -129,6 +129,7 @@ class ExecuteTask extends ActiveRecord implements Linkable
             ]);
             $data = $query->offset($pagination->getOffset())
                 ->limit($pagination->getLimit())
+                ->addOrderBy(['id' => SORT_DESC])
                 ->all();
             return new ArrayDataProvider([
                 'models' => $data,
