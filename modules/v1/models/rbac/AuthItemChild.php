@@ -118,7 +118,7 @@ class AuthItemChild extends ActiveRecord implements Linkable
             case true: // 使用缓存
                 return ActiveRecord::getDb()->cache(function ($db) use ($parent, $child) {
                     return self::getExists($parent, $child);
-                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
+                }, AuthAssignment::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
                 break;
             case false: // 不使用缓存
                 return self::getExists($parent, $child);

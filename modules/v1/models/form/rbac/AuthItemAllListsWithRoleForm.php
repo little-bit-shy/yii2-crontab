@@ -96,7 +96,7 @@ class AuthItemAllListsWithRoleForm extends Model
 
                 // 结果数据返回
                 return $dataProvider;
-            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag(""), AuthItemChild::getDetailTag("/parent/{$attributes['name']}")]]));
+            }, AuthItemChild::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag(""), AuthItemChild::getDetailTag("/parent/{$attributes['name']}")]]));
 
             return $dataProvider;
         } else {

@@ -99,7 +99,7 @@ class AuthAssignment extends ActiveRecord implements Linkable
             case true: // 使用缓存
                 return ActiveRecord::getDb()->cache(function ($db) use ($user_id, $item_name) {
                     return self::getExists($user_id, $item_name);
-                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
+                }, AuthAssignment::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
                 break;
             case false: // 不使用缓存
                 return self::getExists($user_id, $item_name);

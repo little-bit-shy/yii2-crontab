@@ -119,7 +119,7 @@ class AuthItem extends ActiveRecord implements Linkable
             case true: // 使用缓存
                 return ActiveRecord::getDb()->cache(function ($db) use ($type, $name) {
                     return self::getDataProvider($type, $name);
-                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
+                }, AuthItem::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
                 break;
             case false: // 不使用缓存
                 return self::getDataProvider($type, $name);
@@ -159,7 +159,7 @@ class AuthItem extends ActiveRecord implements Linkable
             case true: // 使用缓存
                 return ActiveRecord::getDb()->cache(function ($db) use ($type, $name) {
                     return self::getArrayDataProvider($type, $name);
-                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
+                }, AuthItem::$dataTimeOut, new TagDependency(['tags' => [AuthItem::getListTag("")]]));
                 break;
             case false: // 不使用缓存
                 return self::getArrayDataProvider($type, $name);

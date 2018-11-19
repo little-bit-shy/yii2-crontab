@@ -14,24 +14,27 @@ use yii\web\Linkable;
 use yii\web\NotFoundHttpException;
 
 /**
- * CREATE TABLE `yii2_task` (
+ * CREATE TABLE `yii2_execute_task` (
  * `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
  * `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
- * `rule` varchar(30) DEFAULT NULL COMMENT '规则',
- * `switch` enum('1','2') NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
+ * `start_time` datetime DEFAULT NULL COMMENT '任务计划执行时间',
+ * `execute_time` datetime DEFAULT NULL COMMENT '任务实际执行时间',
+ * `status` enum('1','2','3','4') NOT NULL DEFAULT '1' COMMENT '执行状态 1/准备中 2/执行中 3/任务失败 4/已完成',
+ * `result` varchar(255) DEFAULT NULL COMMENT '任务输出',
  * `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
  * `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
- * PRIMARY KEY (`id`)
- * ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+ * PRIMARY KEY (`id`),
+ * KEY `asfapf17g12yguyf1g11gf12` (`start_time`,`status`) USING BTREE
+ * ) ENGINE=InnoDB AUTO_INCREMENT=1165459 DEFAULT CHARSET=utf8;
  *
- * Class Task
+ * Class ExecuteTask
  * @package v1\models\task
  */
-class Task extends ActiveRecord implements Linkable
+class ExecuteTask extends ActiveRecord implements Linkable
 {
     public static function tableName()
     {
-        return '{{%task}}';
+        return '{{%execute_task}}';
     }
 
     /**
@@ -40,10 +43,7 @@ class Task extends ActiveRecord implements Linkable
      */
     public function rules()
     {
-        return [
-            [['command', 'rule', 'switch', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
-            [['command', 'rule', 'switch'], 'safe', 'on' => 'update'],
-        ];
+        return [];
     }
 
     /**
@@ -52,10 +52,7 @@ class Task extends ActiveRecord implements Linkable
      */
     public function scenarios()
     {
-        return [
-            'create' => ['command', 'rule', 'create_time', 'update_time', 'switch'],
-            'update' => ['command', 'rule', 'switch'],
-        ];
+        return [];
     }
 
     /**
@@ -67,7 +64,7 @@ class Task extends ActiveRecord implements Linkable
     public function getLinks()
     {
         return [
-            Link::REL_SELF => Url::to(['task/view', 'id' => $this->id], true),
+            Link::REL_SELF => Url::to(['execute-task/view', 'id' => $this->id], true),
         ];
     }
 
@@ -106,9 +103,9 @@ class Task extends ActiveRecord implements Linkable
     public static function detail($id)
     {
         $data = ActiveRecord::getDb()->cache(function ($db) use ($id) {
-            $query = Task::find()->where(['id' => $id]);
+            $query = ExecuteTask::find()->where(['id' => $id]);
             return $query->one();
-        }, Task::$dataTimeOut, new TagDependency(['tags' => [Task::getDetailTag("/id/{$id}")]]));
+        }, ExecuteTask::$dataTimeOut, new TagDependency(['tags' => [ExecuteTask::getDetailTag("/id/{$id}")]]));
 
         if (empty($data)) {
             // 数据不存在
@@ -125,7 +122,7 @@ class Task extends ActiveRecord implements Linkable
     public static function lists()
     {
         $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) {
-            $query = Task::find();
+            $query = ExecuteTask::find();
             $pagination = new Pagination([
                 'defaultPageSize' => 10,
                 'totalCount' => $query->count()
@@ -137,7 +134,7 @@ class Task extends ActiveRecord implements Linkable
                 'models' => $data,
                 'Pagination' => $pagination,
             ]);
-        }, Task::$dataTimeOut, new TagDependency(['tags' => [Task::getListTag("")]]));
+        }, ExecuteTask::$dataTimeOut, new TagDependency(['tags' => [ExecuteTask::getListTag("")]]));
 
         return $activeDataProvider;
     }

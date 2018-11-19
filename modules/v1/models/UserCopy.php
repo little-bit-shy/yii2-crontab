@@ -108,7 +108,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 $query->with('userCopy.userCopy.userCopy');
             }]);
             return $query->one();
-        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getDetailTag("/id/{$id}")]]));
+        }, UserCopy::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getDetailTag("/id/{$id}")]]));
 
         if (empty($data)) {
             // 数据不存在
@@ -140,7 +140,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 'models' => $data,
                 'Pagination' => $pagination,
             ]);
-        }, self::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getListTag("")]]));
+        }, UserCopy::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getListTag("")]]));
 
         return $activeDataProvider;
     }

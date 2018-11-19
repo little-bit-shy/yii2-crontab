@@ -118,7 +118,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             case true:
                 $user = ActiveRecord::getDb()->cache(function ($db) {
                     return self::getLists();
-                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getListTag("")]]));
+                }, User::$dataTimeOut, new TagDependency(['tags' => [User::getListTag("")]]));
                 return $user;
                 break;
             case false:
@@ -190,7 +190,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $user = ActiveRecord::getDb()->cache(function ($db) use ($token) {
             return self::getFindIdentityByAccessToken($token);
-        }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
+        }, User::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
         return $user;
     }
 
@@ -240,7 +240,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             case true:
                 $user = ActiveRecord::getDb()->cache(function ($db) use ($username) {
                     return User::getFindIdentityByUsername($username);
-                }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
+                }, User::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
                 return $user;
                 break;
             case false:

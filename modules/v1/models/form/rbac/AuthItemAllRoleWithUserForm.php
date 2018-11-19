@@ -98,7 +98,7 @@ class AuthItemAllRoleWithUserForm extends Model
 
                 // 结果数据返回
                 return $dataProvider;
-            }, ActiveRecord::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
+            }, AuthAssignment::$dataTimeOut, new TagDependency(['tags' => [AuthAssignment::getListTag("")]]));
 
             return $dataProvider;
         } else {
