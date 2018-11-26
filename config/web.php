@@ -2,6 +2,9 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$urlManager = require __DIR__ . '/urlManager.php';
+$modules = require __DIR__ . '/modules.php';
+$aliases = require __DIR__ . '/aliases.php';
 
 $config = [
     'id' => 'basic',
@@ -68,12 +71,12 @@ $config = [
         ],
         'db' => $db,
         //路由配置
-        'urlManager' => require(__DIR__ . '/urlManager.php'),
+        'urlManager' => $urlManager,
     ],
     //模块相关配置
-    'modules' => require(__DIR__ . '/modules.php'),
+    'modules' => $modules,
     //别名定义
-    'aliases' => require(__DIR__ . '/aliases.php'),
+    'aliases' => $aliases,
     'params' => $params,
 ];
 
