@@ -26,4 +26,6 @@ return [
     'switch' => '开关',
     'id' => '编号',
     'rule' => '规则',
+    'password_old' => '旧密码',
+    'password_new' => '新密码',
 ];

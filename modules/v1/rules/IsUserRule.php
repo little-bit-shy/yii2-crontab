@@ -9,14 +9,15 @@
 namespace v1\rules;
 
 use yii\rbac\Rule;
+use Yii;
 
 /**
  * 事例
- * 检查 authorID 是否和通过参数传进来的 user 参数相符
+ * 检查 用户ID 是否和通过参数传进来的 user 参数相符
  */
-class AuthorRule extends Rule
+class IsUserRule extends Rule
 {
-    public $name = 'isAuthor';
+    public $name = 'isUser';
 
     /**
      * @param string|integer $user 用户 ID.
@@ -26,6 +27,10 @@ class AuthorRule extends Rule
      */
     public function execute($user, $item, $params)
     {
-        return false;
+        if(Yii::$app->getUser()->getId() !== $user){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

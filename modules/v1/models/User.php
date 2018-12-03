@@ -172,6 +172,26 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
         return $user->save();
     }
 
+    /**
+     * 重置用户密码
+     * @param $username
+     * @param $password_hash
+     * @return bool
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function ResetPsw($username, $password_hash)
+    {
+        $time = time();
+        $user = User::findOne([
+            'username' => $username
+        ]);
+        $user->load([$user->formName() => [
+            'password_hash' => $password_hash,
+            'updated_at' => $time,
+        ]]);
+        return $user->save();
+    }
+
     /***************************** 登陆相关 *********************************/
 
     public static function findIdentity($id)

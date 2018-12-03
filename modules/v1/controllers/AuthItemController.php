@@ -23,6 +23,7 @@ use v1\models\form\rbac\AuthItemDeleteRolePermissionsForm;
 use v1\models\form\rbac\AuthItemDeleteUserRoleForm;
 use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
+use v1\models\form\rbac\AuthItemResetPswUserForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
 use v1\models\form\rbac\AuthItemUserListForm;
 use Yii;
@@ -67,6 +68,7 @@ class AuthItemController extends Controller
             'delete-user-role' => ['POST'],
             'all-role-with-user' => ['POST'],
             'add-user' => ['POST'],
+            'reset-psw-user' => ['POST'],
         ];
     }
 
@@ -251,5 +253,15 @@ class AuthItemController extends Controller
     public function actionAddUser()
     {
         return AuthItemAddUserForm::addUser(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 重置用户密码
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionResetPswUser()
+    {
+        return AuthItemResetPswUserForm::resetPswUser(Yii::$app->request->getBodyParams());
     }
 }

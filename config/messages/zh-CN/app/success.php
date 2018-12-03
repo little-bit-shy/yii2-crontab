@@ -12,4 +12,5 @@ return [
     'login successfully' => '登录成功|0',
     'data delete successfully' => '数据删除成功|0',
     'data update successfully' => '数据修改成功|0',
+    'password reset successfully' => '密码重置成功|0',
 ];
