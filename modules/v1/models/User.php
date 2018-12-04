@@ -254,27 +254,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      * @throws \Exception
      * @throws \Throwable
      */
-    public static function findIdentityByUsername($cahce = false, $username)
-    {
-        switch ($cahce) {
-            case true:
-                $user = ActiveRecord::getDb()->cache(function ($db) use ($username) {
-                    return User::getFindIdentityByUsername($username);
-                }, User::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/username/{$username}")]]));
-                return $user;
-                break;
-            case false:
-                return User::getFindIdentityByUsername($username);
-                break;
-        }
-    }
-
-    /**
-     * 通过用户名称获取用户详细信息
-     * @param $username
-     * @return null|static
-     */
-    private static function getFindIdentityByUsername($username)
+    public static function findIdentityByUsername($username)
     {
         return User::findOne(['username' => $username]);
     }
@@ -288,7 +268,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      */
     public static function login($username)
     {
-        $user = self::findIdentityByUsername(false, $username);
+        $user = self::findIdentityByUsername($username);
         $user->load([$user->formName() => [
             'last_login_ip' => Yii::$app->getRequest()->getUserIP(),
             'last_login_at' => time(),

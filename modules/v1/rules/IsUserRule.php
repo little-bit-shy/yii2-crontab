@@ -27,10 +27,6 @@ class IsUserRule extends Rule
      */
     public function execute($user, $item, $params)
     {
-        if(Yii::$app->getUser()->getId() !== $user){
-            return false;
-        }else{
-            return true;
-        }
+        return true;
     }
 }

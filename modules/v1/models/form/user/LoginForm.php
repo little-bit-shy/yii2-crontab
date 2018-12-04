@@ -133,7 +133,7 @@ class LoginForm extends Model
     private function getUser($username, $ignoreExistingData = false)
     {
         if (empty(static::$_user) || $ignoreExistingData === true) {
-            static::$_user = User::findIdentityByUsername(false, $username);
+            static::$_user = User::findIdentityByUsername($username);
         }
         return static::$_user;
     }

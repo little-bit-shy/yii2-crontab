@@ -23,7 +23,6 @@ class AuthItemResetPswUserForm extends Model
     /** @var User $_user 保存用户数据容器，避免多次查询 */
     private static $_user = null;
 
-    public $username;
     public $password_old;
     public $password_new;
 
@@ -34,14 +33,13 @@ class AuthItemResetPswUserForm extends Model
     public function rules()
     {
         return [
-            [['username', 'password_old', 'password_new'], 'safe', 'on' => 'reset-psw'],
-            [['username', 'password_old', 'password_new'], 'trim', 'on' => 'reset-psw'],
-            [['username', 'password_old', 'password_new'], 'required', 'on' => 'reset-psw'],
+            [['password_old', 'password_new'], 'safe', 'on' => 'reset-psw'],
+            [['password_old', 'password_new'], 'required', 'on' => 'reset-psw'],
+            [['password_old', 'password_new'], 'string', 'on' => 'reset-psw'],
+            [['password_old', 'password_new'], 'trim', 'on' => 'reset-psw'],
             [['password_new'], 'filter', 'filter' => function ($value) {
                 return Yii::$app->getSecurity()->generatePasswordHash($value);
             }, 'on' => 'reset-psw'],
-            [['username', 'password_old', 'password_new'], 'string', 'on' => 'reset-psw'],
-            [['username'], 'validateUsername', 'on' => 'reset-psw'],
             [['password_old'], 'validatePasswordOld', 'on' => 'reset-psw'],
         ];
     }
@@ -54,7 +52,7 @@ class AuthItemResetPswUserForm extends Model
     {
         return [
             'reset-psw' => [
-                'username', 'password_old', 'password_new'
+                'password_old', 'password_new'
             ]
         ];
     }
@@ -66,25 +64,9 @@ class AuthItemResetPswUserForm extends Model
     public function attributeLabels()
     {
         return [
-            'username' => Yii::t('app\attribute', 'username'),
             'password_old' => Yii::t('app\attribute', 'password_old'),
             'password_new' => Yii::t('app\attribute', 'password_new'),
         ];
-    }
-
-    /**
-     * 验证用户名是否合法
-     * @param $attribute
-     * @param $params
-     * @throws \Exception
-     * @throws \Throwable
-     */
-    public function validateUsername($attribute, $params)
-    {
-        $user = self::getUser($this->username);
-        if (empty($user)) {
-            $this->addError($attribute, Yii::t('app/error', 'the user does not exist'));
-        }
     }
 
     /**
@@ -96,8 +78,11 @@ class AuthItemResetPswUserForm extends Model
      */
     public function validatePasswordOld($attribute, $params)
     {
-        $user = self::getUser($this->username);
-        if (!empty($user) && !$user->validatePassword($this->password_old)) {
+        $user = self::getUser(Yii::$app->getUser()->getId());
+        if (empty($user)) {
+            $this->addError($attribute, Yii::t('app/error', 'the data not exist'));
+        }
+        if (!$user->validatePassword($this->password_old)) {
             $this->addError($attribute, Yii::t('app/error', 'user old password error'));
         }
     }
@@ -147,7 +132,7 @@ class AuthItemResetPswUserForm extends Model
     private function getUser($username, $ignoreExistingData = false)
     {
         if (empty(static::$_user) || $ignoreExistingData === true) {
-            static::$_user = User::findIdentityByUsername(false, $username);
+            static::$_user = User::findIdentityByUsername($username);
         }
         return static::$_user;
     }
