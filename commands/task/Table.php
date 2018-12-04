@@ -15,7 +15,7 @@ class Table
     /** @var $table swoole_table */
     public static $table = null;
     public static $limit = 60;
-    private static $size = 131072;
+    private static $size = 16384;
     private static $columns = [
         ['id', swoole_table::TYPE_INT, 11],
         ['command', swoole_table::TYPE_STRING, 255],
