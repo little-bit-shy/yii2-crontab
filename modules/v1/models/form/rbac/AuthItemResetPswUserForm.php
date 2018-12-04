@@ -80,9 +80,8 @@ class AuthItemResetPswUserForm extends Model
     {
         $user = self::getUser(Yii::$app->getUser()->getId());
         if (empty($user)) {
-            $this->addError($attribute, Yii::t('app/error', 'the data not exist'));
-        }
-        if (!$user->validatePassword($this->password_old)) {
+            $this->addError($attribute, Yii::t('app/error', 'the user not exist'));
+        } else if (!$user->validatePassword($this->password_old)) {
             $this->addError($attribute, Yii::t('app/error', 'user old password error'));
         }
     }
@@ -108,7 +107,7 @@ class AuthItemResetPswUserForm extends Model
             // 过滤后的合法数据
             $attributes = $authItemResetPswUserForm->getAttributes();
             // 添加用户
-            if (User::ResetPsw($attributes['username'], $attributes['password_new'])) {
+            if (User::ResetPsw(Yii::$app->getUser()->getId(), $attributes['password_new'])) {
                 throw new HttpException(200, Yii::t('app/success', 'password reset successfully'));
             } else {
                 throw new HttpException(500, Yii::t('app/error', 'server internal error'));
@@ -123,16 +122,16 @@ class AuthItemResetPswUserForm extends Model
 
     /**
      * 通过用户名称获取用户信息
-     * @param $username
+     * @param $id
      * @param bool $ignoreExistingData 无视容器已有的数据
      * @return User
      * @throws \Exception
      * @throws \Throwable
      */
-    private function getUser($username, $ignoreExistingData = false)
+    private function getUser($id, $ignoreExistingData = false)
     {
         if (empty(static::$_user) || $ignoreExistingData === true) {
-            static::$_user = User::findIdentityByUsername($username);
+            static::$_user = User::findIdentityById($id);
         }
         return static::$_user;
     }

@@ -174,16 +174,16 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
     /**
      * 重置用户密码
-     * @param $username
+     * @param $id
      * @param $password_hash
      * @return bool
      * @throws \yii\base\InvalidConfigException
      */
-    public static function ResetPsw($username, $password_hash)
+    public static function ResetPsw($id, $password_hash)
     {
         $time = time();
         $user = User::findOne([
-            'username' => $username
+            'id' => $id
         ]);
         $user->load([$user->formName() => [
             'password_hash' => $password_hash,
@@ -250,13 +250,21 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     /**
      * 通过用户名称获取用户详细信息
      * @param $username
-     * @return mixed|User
-     * @throws \Exception
-     * @throws \Throwable
+     * @return null|static
      */
     public static function findIdentityByUsername($username)
     {
         return User::findOne(['username' => $username]);
+    }
+
+    /**
+     * 通过用户ID获取用户详细信息
+     * @param $id
+     * @return null|static
+     */
+    public static function findIdentityById($id)
+    {
+        return User::findOne(['id' => $id]);
     }
 
     /**

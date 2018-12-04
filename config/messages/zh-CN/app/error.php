@@ -18,4 +18,5 @@ return [
     'the data not exist' => '数据不存在|10008',
     'rule error' => '规则错误|10009',
     'user old password error' => '用户旧密码错误|10010',
+    'the user not exist' => '用户不存在|10011',
 ];
