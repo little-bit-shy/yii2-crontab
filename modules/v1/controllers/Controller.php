@@ -97,7 +97,8 @@ class Controller extends \yii\rest\Controller
             'rules' => [
                 [
                     'allow' => true,
-                    'matchCallback' => function ($rule, InlineAction $action) {
+                    'matchCallback' => function ($rule, $action) {
+                        /** @var InlineAction $action */
                         // 游客登录不验证权限
                         if (Yii::$app->getUser()->getIsGuest()) {
                             return true;
