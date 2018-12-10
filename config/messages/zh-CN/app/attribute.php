@@ -28,4 +28,5 @@ return [
     'rule' => '规则',
     'password_old' => '旧密码',
     'password_new' => '新密码',
+    'captcha' => '验证码',
 ];

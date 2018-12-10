@@ -25,6 +25,7 @@ class LoginForm extends Model
 
     public $username;
     public $password;
+    public $captcha;
 
     /**
      * 验证规则
@@ -33,8 +34,9 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            [['username', 'password'], 'safe', 'on' => 'login'],
-            [['username', 'password'], 'required', 'on' => 'login', 'message' => '{attribute}' . Yii::t('app\error', 'not null')],
+            [['username', 'password', 'captcha'], 'safe', 'on' => 'login'],
+            [['username', 'password', 'captcha'], 'required', 'on' => 'login', 'message' => '{attribute}' . Yii::t('app\error', 'not null')],
+            [['captcha'], 'captcha', 'on' => 'login'],
             [['username'], 'validateUsername', 'on' => 'login'],
             [['password'], 'validatePassword', 'on' => 'login'],
         ];
@@ -50,6 +52,7 @@ class LoginForm extends Model
             'login' => [
                 'username',
                 'password',
+                'captcha',
             ]
         ];
     }
@@ -63,6 +66,7 @@ class LoginForm extends Model
         return [
             'username' => Yii::t('app\attribute', 'username'),
             'password' => Yii::t('app\attribute', 'password'),
+            'captcha' => Yii::t('app\attribute', 'captcha'),
         ];
     }
 
