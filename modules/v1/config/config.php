@@ -10,6 +10,7 @@ $cache = require(__DIR__ . '/cache.php');
 $i18n = require(__DIR__ . '/i18n.php');
 $authManager = require(__DIR__. '/authManager.php');
 $params = require(__DIR__ . '/params.php');
+$session = require(__DIR__ . '/session.php');
 
 $config = [
     'components' => [
@@ -31,6 +32,8 @@ $config = [
         'i18n' => $i18n,
         //rbac权限管理
         'authManager' => $authManager,
+        //session设置
+        'session' => $session,
     ],
     'params' => $params,
 ];
