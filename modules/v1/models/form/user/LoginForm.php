@@ -36,7 +36,7 @@ class LoginForm extends Model
         return [
             [['username', 'password', 'captcha'], 'safe', 'on' => 'login'],
             [['username', 'password', 'captcha'], 'required', 'on' => 'login', 'message' => '{attribute}' . Yii::t('app\error', 'not null')],
-            [['captcha'], 'captcha', 'on' => 'login'],
+            [['captcha'], 'captcha', 'captchaAction' => 'v1/site/captcha', 'on' => 'login'],
             [['username'], 'validateUsername', 'on' => 'login'],
             [['password'], 'validatePassword', 'on' => 'login'],
         ];
