@@ -77,6 +77,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $fields = parent::fields();
         unset($fields['password_hash']);
+        unset($fields['access_token']);
         $fields['created_at'] = function ($model) {
             return date('Y-m-d H:i:s', $model->created_at);
         };
