@@ -13,6 +13,9 @@ Nginx 1.13.7
 Redis 4.0.8  
 Mysql 5.6.16
 
+#### 环境安装（Docker）  
+[web环境docker一键安装](https://github.com/little-bit-shy/docker-web)
+
 #### Nginx路由优化配置
 ```bash
 server {
