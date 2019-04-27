@@ -22,8 +22,10 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/console_db.php'),
+        // kafka配置
+        'kafka' => require(__DIR__ . '/console_kafka.php')
     ],
-    //别名定义
+    // 别名定义
     'aliases' => require(__DIR__ . '/console_aliases.php'),
     'params' => require __DIR__ . '/console_params.php',
     /*
