@@ -4,7 +4,6 @@
  * User: xuguozhi
  * Date: 2019/4/26
  * Time: 19:31
- * @desc kafka
  */
 
 namespace app\components;
@@ -13,6 +12,10 @@ use Yii;
 use yii\base\Component;
 use yii\console\Exception;
 
+/**
+ * Class Kafka
+ * @package app\components
+ */
 class Kafka extends Component
 {
     /**
@@ -81,7 +84,7 @@ class Kafka extends Component
      * @param string $autoOffsetReset
      * @throws \Exception
      */
-    public function consumer($topic = [], $object, $callback, $groupId = '0', $autoOffsetReset = 'smallest')
+    public function consumerHighLevel($topic = [], $object, $callback, $groupId = '0', $autoOffsetReset = 'smallest')
     {
         $conf = new \RdKafka\Conf();
         // 分配/撤销 分区
@@ -111,26 +114,73 @@ class Kafka extends Component
 
         $consumer = new \RdKafka\KafkaConsumer($conf);
         $consumer->subscribe($topic);
-        echo "Waiting for partition assignment... (make take some time when\n";
-        echo "quickly re-joining the group after leaving it.)\n";
+        echo "Waiting for partition assignment... (make take some time when", PHP_EOL;
+        echo "quickly re-joining the group after leaving it.)", PHP_EOL;
         while (true) {
-            $message = $consumer->consume(120 * 1000);
+            $message = $consumer->consume(10 * 1000);
             switch ($message->err) {
                 case RD_KAFKA_RESP_ERR_NO_ERROR:
-                    echo "message payload....";
+                    echo "message payload....", PHP_EOL;
                     $object->$callback($message->payload);
+                    echo PHP_EOL;
                     break;
                 case RD_KAFKA_RESP_ERR__PARTITION_EOF:
-                    echo "No more messages; will wait for more\n";
+                    echo "No more messages; will wait for more", PHP_EOL;
                     break;
                 case RD_KAFKA_RESP_ERR__TIMED_OUT:
-                    echo "Timed out\n";
+                    echo "Timed out", PHP_EOL;
                     break;
                 default:
-                    throw new Exception($message->errstr(), $message->err);
+                    throw new Exception($message->errstr());
                     break;
             }
-            sleep(1);
+        }
+    }
+
+    /**
+     * 低级消费者，数据节点等数据客户端决定如何处理
+     * @param array $topic
+     * @param object $object
+     * @param string $callback
+     * @param string $groupId
+     * @param int $partition
+     * @throws Exception
+     */
+    public function consumerLowLevel($topic, $object, $callback, $groupId = '0', $partition = 0)
+    {
+        $conf = new \RdKafka\Conf();
+
+        $conf->set('group.id', $groupId);
+
+        $rk = new \RdKafka\Consumer($conf);
+        $rk->setLogLevel(LOG_DEBUG);
+        $rk->addBrokers($this->broker_list);
+
+        $topicConf = new \RdKafka\TopicConf();
+        // Disable committing offsets automatically
+        $topicConf->set('auto.commit.enable', 'false');
+        $topic = $rk->newTopic($topic, $topicConf);
+
+        // The first argument is the partition to consume from.
+        // The second argument is the offset at which to start consumption. Valid values
+        // are: RD_KAFKA_OFFSET_BEGINNING, RD_KAFKA_OFFSET_END, RD_KAFKA_OFFSET_STORED.
+        $topic->consumeStart($partition, RD_KAFKA_OFFSET_BEGINNING);
+
+        while (true) {
+            // The first argument is the partition (again).
+            // The second argument is the timeout.
+            $message = $topic->consume($partition, 10 * 1000);
+            if (null === $message) {
+                continue;
+            } elseif ($message->err) {
+                throw new Exception($message->errstr());
+                break;
+            } else {
+                echo "message payload....", PHP_EOL;
+                echo "offset: " . $message->offset, PHP_EOL;
+                $object->$callback($message->payload);
+                echo PHP_EOL;
+            }
         }
     }
 }
