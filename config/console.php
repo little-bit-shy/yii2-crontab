@@ -14,10 +14,15 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'log' => [
+            'traceLevel' => 0,
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'class' => yii\log\FileTarget::className(),
+                    'logFile' => '@runtime/logs/console.log',
+                    'maxFileSize' => 102400,
+                    'maxLogFiles' => 20,
+                    'logVars' => [],
+                    'levels' => ['info', 'error', 'warning'],
                 ],
             ],
         ],
