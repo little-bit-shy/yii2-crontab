@@ -7,7 +7,7 @@
  * Message: ActiveRecord
  */
 
-namespace v1\models\redis;
+namespace app\models\redis;
 
 
 
@@ -15,7 +15,7 @@ namespace v1\models\redis;
  * Class ActiveRecord
  * @package v1\models\redis
  */
-class ActiveRecord extends \app\models\redis\ActiveRecord
+class ActiveRecord extends \yii\redis\ActiveRecord
 {
 
 }

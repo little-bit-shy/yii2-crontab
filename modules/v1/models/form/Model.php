@@ -8,21 +8,6 @@
 
 namespace v1\models\form;
 
-use Yii;
-
-class Model extends \yii\base\Model
+class Model extends \app\models\form\Model
 {
-    /**
-     * rewrite
-     * @param null $attribute
-     * @return mixed|string
-     */
-    public function getFirstError($attribute = null)
-    {
-        if ($attribute === null) {
-            $firstErrors = $this->getFirstErrors();
-            return reset($firstErrors);
-        }
-        return parent::getFirstError($attribute);
-    }
 }
