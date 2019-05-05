@@ -67,9 +67,13 @@ class KafkaController extends Controller
         if ($model->hasErrors()) {
             throw new Exception($model->getFirstError(), 500);
         }
-        Kafka::getClass()->consumerLowLevel('test', $this, 'consumerCallback', 'myConsumerGroup', $this->partition);
+        Kafka::getClass()->consumerLowLevel('test', $this, 'consumerCallback', 'myConsumerGroup', $this->partition, 0);
     }
 
+    /**
+     * 消息实际处理业务
+     * @param $message
+     */
     public function consumerCallback($message)
     {
         $this->stdout("{$message}", Console::BG_GREEN);
