@@ -4,7 +4,7 @@
  * User: xuguozhi
  * Date: 2019/4/26
  * Time: 19:37
- * @desc 生产者（kafka）
+ * @desc 生产者、消费者（kafka）
  */
 
 namespace app\commands;
