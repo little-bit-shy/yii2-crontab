@@ -52,12 +52,12 @@ class SiteController extends Controller
         return [
             'captcha' => [
                 'class' => CaptchaAction::className(),
-                'maxLength'=>4,
-                'minLength'=>4,
-                'padding'=>5,
-                'height'=>39,
-                'width'=>100,
-                'offset'=>3,
+                'maxLength' => 4,
+                'minLength' => 4,
+                'padding' => 5,
+                'height' => 39,
+                'width' => 100,
+                'offset' => 3,
             ],
         ];
     }

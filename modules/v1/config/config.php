@@ -11,6 +11,7 @@ $i18n = require(__DIR__ . '/i18n.php');
 $authManager = require(__DIR__. '/authManager.php');
 $params = require(__DIR__ . '/params.php');
 $session = require(__DIR__ . '/session.php');
+$elasticsearch = require(__DIR__ . '/elasticsearch.php');
 
 $config = [
     'components' => [
@@ -34,6 +35,8 @@ $config = [
         'authManager' => $authManager,
         //session设置
         'session' => $session,
+        //elasticsearch设置
+        'elasticsearch' => $elasticsearch,
     ],
     'params' => $params,
 ];
