@@ -69,7 +69,7 @@ $config = [
                 ],
             ],
         ],
-        'db' => $db,
+        // 'db' => $db,
         //路由配置
         'urlManager' => $urlManager,
     ],

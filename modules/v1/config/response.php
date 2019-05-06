@@ -6,6 +6,7 @@
  * 而不是依赖于使用不同的HTTP状态来表示不同的错误，
  * 并附上实际的HTTP状态代码为JSON结构的一部分的响应
  */
+
 return [
     'class' => \yii\web\Response::className(),
     'on beforeSend' => function ($event) {
