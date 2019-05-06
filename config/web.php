@@ -1,7 +1,7 @@
 <?php
 
 $params = require __DIR__ . '/params.php';
-$db = require __DIR__ . '/db.php';
+//$db = require __DIR__ . '/db.php';
 $urlManager = require __DIR__ . '/urlManager.php';
 $modules = require __DIR__ . '/modules.php';
 $aliases = require __DIR__ . '/aliases.php';
