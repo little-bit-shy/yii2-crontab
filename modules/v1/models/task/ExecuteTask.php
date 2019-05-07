@@ -107,7 +107,7 @@ class ExecuteTask extends ActiveRecord implements Linkable
         $data = ActiveRecord::getDb()->cache(function ($db) use ($id) {
             $query = ExecuteTask::find()->where(['id' => $id]);
             return $query->one();
-        }, ExecuteTask::$dataTimeOut, new TagDependency(['tags' => [ExecuteTask::getDetailTag("/id/{$id}")]]));
+        }, ExecuteTask::$dataTimeOut, new TagDependency(['tags' => [ExecuteTask::getIdDetailTag($id)]]));
 
         if (empty($data)) {
             // 数据不存在

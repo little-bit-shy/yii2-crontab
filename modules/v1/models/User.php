@@ -102,11 +102,26 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             $access_token = $this->getAttribute('access_token');
             $username = $this->getAttribute('username');
             // 数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), [self::getDetailTag("/access_token/{$access_token}"), self::getDetailTag("/username/{$username}")]);
+            TagDependency::invalidate(Yii::$app->getCache(), [
+                self::getAccessTokenDetailTag($access_token),
+                self::getUsernameDetailTag($username)
+            ]);
         } catch (Exception $e) {
             return false;
         }
         return parent::tagDependencyInvalidate();
+    }
+
+    /***************************** 缓存依赖 *********************************/
+
+    public static function getAccessTokenDetailTag($access_token)
+    {
+        return self::getDetailTag("/access_token/{$access_token}");
+    }
+
+    public static function getUsernameDetailTag($username)
+    {
+        return self::getDetailTag("/username/{$username}");
     }
 
     /***************************** 关联数据 *********************************/
@@ -211,7 +226,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $user = ActiveRecord::getDb()->cache(function ($db) use ($token) {
             return self::getFindIdentityByAccessToken($token);
-        }, User::$dataTimeOut, new TagDependency(['tags' => [User::getDetailTag("/access_token/{$token}")]]));
+        }, User::$dataTimeOut, new TagDependency(['tags' => [User::getAccessTokenDetailTag($token)]]));
         return $user;
     }
 

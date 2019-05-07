@@ -108,7 +108,7 @@ class UserCopy extends ActiveRecord implements Linkable
                 $query->with('userCopy.userCopy.userCopy');
             }]);
             return $query->one();
-        }, UserCopy::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getDetailTag("/id/{$id}")]]));
+        }, UserCopy::$dataTimeOut, new TagDependency(['tags' => [UserCopy::getIdDetailTag($id)]]));
 
         if (empty($data)) {
             // 数据不存在

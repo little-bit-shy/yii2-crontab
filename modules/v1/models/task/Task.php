@@ -108,7 +108,7 @@ class Task extends ActiveRecord implements Linkable
         $data = ActiveRecord::getDb()->cache(function ($db) use ($id) {
             $query = Task::find()->where(['id' => $id]);
             return $query->one();
-        }, Task::$dataTimeOut, new TagDependency(['tags' => [Task::getDetailTag("/id/{$id}")]]));
+        }, Task::$dataTimeOut, new TagDependency(['tags' => [Task::getIdDetailTag($id)]]));
 
         if (empty($data)) {
             // 数据不存在

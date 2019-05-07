@@ -71,6 +71,13 @@ class ActiveRecord extends \yii\db\ActiveRecord
         return $fields;
     }
 
+    /***************************** 缓存依赖 *********************************/
+
+    public static function getIdDetailTag($id)
+    {
+        return self::getDetailTag("/id/{$id}");
+    }
+
     /***************************** 触发事件 *********************************/
 
     /**
@@ -105,7 +112,7 @@ class ActiveRecord extends \yii\db\ActiveRecord
             // 数据id
             $id = $this->getAttribute('id');
             // 数据缓存清除
-            TagDependency::invalidate(Yii::$app->getCache(), [self::getListTag(), self::getDetailTag("/id/{$id}")]);
+            TagDependency::invalidate(Yii::$app->getCache(), [self::getListTag(), self::getIdDetailTag($id)]);
         } catch (Exception $e) {
             return false;
         }
