@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d05ad6478254437637064ce3b4146db",
+    "content-hash": "bafc2d9ec4d3dcff0527e572c0930c8c",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -55,7 +55,7 @@
             "version": "3.2.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:jquery/jquery-dist.git",
+                "url": "https://github.com/jquery/jquery-dist.git",
                 "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
             },
             "dist": {
@@ -466,21 +466,24 @@
         },
         {
             "name": "yiisoft/yii2-elasticsearch",
-            "version": "2.0.5",
+            "version": "2.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-elasticsearch.git",
-                "reference": "82d66d17543040dda3c64f299ae251658156c2c1"
+                "reference": "bc5f1c4f851d840482d047eb2a427133a15974b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-elasticsearch/zipball/82d66d17543040dda3c64f299ae251658156c2c1",
-                "reference": "82d66d17543040dda3c64f299ae251658156c2c1",
+                "url": "https://api.github.com/repos/yiisoft/yii2-elasticsearch/zipball/bc5f1c4f851d840482d047eb2a427133a15974b2",
+                "reference": "bc5f1c4f851d840482d047eb2a427133a15974b2",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "yiisoft/yii2": "~2.0.14"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.27|~5.7.21|^6.2"
             },
             "type": "yii2-extension",
             "extra": {
@@ -511,7 +514,7 @@
                 "search",
                 "yii2"
             ],
-            "time": "2018-03-20T11:34:58+00:00"
+            "time": "2019-05-01T21:06:25+00:00"
         },
         {
             "name": "yiisoft/yii2-redis",
@@ -3135,7 +3138,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "yiisoft/yii2-elasticsearch": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

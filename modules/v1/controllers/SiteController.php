@@ -39,7 +39,7 @@ class SiteController extends Controller
     {
         return [
             'captcha' => ['GET', 'POST'],
-            'login' => ['POST'],
+            'login' => ['GET', 'POST'],
             'all-permissions' => ['GET', 'POST'],
         ];
     }
