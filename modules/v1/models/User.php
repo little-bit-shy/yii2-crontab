@@ -2,17 +2,21 @@
 
 namespace v1\models;
 
+use app\controllers\Controller;
 use v1\models\redis\RateLimit;
 use Yii;
+use yii\base\InlineAction;
 use yii\caching\TagDependency;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\db\Exception;
 use yii\filters\RateLimitInterface;
 use yii\helpers\Url;
+use yii\rest\Action;
 use yii\web\IdentityInterface;
 use yii\web\Link;
 use yii\web\Linkable;
+use yii\web\Request;
 
 /**
  * CREATE TABLE `yii2_user` (
@@ -77,7 +81,13 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     {
         $fields = parent::fields();
         unset($fields['password_hash']);
-        unset($fields['access_token']);
+
+        $request = new Request();
+        $pathInfo = $request->getPathInfo();
+        // 仅限登陆请求返回
+        if ($pathInfo !== 'v1/site/login') {
+            unset($fields['access_token']);
+        }
         $fields['created_at'] = function ($model) {
             return date('Y-m-d H:i:s', $model->created_at);
         };
