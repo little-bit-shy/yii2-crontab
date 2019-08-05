@@ -1,4 +1,5 @@
 <?php
+
 namespace app\commands\task;
 
 use app\components\ParseCrontab;
@@ -47,6 +48,7 @@ class Table
     {
         $start_time = time() + self::$limit;
         $tasks = Task::get();
+        $task_id = 0;
         foreach ($tasks as $task) {
             $interval = null;
             list($command, $rule) = array_values($task);
@@ -72,8 +74,10 @@ class Table
                     'execute_time' => date('Y-m-d H:i:s', $start_time + $value),
                     'command' => $command,
                 ];
+                // 避免key导致内存溢出
+                ++$task_id;
                 // 添加任务数据到 Swoole Table
-                self::$table->set($last_insert_id, $execute_task);
+                self::$table->set($task_id, $execute_task);
             }
         }
     }
