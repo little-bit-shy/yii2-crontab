@@ -19,13 +19,15 @@ use swoole_process;
  */
 class ServerController extends Controller
 {
+    public $host = '127.0.0.1';
+    public $port = 9501;
     private $serv;
 
     public function actionIndex()
     {
         // Swoole Table 初始化
         Table::init();
-        $this->serv = new swoole_server("127.0.0.1", 9501, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
+        $this->serv = new swoole_server($this->host, $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
         $this->serv->set(array(
             'worker_num' => 8,
             'daemonize' => false,

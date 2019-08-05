@@ -18,6 +18,9 @@ use swoole_client;
  */
 class ClientController extends Controller
 {
+    public $host = '127.0.0.1';
+    public $port = 9501;
+    public $timeout = 1;
     private $client;
 
     public function actionIndex()
@@ -35,7 +38,7 @@ class ClientController extends Controller
         $this->client->on('Connect', [$this, 'onConnect']);
         $this->client->on('Receive', [$this, 'onReceive']);
         $this->client->on('Close', [$this, 'onClose']);
-        $this->client->connect("127.0.0.1", 9501, 1);
+        $this->client->connect($this->host, $this->port, $this->timeout);
     }
 
     /**
