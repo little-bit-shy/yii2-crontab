@@ -9,6 +9,7 @@ namespace app\commands;
 
 use app\commands\task\ExecuteTask;
 use app\commands\task\Table;
+use app\components\ParseCrontab;
 use yii\console\Controller;
 use swoole_server;
 use swoole_process;
