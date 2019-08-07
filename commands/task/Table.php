@@ -46,7 +46,7 @@ class Table
      */
     public static function set(swoole_server $serv)
     {
-        $start_time = time() - (time() % 60) + self::$limit;
+        $start_time = time() - (time() % 60) + 60 + 60;
         $tasks = Task::get();
         $task_id = 0;
         foreach ($tasks as $task) {
