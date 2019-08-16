@@ -20,18 +20,18 @@ yii2-rest           项目目录
 │  │  ├─rules	    权限规则目录
 │  │  └─Module.php  初始化模块脚本
 │  └─
-├─web                项目入口目录
-│ ├─dev.php	      开发入口脚本
-│ ├─prod.php	      生产入口脚本
-│ └─test.php	      测试入口脚本
+├─web               项目入口目录
+│ ├─dev.php	     开发入口脚本
+│ ├─prod.php	     生产入口脚本
+│ └─test.php	     测试入口脚本
 │
-├─composer.json      composer 定义文件
-├─composer.phar      composer 工具
-├─README.md          README 文件
-├─yii_dev	     开发Cli入口脚本
-├─yii_prod	     生产Cli入口脚本
-├─yii_test	     测试Cli入口脚本
-└─yii2restful.sql    项目初始化数据Sql文件
+├─composer.json     composer 定义文件
+├─composer.phar     composer 工具
+├─README.md         README 文件
+├─yii_dev	    开发Cli入口脚本
+├─yii_prod	    生产Cli入口脚本
+├─yii_test	    测试Cli入口脚本
+└─yii2restful.sql   项目初始化数据Sql文件
 ```
 
 #### 如何安装
@@ -70,7 +70,7 @@ server {
     #解析.php的文件
     location ~ \.php$ {
         root /www/yii2-rest/web/;
-	    fastcgi_pass 127.0.0.1:9000;
+        fastcgi_pass 127.0.0.1:9000;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
