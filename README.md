@@ -7,7 +7,7 @@
 首先执行`php composer.phar install`命令对项目进行安装操作
 
 #### 运行环境
-Php 7.1.9  
+Php 7.2.7  
 Yii 2.0.14  
 Nginx 1.13.7  
 Redis 4.0.8  
@@ -19,33 +19,30 @@ Mysql 5.6.16
 #### Nginx路由优化配置
 ```bash
 server {
-    listen 888; 
+    listen 80;
     server_name localhost;
-    
-    # cors跨域处理
+    autoindex off;
+
+    #直接输入域名进入的目录和默认解析的文件
     location / {
-             if ($request_method = OPTIONS) {
-                add_header Access-Control-Allow-Origin *;
-                add_header Access-Control-Allow-Credentials true;
-                add_header Access-Control-Allow-Methods 'GET,POST,OPTIONS';
-                add_header 'Access-Control-Allow-Headers' 'DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,X-Custom-Header';
-                return 204;
-            }
+        if ( $request_method = 'OPTIONS' ) {
+            add_header Access-Control-Allow-Origin *;
+            add_header Access-Control-Allow-Credentials true;
+            add_header Access-Control-Allow-Methods 'GET,POST,OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'x-access-token,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,X-Custom-Header';
+            add_header Access-Control-Max-Age 6000;
+            return 204;
+        }
+        try_files $uri $uri/ /prod.php?s=$uri&$args;
     }
 
-    # 直接输入域名进入的目录和默认解析的文件
-    location / {
-        index index.php;
-        try_files $uri $uri/ /index.php?r=$uri&$args;
-        root /usr/local/nginx/www/vhost/www/myself/yii2-rest/web/;
-    }
-    
-    # 解析.php的文件
+    #解析.php的文件
     location ~ \.php$ {
-        fastcgi_pass 127.0.0.1:9000;
-        fastcgi_param SCRIPT_FILENAME /usr/local/nginx/www/vhost/www/myself/yii2-rest/web/$fastcgi_script_name;
+        root /www/yii2-rest/web/;
+	    fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
 }
 ```
-访问域名`http://127.0.0.1:888/v1/site/login`  
+访问域名`http://localhost/v1/site/login`  
