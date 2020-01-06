@@ -17,6 +17,15 @@
         </Row>
 
         <Row>
+            <Col span="6">
+                <Form ref="searchForm" :model="searchForm">
+                    <FormItem prop="name" label="">
+                        <Input type="text" v-model="searchForm.name" placeholder="输入名称...">
+                        <Icon type="ios-search" slot="prepend"></Icon>
+                        </Input>
+                    </FormItem>
+                </Form>
+            </Col>
             <Col span="24">
             <Table border size="small" :loading="loading" :columns="columns" :data="data"></Table>
 
@@ -156,6 +165,9 @@
                         {required: true, message: '用户密码不能为空', trigger: 'blur'}
                     ]
                 },
+                searchForm: {
+                    name: null,
+                },
                 columns: [
                     {
                         title: '名称',
@@ -240,6 +252,9 @@
             },
             pageSize: function (newPageSize, oldPageSize) {
                 this.getListData();
+            },
+            'searchForm.name': function (newPageSize, oldPageSize) {
+                this.getListData();
             }
         },
         methods: {
@@ -266,7 +281,9 @@
                     this.loading = true;
                 }
                 this.async = setTimeout(() => {
-                    (new ajax()).send('/v1/auth-item/user-lists?page=' + this.page + '&per-page=' + this.pageSize, {}).then((response) => {
+                    (new ajax()).send('/v1/auth-item/user-lists?page=' + this.page + '&per-page=' + this.pageSize, {
+                        'username': this.searchForm.name
+                    }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;
                         this.pageTotal = +data.data._meta.totalCount;

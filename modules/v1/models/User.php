@@ -138,17 +138,17 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
 
     /***************************** 增删改查 *********************************/
 
-    public static function lists($cache = false)
+    public static function lists($cache = false, $param = [])
     {
         switch ($cache) {
             case true:
-                $user = ActiveRecord::getDb()->cache(function ($db) {
-                    return self::getLists();
+                $user = ActiveRecord::getDb()->cache(function ($db) use ($param) {
+                    return self::getLists($param);
                 }, User::$dataTimeOut, new TagDependency(['tags' => [User::getListTag("")]]));
                 return $user;
                 break;
             case false:
-                return self::getLists();
+                return self::getLists($param);
                 break;
         }
     }
@@ -157,9 +157,10 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
      * 获取用户列表数据
      * @return ArrayDataProvider
      */
-    private static function getLists()
+    private static function getLists($param = [])
     {
         $query = User::find();
+        $query->andFilterWhere(['like', 'username', $param['username'], false]);
         // 结果数据返回
         $pagination = new Pagination([
             'defaultPageSize' => 20,

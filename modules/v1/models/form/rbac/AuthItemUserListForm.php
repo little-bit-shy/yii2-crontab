@@ -8,13 +8,11 @@
 
 namespace v1\models\form\rbac;
 
-use v1\models\ActiveRecord;
+use app\components\LikeValidator;
 use v1\models\form\Model;
-use v1\models\rbac\AuthItem;
 use v1\models\User;
-use yii\caching\TagDependency;
-use yii\data\ArrayDataProvider;
-use yii\data\Pagination;
+use Yii;
+use yii\web\HttpException;
 
 /**
  * 表单模型
@@ -23,6 +21,8 @@ use yii\data\Pagination;
  */
 class AuthItemUserListForm extends Model
 {
+    public $username;
+
     /**
      * 验证规则
      * @return array
@@ -30,6 +30,10 @@ class AuthItemUserListForm extends Model
     public function rules()
     {
         return [
+            [['username'], 'safe', 'on' => 'index'],
+            [['username'], 'trim', 'on' => 'index'],
+            [['username'], 'string', 'on' => 'index'],
+            [['username'], LikeValidator::className(), 'skipOnEmpty' => true, 'on' => 'index'],
         ];
     }
 
@@ -40,6 +44,9 @@ class AuthItemUserListForm extends Model
     public function scenarios()
     {
         return [
+            'index' => [
+                'username',
+            ]
         ];
     }
 
@@ -50,6 +57,7 @@ class AuthItemUserListForm extends Model
     public function attributeLabels()
     {
         return [
+            'username' => Yii::t('app\attribute', 'username'),
         ];
     }
 
@@ -60,13 +68,19 @@ class AuthItemUserListForm extends Model
     /**
      * 获取列表数据
      * @param $param
-     * @return mixed
-     * @throws \Exception
-     * @throws \Throwable
+     * @return mixed|\yii\data\ArrayDataProvider
+     * @throws HttpException
+     * @throws \yii\base\InvalidConfigException
      */
     public static function lists($param)
     {
-        $dataProvider = User::lists(true);
-        return $dataProvider;
+        $form = new AuthItemUserListForm();
+        $form->setScenario('index');
+        if ($form->load([$form->formName() => $param]) && $form->validate()) {
+            $attributes = $form->getAttributes();
+            return User::lists(true, $attributes);
+        } else {
+            throw new HttpException(422, $form->getFirstError());
+        }
     }
 }
