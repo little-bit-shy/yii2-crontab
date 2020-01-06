@@ -16,6 +16,16 @@ class ActiveRecord extends \yii\db\ActiveRecord
     public static $dataTimeOut = 600;
 
     /**
+     * 替换 ActiveQuery
+     * @return object
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function find()
+    {
+        return Yii::createObject(ActiveQuery::className(), [get_called_class()]);
+    }
+
+    /**
      * 获取列表数据缓存依赖标签
      * @param string $identifying
      * @return string
@@ -54,7 +64,8 @@ class ActiveRecord extends \yii\db\ActiveRecord
      */
     public function extraFields()
     {
-        $fields = array_keys($this->getRelatedRecords());
+        $relatedRecords = $this->getRelatedRecords();
+        $fields = array_keys($relatedRecords);
         foreach ($fields as $value) {
             // 获取所有子关联级相关数据
             $fields[$value] = function (self $model) use ($value) {
@@ -63,8 +74,18 @@ class ActiveRecord extends \yii\db\ActiveRecord
                 if (empty($activeRecord)) {
                     return null;
                 } else {
-                    $field = array_keys($activeRecord->getRelatedRecords());
-                    return $activeRecord->toArray([], $field, true);
+                    if (is_array($activeRecord)) { // 一对多
+                        $activeRecords = $activeRecord;
+                        $result = [];
+                        foreach ($activeRecords as $activeRecord) {
+                            $field = array_keys($activeRecord->getRelatedRecords());
+                            $result[] = $activeRecord->toArray([], $field, true);
+                        }
+                        return $result;
+                    } else { // 一对一
+                        $field = array_keys($activeRecord->getRelatedRecords());
+                        return $activeRecord->toArray([], $field, true);
+                    }
                 }
             };
         }

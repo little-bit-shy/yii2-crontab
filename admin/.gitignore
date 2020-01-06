@@ -1,0 +1,10 @@
+npm-debug.log
+.idea
+node_modules
+.project
+.vscode
+.history
+.DS_Store
+\.settings/
+build/env.js
+dist/

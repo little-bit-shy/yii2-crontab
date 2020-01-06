@@ -18,7 +18,9 @@ class Module extends \yii\base\Module
         // 从config.php加载配置来初始化模块
         $config = require(__DIR__ . '/config/config.php');
         $components = $config['components'];
+        $params = $config['params'];
         // 重新配置相关组件
         Yii::$app->setComponents($components);
+        Yii::$app->params = $params;
     }
 }

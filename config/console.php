@@ -26,13 +26,13 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/console_db.php'),
+        'db' => require(__DIR__ . '/db.php'),
         // kafka配置
-        'kafka' => require(__DIR__ . '/console_kafka.php')
+        'kafka' => require(__DIR__ . '/kafka.php')
     ],
     // 别名定义
-    'aliases' => require(__DIR__ . '/console_aliases.php'),
-    'params' => require __DIR__ . '/console_params.php',
+    'aliases' => require(__DIR__ . '/aliases.php'),
+    'params' => require __DIR__ . '/params.php',
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.

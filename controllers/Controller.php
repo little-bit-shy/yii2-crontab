@@ -21,6 +21,7 @@ use yii\filters\Cors;
 use yii\filters\RateLimiter;
 use yii\helpers\ArrayHelper;
 use yii\caching\TagDependency;
+use yii\rest\Serializer;
 
 /**
  * Yii 提供两个控制器基类来简化创建RESTful 操作的工作: yii\rest\Controller 和 yii\rest\ActiveController，
@@ -36,11 +37,13 @@ class Controller extends \yii\rest\Controller
 {
     /**
      * 有时你可能想通过直接在响应主体内包含分页信息来简化客户端的开发工作。
-     * @var array
+     * @var Serializer
      */
     public $serializer = [
-        'class' => 'yii\rest\Serializer',
+        'class' => 'app\controllers\behaviors\Serializer',
         'collectionEnvelope' => 'items',
+        'fieldsParam' => 'fields',
+        'expandParam' => 'expand',
     ];
 
     /**
@@ -56,7 +59,7 @@ class Controller extends \yii\rest\Controller
                     'Origin' => ['*'],
                     'Access-Control-Request-Method' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
                     'Access-Control-Request-Headers' => ['*'],
-                    'Access-Control-Allow-Credentials' => true,
+                    'Access-Control-Allow-Credentials' => false,
                     'Access-Control-Max-Age' => 86400,
                     'Access-Control-Expose-Headers' => [],
                 ]
