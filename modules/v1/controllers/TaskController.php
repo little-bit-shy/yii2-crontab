@@ -11,6 +11,7 @@ namespace v1\controllers;
 
 use v1\models\form\task\TaskCreateForm;
 use v1\models\form\task\TaskDeleteForm;
+use v1\models\form\task\TaskIndexForm;
 use v1\models\form\task\TaskUpdateForm;
 use v1\models\task\Task;
 use Yii;
@@ -58,7 +59,7 @@ class TaskController extends Controller
      */
     public function actionIndex()
     {
-        return Task::lists();
+        return TaskIndexForm::lists(Yii::$app->request->getBodyParams());
     }
 
 

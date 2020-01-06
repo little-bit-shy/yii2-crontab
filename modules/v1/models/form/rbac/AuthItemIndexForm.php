@@ -8,13 +8,10 @@
 
 namespace v1\models\form\rbac;
 
-use v1\models\ActiveRecord;
+use app\components\LikeValidator;
 use v1\models\form\Model;
 use v1\models\rbac\AuthItem;
 use Yii;
-use yii\caching\TagDependency;
-use yii\data\ArrayDataProvider;
-use yii\data\Pagination;
 use yii\web\HttpException;
 
 /**
@@ -36,6 +33,7 @@ class AuthItemIndexForm extends Model
         return [
             [['type', 'name'], 'safe', 'on' => 'index'],
             [['name'], 'string', 'on' => 'index'],
+            [['name'], LikeValidator::className(), 'skipOnEmpty' => true, 'on' => 'index'],
             [['type'], 'default', 'value' => 2, 'on' => 'index'],
             [['type'], 'in', 'range' => [1, 2], 'on' => 'index'],
         ];

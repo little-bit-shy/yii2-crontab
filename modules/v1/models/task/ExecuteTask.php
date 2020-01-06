@@ -121,10 +121,12 @@ class ExecuteTask extends ActiveRecord implements Linkable
      * 获取列表数据
      * @return ActiveDataProvider
      */
-    public static function lists()
+    public static function lists($param)
     {
-        $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) {
+        $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) use ($param) {
             $query = ExecuteTask::find();
+            $query->andFilterWhere(['like', 'command', $param['command'], false]);
+
             $pagination = new Pagination([
                 'defaultPageSize' => 10,
                 'totalCount' => $query->count()

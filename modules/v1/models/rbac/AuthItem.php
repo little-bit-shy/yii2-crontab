@@ -179,7 +179,7 @@ class AuthItem extends ActiveRecord implements Linkable
         // 数据类型过滤
         $query->andFilterWhere(['type' => $type]);
         // 权限、角色名称过滤
-        $query->andFilterWhere(['like', 'name', $name]);
+        $query->andFilterWhere(['like', 'name', $name, false]);
         // 结果数据返回
         $pagination = new Pagination([
             'defaultPageSize' => 20,

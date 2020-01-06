@@ -9,6 +9,7 @@
 
 namespace v1\controllers;
 
+use v1\models\form\task\ExecuteTaskIndexForm;
 use v1\models\task\ExecuteTask;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
@@ -52,7 +53,7 @@ class ExecuteTaskController extends Controller
      */
     public function actionIndex()
     {
-        return ExecuteTask::lists();
+        return ExecuteTaskIndexForm::lists(Yii::$app->request->getBodyParams());
     }
 
 
