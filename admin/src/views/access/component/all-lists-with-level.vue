@@ -1,16 +1,19 @@
 <style lang="less" scoped>
     @import '../../../styles/common.less';
+    .check{
+        width:150px;
+    }
 </style>
 <template>
     <div>
         <Card :bordered="false" :dis-hover="true">
             <span v-for="(item, key) in (data || dataFirst)">
-                <p slot="title" v-if="item.name && item.name.indexOf('*') >= 0">
+                <p slot="title" v-if="item.name && item.children">
                     <Icon type="android-folder-open"></Icon>
                     {{ item.description }}
                 </p>
-                <Checkbox v-model="check[item.name]" @on-change="onChange($event, item.name)" v-else>
-                    {{ item.description }}
+                <Checkbox class="check" v-model="check[item.name]" @on-change="onChange($event, item.name)" v-else>
+                    {{ item.description|ellipsis(10) }}
                 </Checkbox>
 
                 <allListsWithLevel v-if="item.children && (roleFirst || role)"
@@ -45,6 +48,15 @@
                 handler: function (val, oldVal) {
                 },
                 deep: true
+            }
+        },
+        filters: {
+            ellipsis (value,length) {
+              if (!value) return ''
+              if (value.length > length) {
+                return value.slice(0,length) + '...'
+              }
+              return value
             }
         },
         methods: {

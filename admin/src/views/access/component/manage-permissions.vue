@@ -16,6 +16,15 @@
         </Row>
 
         <Row>
+            <Col span="6">
+                <Form ref="searchForm" :model="searchForm">
+                    <FormItem prop="name" label="">
+                        <Input type="text" v-model="searchForm.name" placeholder="输入名称...">
+                        <Icon type="ios-search" slot="prepend"></Icon>
+                        </Input>
+                    </FormItem>
+                </Form>
+            </Col>
             <Col span="24">
             <Table border size="small" :loading="loading" :columns="columns" :data="data"></Table>
             <Modal
@@ -140,6 +149,9 @@
                         {required: true, message: '权限不能为空', trigger: 'blur'}
                     ]
                 },
+                searchForm: {
+                    name: null,
+                },
                 columns: [
                     {
                         title: '名称',
@@ -247,6 +259,9 @@
             },
             pageSize: function (newPageSize, oldPageSize) {
                 this.getListData();
+            },
+            'searchForm.name': function (newPageSize, oldPageSize) {
+                this.getListData();
             }
         },
         methods: {
@@ -278,7 +293,7 @@
                     // 添加响应拦截器
                     (new ajax()).send('/v1/auth-item/index?page=' + this.page + '&per-page=' + this.pageSize, {
                         'type': 2,
-                        'name': this.name
+                        'name': this.searchForm.name
                     }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;

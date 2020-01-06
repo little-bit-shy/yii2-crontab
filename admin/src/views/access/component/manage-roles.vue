@@ -17,6 +17,15 @@
         </Row>
 
         <Row>
+            <Col span="6">
+                <Form ref="searchForm" :model="searchForm">
+                    <FormItem prop="name" label="">
+                        <Input type="text" v-model="searchForm.name" placeholder="输入名称...">
+                        <Icon type="ios-search" slot="prepend"></Icon>
+                        </Input>
+                    </FormItem>
+                </Form>
+            </Col>
             <Col span="24">
             <Table border size="small" :loading="loading" :columns="columns" :data="data"></Table>
 
@@ -165,6 +174,23 @@
                 <div slot="footer">
                 </div>
             </Modal>
+
+            <Modal
+                    class-name="vertical-center-modal"
+                    title="分配角色"
+                    v-model="roleModal"
+                    :loading="true"
+                    :width="60"
+                    :closable="true">
+                <div style="overflow: hidden;">
+                    <div style="height:500px;overflow: auto;">
+                        <allRoleWithRole :role="role"
+                                         v-if="roleModal"></allRoleWithRole>
+                    </div>
+                </div>
+                <div slot="footer">
+                </div>
+            </Modal>
             </Col>
         </Row>
         <br/>
@@ -192,9 +218,10 @@
     import ajax from '../../../libs/ajax';
     import message from '../../../libs/message';
     import allListsWithLevel from './all-lists-with-level';
+    import allRoleWithRole from './all-role-with-role';
 
     export default {
-        components: {allListsWithLevel},
+        components: {allListsWithLevel,allRoleWithRole},
         names: 'manageRoles',
         data () {
             return {
@@ -239,6 +266,15 @@
                 allotForm: null,
                 allotFormError: null,
                 allotFormRule: {},
+                roleModal: false,
+                roleModalLoading: false,
+                roleData: null,
+                roleForm: null,
+                roleFormError: null,
+                roleFormRule: {},
+                searchForm: {
+                    name: null,
+                },
                 columns: [
                     {
                         title: '名称',
@@ -301,7 +337,23 @@
                                             this.role = this.data[index].name;
                                         }
                                     }
-                                }, '分配'),
+                                }, '权限'),
+                                h('Button', {
+                                    props: {
+                                        type: 'info',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.roleModal = true;
+                                            let index = params.index;
+                                            this.role = this.data[index].name;
+                                        }
+                                    }
+                                }, '角色'),
                                 h('Button', {
                                     props: {
                                         type: 'success',
@@ -361,6 +413,9 @@
             },
             pageSize: function (newPageSize, oldPageSize) {
                 this.getListData();
+            },
+            'searchForm.name': function (newPageSize, oldPageSize) {
+                this.getListData();
             }
         },
         methods: {
@@ -400,7 +455,7 @@
                 this.async = setTimeout(() => {
                     (new ajax()).send('/v1/auth-item/index?page=' + this.page + '&per-page=' + this.pageSize, {
                         'type': 1,
-                        'name': this.name
+                        'name': this.searchForm.name
                     }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;

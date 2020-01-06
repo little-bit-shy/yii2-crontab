@@ -26,6 +26,9 @@ use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemResetPswUserForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
 use v1\models\form\rbac\AuthItemUserListForm;
+use \v1\models\form\rbac\AuthItemAddRoleRoleForm;
+use v1\models\form\rbac\AuthItemAllRoleWithRoleForm;
+use v1\models\form\rbac\AuthItemDeleteRoleRoleForm;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 
@@ -69,6 +72,9 @@ class AuthItemController extends Controller
             'all-role-with-user' => ['POST'],
             'add-user' => ['POST'],
             'reset-psw-user' => ['POST'],
+            'all-role-with-role' => ['POST'],
+            'add-role-role' => ['POST'],
+            'delete-role-role' => ['POST'],
         ];
     }
 
@@ -243,6 +249,41 @@ class AuthItemController extends Controller
     public function actionAllRoleWithUser()
     {
         return AuthItemAllRoleWithUserForm::allRoleWithUser(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 返回角色下的所有角色列表数据
+     * @return mixed
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAllRoleWithRole()
+    {
+        return AuthItemAllRoleWithRoleForm::allRoleWithRole(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 为角色分配角色
+     * @throws \Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddRoleRole()
+    {
+        return AuthItemAddRoleRoleForm::addRoleRole(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 删除为角色分配的角色
+     * @throws \Exception
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionDeleteRoleRole()
+    {
+        return AuthItemDeleteRoleRoleForm::deleteRoleRole(Yii::$app->request->getBodyParams());
     }
 
     /**
