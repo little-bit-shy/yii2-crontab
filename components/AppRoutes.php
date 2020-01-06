@@ -20,14 +20,17 @@ class AppRoutes extends BaseObject
      * Get list of application routes
      * @return array
      */
-    public function getAppRoutes($module = null)
+    public function getAppRoutes($modules = [])
     {
-        if ($module === null) {
-            $module = Yii::$app;
-        } elseif (is_string($module)) {
-            $module = Yii::$app->getModule($module);
+        $modules = require __DIR__ . '/../config/modules.php';
+        foreach ($modules as $key => &$value){
+            $value = $key;
         }
-        $this->getRouteRecrusive($module, $result);
+        $result['/*'] = '/*';
+        foreach ($modules as $module){
+            $module = Yii::$app->getModule($module);
+            $this->getRouteRecrusive($module, $result);
+        }
         return $result;
     }
 

@@ -16,6 +16,15 @@
         </Row>
 
         <Row>
+            <Col span="6">
+                <Form ref="searchForm" :model="searchForm">
+                    <FormItem prop="name" label="">
+                        <Input type="text" v-model="searchForm.name" placeholder="输入名称...">
+                        <Icon type="ios-search" slot="prepend"></Icon>
+                        </Input>
+                    </FormItem>
+                </Form>
+            </Col>
             <Col span="24">
             <Table border size="small" :loading="loading" :columns="columns" :data="data"></Table>
             </Col>
@@ -53,6 +62,9 @@
                 pageSize: 15,
                 pageTotal: 0,
                 pageSizeOpts: [15, 20, 30, 40, 50],
+                searchForm: {
+                    name: null,
+                },
                 columns: [
                     {
                         type: 'expand',
@@ -148,6 +160,9 @@
             },
             pageSize: function (newPageSize, oldPageSize) {
                 this.getListData();
+            },
+            'searchForm.name': function (newPageSize, oldPageSize) {
+                this.getListData();
             }
         },
         methods: {
@@ -165,7 +180,9 @@
                     this.loading = true;
                 }
                 this.async = setTimeout(() => {
-                    (new ajax()).send('/v1/execute-task/index?page=' + this.page + '&per-page=' + this.pageSize, {}).then((response) => {
+                    (new ajax()).send('/v1/execute-task/index?page=' + this.page + '&per-page=' + this.pageSize, {
+                        'command': this.searchForm.name
+                    }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;
                         this.pageTotal = +data.data._meta.totalCount;
