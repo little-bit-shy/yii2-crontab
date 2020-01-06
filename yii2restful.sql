@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 06/01/2020 18:02:22
+ Date: 06/01/2020 18:12:02
 */
 
 SET NAMES utf8mb4;
@@ -187,12 +187,12 @@ CREATE TABLE `yii2_execute_task`  (
   `start_time` datetime(0) NULL DEFAULT NULL COMMENT '任务计划执行时间',
   `execute_time` datetime(0) NULL DEFAULT NULL COMMENT '任务实际执行时间',
   `status` enum('1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '执行状态 1/准备中 2/执行中 3/任务失败 4/已完成',
-  `result` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务输出',
+  `result` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '任务输出',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '数据创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '数据修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `asfapf17g12yguyf1g11gf12`(`start_time`, `status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1544612 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1544621 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yii2_execute_task
@@ -403,9 +403,18 @@ INSERT INTO `yii2_execute_task` VALUES (1544605, 'df -h', '2020-01-06 09:58:00',
 INSERT INTO `yii2_execute_task` VALUES (1544606, 'df -h', '2020-01-06 09:59:00', NULL, '3', NULL, '2020-01-06 09:57:00', '2020-01-06 10:00:01');
 INSERT INTO `yii2_execute_task` VALUES (1544607, 'df -h', '2020-01-06 10:00:00', NULL, '3', NULL, '2020-01-06 09:58:00', '2020-01-06 10:01:01');
 INSERT INTO `yii2_execute_task` VALUES (1544608, 'df -h', '2020-01-06 10:01:00', NULL, '3', NULL, '2020-01-06 09:59:00', '2020-01-06 10:02:01');
-INSERT INTO `yii2_execute_task` VALUES (1544609, 'df -h', '2020-01-06 10:02:00', NULL, '1', NULL, '2020-01-06 10:00:00', '2020-01-06 10:00:00');
-INSERT INTO `yii2_execute_task` VALUES (1544610, 'df -h', '2020-01-06 10:03:00', NULL, '1', NULL, '2020-01-06 10:01:00', '2020-01-06 10:01:00');
-INSERT INTO `yii2_execute_task` VALUES (1544611, 'df -h', '2020-01-06 10:04:00', NULL, '1', NULL, '2020-01-06 10:02:00', '2020-01-06 10:02:00');
+INSERT INTO `yii2_execute_task` VALUES (1544609, 'df -h', '2020-01-06 10:02:00', NULL, '3', NULL, '2020-01-06 10:00:00', '2020-01-06 10:03:01');
+INSERT INTO `yii2_execute_task` VALUES (1544610, 'df -h', '2020-01-06 10:03:00', '2020-01-06 10:03:00', '2', NULL, '2020-01-06 10:01:00', '2020-01-06 10:03:00');
+INSERT INTO `yii2_execute_task` VALUES (1544611, 'df -h', '2020-01-06 10:04:00', NULL, '3', NULL, '2020-01-06 10:02:00', '2020-01-06 10:05:01');
+INSERT INTO `yii2_execute_task` VALUES (1544612, 'df -h', '2020-01-06 10:05:00', NULL, '3', NULL, '2020-01-06 10:03:00', '2020-01-06 10:06:01');
+INSERT INTO `yii2_execute_task` VALUES (1544613, 'df -h', '2020-01-06 10:06:00', NULL, '3', NULL, '2020-01-06 10:04:00', '2020-01-06 10:07:01');
+INSERT INTO `yii2_execute_task` VALUES (1544614, 'df -h', '2020-01-06 10:07:00', '2020-01-06 10:07:00', '4', 'Filesystem               Size  Used Avail Use% Mounted on\noverlay                   17G  7.0G   11G  41% /\ntmpfs                     64M     0   64M   0% /dev\ntmpfs                    910M     0  910M   0% /sys/fs/cgroup\nshm                       64M     0   64M   0% /dev/shm\nvmhgfs-fuse              284G   24G  260G   9% /www\n/dev/mapper/centos-root   17G  7.0G   11G  41% /phplogs\ntmpfs                    910M     0  910M   0% /proc/asound\ntmpfs                    910M     0  910M   0% /proc/acpi\ntmpfs                    910M     0  910M   0% /proc/scsi\ntmpfs                    910M     0  910M   0% /sys/firmware\n', '2020-01-06 10:05:00', '2020-01-06 10:07:00');
+INSERT INTO `yii2_execute_task` VALUES (1544615, 'df -h', '2020-01-06 10:08:00', '2020-01-06 10:08:00', '4', 'Filesystem               Size  Used Avail Use% Mounted on\noverlay                   17G  7.0G   11G  41% /\ntmpfs                     64M     0   64M   0% /dev\ntmpfs                    910M     0  910M   0% /sys/fs/cgroup\nshm                       64M     0   64M   0% /dev/shm\nvmhgfs-fuse              284G   24G  260G   9% /www\n/dev/mapper/centos-root   17G  7.0G   11G  41% /phplogs\ntmpfs                    910M     0  910M   0% /proc/asound\ntmpfs                    910M     0  910M   0% /proc/acpi\ntmpfs                    910M     0  910M   0% /proc/scsi\ntmpfs                    910M     0  910M   0% /sys/firmware\n', '2020-01-06 10:06:00', '2020-01-06 10:08:00');
+INSERT INTO `yii2_execute_task` VALUES (1544616, 'df -h', '2020-01-06 10:09:00', '2020-01-06 10:09:00', '4', 'Filesystem               Size  Used Avail Use% Mounted on\noverlay                   17G  7.0G   11G  41% /\ntmpfs                     64M     0   64M   0% /dev\ntmpfs                    910M     0  910M   0% /sys/fs/cgroup\nshm                       64M     0   64M   0% /dev/shm\nvmhgfs-fuse              284G   24G  260G   9% /www\n/dev/mapper/centos-root   17G  7.0G   11G  41% /phplogs\ntmpfs                    910M     0  910M   0% /proc/asound\ntmpfs                    910M     0  910M   0% /proc/acpi\ntmpfs                    910M     0  910M   0% /proc/scsi\ntmpfs                    910M     0  910M   0% /sys/firmware\n', '2020-01-06 10:07:00', '2020-01-06 10:09:00');
+INSERT INTO `yii2_execute_task` VALUES (1544617, 'df -h', '2020-01-06 10:10:00', '2020-01-06 10:10:00', '4', 'Filesystem               Size  Used Avail Use% Mounted on\noverlay                   17G  7.0G   11G  41% /\ntmpfs                     64M     0   64M   0% /dev\ntmpfs                    910M     0  910M   0% /sys/fs/cgroup\nshm                       64M     0   64M   0% /dev/shm\nvmhgfs-fuse              284G   24G  260G   9% /www\n/dev/mapper/centos-root   17G  7.0G   11G  41% /phplogs\ntmpfs                    910M     0  910M   0% /proc/asound\ntmpfs                    910M     0  910M   0% /proc/acpi\ntmpfs                    910M     0  910M   0% /proc/scsi\ntmpfs                    910M     0  910M   0% /sys/firmware\n', '2020-01-06 10:08:00', '2020-01-06 10:10:00');
+INSERT INTO `yii2_execute_task` VALUES (1544618, 'df -h', '2020-01-06 10:11:00', '2020-01-06 10:11:00', '4', 'Filesystem               Size  Used Avail Use% Mounted on\noverlay                   17G  7.0G   11G  41% /\ntmpfs                     64M     0   64M   0% /dev\ntmpfs                    910M     0  910M   0% /sys/fs/cgroup\nshm                       64M     0   64M   0% /dev/shm\nvmhgfs-fuse              284G   24G  260G   9% /www\n/dev/mapper/centos-root   17G  7.0G   11G  41% /phplogs\ntmpfs                    910M     0  910M   0% /proc/asound\ntmpfs                    910M     0  910M   0% /proc/acpi\ntmpfs                    910M     0  910M   0% /proc/scsi\ntmpfs                    910M     0  910M   0% /sys/firmware\n', '2020-01-06 10:09:00', '2020-01-06 10:11:00');
+INSERT INTO `yii2_execute_task` VALUES (1544619, 'df -h', '2020-01-06 10:12:00', NULL, '1', NULL, '2020-01-06 10:10:00', '2020-01-06 10:10:00');
+INSERT INTO `yii2_execute_task` VALUES (1544620, 'df -h', '2020-01-06 10:13:00', NULL, '1', NULL, '2020-01-06 10:11:00', '2020-01-06 10:11:00');
 
 -- ----------------------------
 -- Table structure for yii2_task
