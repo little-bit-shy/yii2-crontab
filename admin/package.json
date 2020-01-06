@@ -28,7 +28,7 @@
     "iview-area": "^1.5.14",
     "iview-loader": "^1.0.0",
     "js-cookie": "^2.2.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.13",
     "rasterizehtml": "^1.2.4",
     "simplemde": "^1.11.2",
     "sortablejs": "^1.7.0",
