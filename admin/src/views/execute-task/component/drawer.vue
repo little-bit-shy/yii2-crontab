@@ -50,8 +50,13 @@
         <Row>
             <Col span="24">
             <p class="view-text">
-                任务输出:
-            <pre>{{row.result}}</pre>
+                    任务输出:<span style="color:#ff9900;" v-if=!row.result> {{{
+                              1: '任务待处理，暂无输出...',
+                              2: '任务处理中，暂无输出...',
+                              3: '任务已失败，暂无输出...',
+                              4: '当前任务没有输出...'
+                              }[row.status]}}</span>
+                <pre v-if=row.result>{{row.result}}</pre>
             </p>
             </Col>
         </Row>
