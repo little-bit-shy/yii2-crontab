@@ -1,6 +1,11 @@
 <style lang="less">
     @import '../../../styles/common.less';
     @import './styles/list.less';
+
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
 </style>
 
 <template>

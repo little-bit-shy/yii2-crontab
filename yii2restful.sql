@@ -187,7 +187,7 @@ CREATE TABLE `yii2_execute_task`  (
   `start_time` datetime(0) NULL DEFAULT NULL COMMENT '任务计划执行时间',
   `execute_time` datetime(0) NULL DEFAULT NULL COMMENT '任务实际执行时间',
   `status` enum('1','2','3','4') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '执行状态 1/准备中 2/执行中 3/任务失败 4/已完成',
-  `result` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '任务输出',
+  `result` longtext COMMENT '任务输出',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '数据创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '数据修改时间',
   PRIMARY KEY (`id`) USING BTREE,
