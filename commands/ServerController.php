@@ -9,7 +9,6 @@ namespace app\commands;
 
 use app\commands\task\ExecuteTask;
 use app\commands\task\Table;
-use app\components\ParseCrontab;
 use yii\console\Controller;
 use swoole_server;
 use swoole_process;
@@ -22,6 +21,7 @@ class ServerController extends Controller
 {
     public $host = '127.0.0.1';
     public $port = 9501;
+    public static $sign = '1gf281f01gf0120gf2101';
     private $serv;
 
     public function actionIndex()
@@ -32,11 +32,14 @@ class ServerController extends Controller
         $this->serv->set(array(
             'worker_num' => 8,
             'daemonize' => false,
-            'task_worker_num' => 4, // 设置启动4个task进程
+            'task_worker_num' => 4,
             'open_eof_split' => true,
             'package_eof' => "\r\n",
             'ssl_cert_file' => __DIR__ . '/task/ssl/server.crt',
             'ssl_key_file' => __DIR__ . '/task/ssl/server.key',
+            'ssl_verify_peer' => true,
+            'ssl_allow_self_signed' => true,
+            'ssl_verify_depth' => 10,
         ));
 
         $this->serv->on('Start', [$this, 'onStart']);
@@ -73,6 +76,7 @@ class ServerController extends Controller
                 foreach (Table::$table as $id => $task) {
                     if ($count > 0) {
                         $remaining = $id % $count;
+                        self::addSign($task);
                         $serv->send($clientList[$remaining], json_encode($task) . "\r\n");
                         Table::$table->del($id);
                     }
@@ -166,5 +170,14 @@ class ServerController extends Controller
             swoole_set_process_name("swoole : worker");
         }
 
+    }
+
+    /**
+     * 添加签名
+     * @param $data
+     */
+    public static function addSign(&$data)
+    {
+        $data['sign'] = self::$sign;
     }
 }

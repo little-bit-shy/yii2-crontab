@@ -20,6 +20,7 @@ class ClientController extends Controller
 {
     public $host = '127.0.0.1';
     public $port = 9501;
+    public static $sign = '1gf281f01gf0120gf2101';
     public $timeout = 1;
     private $client;
 
@@ -29,10 +30,6 @@ class ClientController extends Controller
         $this->client->set([
             'open_eof_split' => true,
             'package_eof' => "\r\n",
-            'ssl_verify_peer' => true,
-            'ssl_cafile' => __DIR__ . '/task/ssl/server.crt',
-            'ssl_cert_file' => __DIR__ . '/task/ssl/client.crt',
-            'ssl_key_file' => __DIR__ . '/task/ssl/client.key',
         ]);
         $this->client->on('Error', [$this, 'onError']);
         $this->client->on('Connect', [$this, 'onConnect']);
@@ -55,7 +52,11 @@ class ClientController extends Controller
      */
     public function onReceive($cli, $data)
     {
-        ExecuteTask::execute($data);
+        if (self::checkSign($data)) {
+            ExecuteTask::execute($data);
+        } else {
+            $cli->close();
+        }
     }
 
     /**
@@ -74,5 +75,18 @@ class ClientController extends Controller
         echo "Client error\n";
     }
 
-
+    /**
+     * 验证签名
+     * @param $data
+     * @return bool
+     */
+    public static function checkSign($data)
+    {
+        $data = json_decode($data, true);
+        if (isset($data['sign']) && $data['sign'] = self::$sign) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
