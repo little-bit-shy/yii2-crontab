@@ -50,13 +50,8 @@
         <Row>
             <Col span="24">
             <p class="view-text">
-                    任务输出:<span style="color:#ff9900;" v-if=!row.result> {{{
-                              1: '任务待处理，暂无输出...',
-                              2: '任务处理中，暂无输出...',
-                              3: '任务已失败，暂无输出...',
-                              4: '当前任务没有输出...'
-                              }[row.status]}}</span>
-                <pre v-if=row.result>{{row.result}}</pre>
+                任务输出:
+            <pre>{{row.result}}</pre>
             </p>
             </Col>
         </Row>
@@ -81,6 +76,29 @@
         watch: {},
         methods: {},
         created() {
+            if (this.row.result == null) {
+                let $this = this;
+                let tmp = {
+                    1: '任务待处理，暂无输出',
+                    2: '任务处理中，暂无输出',
+                    3: '任务已失败，暂无输出',
+                    4: '当前任务没有输出'
+                };
+                $this.row.result = tmp[$this.row.status];
+                let num = 0;
+                let how = 5;
+                let result = $this.row.result;
+                setInterval(function () {
+                    ++num;
+                    let dian = new Array(num + 1).join('.');
+                    if (num % (how + 1) == 0) {
+                        num = 0;
+                        $this.row.result = result;
+                    } else {
+                        $this.row.result = result + dian;
+                    }
+                }, 500);
+            }
         }
     };
 </script>
