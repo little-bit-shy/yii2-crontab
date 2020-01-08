@@ -1,5 +1,17 @@
 <style lang="less">
     @import "./main.less";
+
+    .ivu-avatar-string {
+        position: unset !important;
+    }
+
+    .main-header .header-avator-con {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 200px;
+    }
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
@@ -36,8 +48,8 @@
                 </div>
                 <div class="header-avator-con">
                     <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
-                    <message-tip v-model="mesCount"></message-tip>
+                    <!--<lock-screen></lock-screen>-->
+                    <!--<message-tip v-model="mesCount"></message-tip>-->
                     <theme-switch></theme-switch>
 
                     <div class="user-dropdown-menu-con">
@@ -52,7 +64,9 @@
                                     <DropdownItem name="loginout" divided>退出登录</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
-                            <Avatar :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar>
+                            <Avatar style="margin-left: 10px;">
+                                <img style="width:100%;height:100%" src="../images/head.jpg"/>
+                            </Avatar>
                         </Row>
                     </div>
                 </div>
