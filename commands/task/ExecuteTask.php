@@ -60,10 +60,11 @@ class ExecuteTask
      * @param $status
      * @param null $execute_time
      * @param null $result
+     * @param null $complete_time
      * @return int
      * @throws \yii\db\Exception
      */
-    public static function update($id, $status, $execute_time = null, $result = null)
+    public static function update($id, $status, $execute_time = null, $result = null, $complete_time = null)
     {
         $data = [
             'status' => $status
@@ -71,6 +72,11 @@ class ExecuteTask
         if (!empty($execute_time)) {
             $data = array_merge($data, [
                 'execute_time' => $execute_time
+            ]);
+        }
+        if (!empty($complete_time)) {
+            $data = array_merge($data, [
+                'complete_time' => $complete_time
             ]);
         }
         if (!empty($result)) {
@@ -116,7 +122,7 @@ class ExecuteTask
             // 执行指定任务
             swoole_async::exec($task['command'], function ($result, $status) use ($task) {
                 // 修改任务状态（处理完成）
-                self::update($task['id'], 4, null, $result);
+                self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
             });
         });
 

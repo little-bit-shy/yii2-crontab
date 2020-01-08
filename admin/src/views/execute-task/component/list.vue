@@ -72,9 +72,10 @@
                         render: (h, params) => {
                             return h(drawer, {
                                 props: {
-                                    row: params.row
+                                    id: params.row.id,
+                                    old_row: params.row
                                 }
-                            })
+                            });
                         }
                     },
                     {
@@ -143,9 +144,10 @@
                         ellipsis: true,
                     },
                     {
-                        title: '任务输出',
-                        key: 'result',
-                        minWidth: 200,
+                        title: '任务实际完成时间',
+                        key: 'complete_time',
+                        align: 'center',
+                        width: 160,
                         ellipsis: true,
                     }
                 ],
@@ -180,11 +182,18 @@
                     this.loading = true;
                 }
                 this.async = setTimeout(() => {
-                    (new ajax()).send('/v1/execute-task/index?page=' + this.page + '&per-page=' + this.pageSize, {
+                    (new ajax()).send('/v1/execute-task/index?fields=command,complete_time,create_time,execute_time,id,start_time,status,update_time&page=' + this.page + '&per-page=' + this.pageSize, {
                         'command': this.searchForm.name
                     }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;
+                        this.data.map((item, index)=>{
+                            if(index==0)
+                            {
+                                item._expanded = true;
+                            }
+                            return item;
+                        });
                         this.pageTotal = +data.data._meta.totalCount;
                         this.loading = false;
                     }).catch((error) => {

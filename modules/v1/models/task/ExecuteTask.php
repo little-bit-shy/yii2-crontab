@@ -19,13 +19,14 @@ use yii\web\NotFoundHttpException;
  * `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
  * `start_time` datetime DEFAULT NULL COMMENT '任务计划执行时间',
  * `execute_time` datetime DEFAULT NULL COMMENT '任务实际执行时间',
+ * `complete_time` datetime DEFAULT NULL COMMENT '任务实际完成时间',
  * `status` enum('1','2','3','4') NOT NULL DEFAULT '1' COMMENT '执行状态 1/准备中 2/执行中 3/任务失败 4/已完成',
- * `result` varchar(255) DEFAULT NULL COMMENT '任务输出',
+ * `result` longtext COMMENT '任务输出',
  * `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
  * `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
  * PRIMARY KEY (`id`),
  * KEY `asfapf17g12yguyf1g11gf12` (`start_time`,`status`) USING BTREE
- * ) ENGINE=InnoDB AUTO_INCREMENT=1165459 DEFAULT CHARSET=utf8;
+ * ) ENGINE=InnoDB AUTO_INCREMENT=1546219 DEFAULT CHARSET=utf8;
  *
  * Class ExecuteTask
  * @package v1\models\task
