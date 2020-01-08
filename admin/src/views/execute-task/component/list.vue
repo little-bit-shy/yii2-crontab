@@ -187,13 +187,6 @@
                     }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;
-                        this.data.map((item, index)=>{
-                            if(index==0)
-                            {
-                                item._expanded = true;
-                            }
-                            return item;
-                        });
                         this.pageTotal = +data.data._meta.totalCount;
                         this.loading = false;
                     }).catch((error) => {
