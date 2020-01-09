@@ -22,6 +22,7 @@ use yii\web\HttpException;
  */
 class TaskCreateForm extends Model
 {
+    public $name;
     public $command;
     public $rule;
     public $switch;
@@ -33,10 +34,10 @@ class TaskCreateForm extends Model
     public function rules()
     {
         return [
-            [['command', 'rule', 'switch'], 'safe', 'on' => 'create'],
-            [['command', 'rule'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'create'],
-            [['command'], 'trim', 'on' => 'create'],
-            [['command'], 'string', 'on' => 'create'],
+            [['name', 'command', 'rule', 'switch'], 'safe', 'on' => 'create'],
+            [['name', 'command', 'rule'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'create'],
+            [['name', 'command'], 'trim', 'on' => 'create'],
+            [['name', 'command'], 'string', 'on' => 'create'],
             [['switch'], 'default', 'value' => 1, 'on' => 'create'],
             [['switch'], 'in', 'range' => [1, 2], 'on' => 'create'],
             [['rule'], 'string', 'on' => 'create'],
@@ -64,6 +65,7 @@ class TaskCreateForm extends Model
     {
         return [
             'create' => [
+                'name',
                 'command',
                 'rule',
                 'switch'
@@ -78,6 +80,7 @@ class TaskCreateForm extends Model
     public function attributeLabels()
     {
         return [
+            'name' => Yii::t('app\attribute', 'name'),
             'command' => Yii::t('app\attribute', 'command'),
             'type' => Yii::t('app\attribute', 'type'),
             'rule' => Yii::t('app\attribute', 'rule'),

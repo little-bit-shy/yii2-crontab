@@ -16,13 +16,14 @@ use yii\web\NotFoundHttpException;
 /**
  * CREATE TABLE `yii2_task` (
  * `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
- * `command` varchar(255) NOT NULL COMMENT '需要执行的命令',
+ * `command` text NOT NULL COMMENT '需要执行的命令',
+ * `name` varchar(255) DEFAULT NULL COMMENT '备注',
  * `rule` varchar(30) DEFAULT NULL COMMENT '规则',
  * `switch` enum('1','2') NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
  * `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
  * `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
  * PRIMARY KEY (`id`)
- * ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+ * ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
  *
  * Class Task
  * @package v1\models\task
@@ -41,8 +42,8 @@ class Task extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['command', 'rule', 'switch', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
-            [['command', 'rule', 'switch'], 'safe', 'on' => 'update'],
+            [['name', 'command', 'rule', 'switch', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
+            [['name', 'command', 'rule', 'switch'], 'safe', 'on' => 'update'],
         ];
     }
 
@@ -53,8 +54,8 @@ class Task extends ActiveRecord implements Linkable
     public function scenarios()
     {
         return [
-            'create' => ['command', 'rule', 'create_time', 'update_time', 'switch'],
-            'update' => ['command', 'rule', 'switch'],
+            'create' => ['name', 'command', 'rule', 'create_time', 'update_time', 'switch'],
+            'update' => ['name', 'command', 'rule', 'switch'],
         ];
     }
 
@@ -127,7 +128,7 @@ class Task extends ActiveRecord implements Linkable
         $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) use ($param) {
             $query = Task::find();
 
-            $query->andFilterWhere(['like', 'command', $param['command'], false]);
+            $query->andFilterWhere(['like', 'name', $param['name'], false]);
             $pagination = new Pagination([
                 'defaultPageSize' => 10,
                 'totalCount' => $query->count()

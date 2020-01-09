@@ -45,6 +45,14 @@
                         </Col>
 
                         <Col span="24">
+                        <FormItem prop="name" label="">
+                            <Input type="text" v-model="addForm.name" placeholder="输入名称...">
+                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="24">
                         <FormItem prop="command" label="">
                             <Input type="text" v-model="addForm.command" placeholder="输入需要执行的命令...">
                             <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
@@ -92,6 +100,14 @@
                     <Row :gutter="16">
                         <Col span="24" v-show="updateFormError !== null">
                         <Alert show-icon type="error">{{updateFormError}}</Alert>
+                        </Col>
+
+                        <Col span="24">
+                        <FormItem prop="name" label="">
+                            <Input type="text" v-model="updateForm.name" placeholder="输入名称...">
+                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
                         </Col>
 
                         <Col span="24">
@@ -168,6 +184,8 @@
                 updateModal: false,
                 updateModalLoading: false,
                 updateForm: {
+                    id: null,
+                    name: null,
                     command: null,
                     rule: null,
                     switch: 1
@@ -175,18 +193,28 @@
                 updateFormError: null,
                 updateFormRule: {
                     name: [
-                        {required: true, message: '角色不能为空', trigger: 'blur'}
+                        {required: true, message: '名称不能为空', trigger: 'blur'}
+                    ],
+                    command: [
+                        {required: true, message: '命令不能为空', trigger: 'blur'}
+                    ],
+                    rule: [
+                        {required: true, message: '规则不能为空', trigger: 'blur'}
                     ]
                 },
                 addModal: false,
                 addModalLoading: false,
                 addForm: {
+                    name: null,
                     command: null,
                     rule: null,
                     switch: 1
                 },
                 addFormError: null,
                 addFormRule: {
+                    name: [
+                        {required: true, message: '名称不能为空', trigger: 'blur'}
+                    ],
                     command: [
                         {required: true, message: '命令不能为空', trigger: 'blur'}
                     ],
@@ -199,6 +227,11 @@
                 },
                 columns: [
                     {
+                        title: '名称',
+                        key: 'name',
+                        minWidth: 80,
+                        ellipsis: true
+                    },{
                         title: '命令',
                         key: 'command',
                         minWidth: 240,
@@ -266,6 +299,7 @@
                                             this.updateModal = true;
                                             let index = params.index;
                                             this.updateForm.id = this.data[index].id;
+                                            this.updateForm.name = this.data[index].name;
                                             this.updateForm.command = this.data[index].command;
                                             this.updateForm.rule = this.data[index].rule;
                                             this.updateForm.switch = parseInt(this.data[index].switch);
@@ -350,7 +384,7 @@
                 }
                 this.async = setTimeout(() => {
                     (new ajax()).send('/v1/task/index?page=' + this.page + '&per-page=' + this.pageSize, {
-                        'command': this.searchForm.name
+                        'name': this.searchForm.name
                     }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;
@@ -366,6 +400,7 @@
                 this.async = setTimeout(() => {
                     (new ajax()).send('/v1/task/update', {
                         'id': this.updateForm.id,
+                        'name': this.updateForm.name,
                         'command': this.updateForm.command,
                         'rule': this.updateForm.rule,
                         'switch': this.updateForm.switch
@@ -393,6 +428,7 @@
                 this.addModalLoading = true;
                 this.async = setTimeout(() => {
                     (new ajax()).send('/v1/task/create', {
+                        'name': this.addForm.name,
                         'command': this.addForm.command,
                         'rule': this.addForm.rule,
                         'switch': this.addForm.switch

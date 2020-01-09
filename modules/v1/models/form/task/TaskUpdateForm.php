@@ -22,6 +22,7 @@ use yii\web\HttpException;
 class TaskUpdateForm extends Model
 {
     public $id;
+    public $name;
     public $command;
     public $rule;
     public $switch;
@@ -33,11 +34,11 @@ class TaskUpdateForm extends Model
     public function rules()
     {
         return [
-            [['id', 'command', 'rule', 'switch'], 'safe', 'on' => 'update'],
-            [['id', 'command', 'rule', 'switch'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'update'],
+            [['id', 'name', 'command', 'rule', 'switch'], 'safe', 'on' => 'update'],
+            [['id', 'name', 'command', 'rule', 'switch'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'update'],
             [['id'], 'integer', 'on' => 'update'],
-            [['command'], 'trim', 'on' => 'update'],
-            [['command', 'rule'], 'string', 'on' => 'update'],
+            [['name', 'command'], 'trim', 'on' => 'update'],
+            [['name', 'command', 'rule'], 'string', 'on' => 'update'],
             [['switch'], 'in', 'range' => [1, 2], 'on' => 'update'],
             [['rule'], 'validateRule', 'on' => 'update'],
             [['id'], 'exist', 'targetClass' => Task::className(), 'targetAttribute' => ['id' => 'id'], 'on' => 'update'],
@@ -65,6 +66,7 @@ class TaskUpdateForm extends Model
         return [
             'update' => [
                 'id',
+                'name',
                 'command',
                 'rule',
                 'switch'
@@ -80,6 +82,7 @@ class TaskUpdateForm extends Model
     {
         return [
             'id' => Yii::t('app\attribute', 'id'),
+            'name' => Yii::t('app\attribute', 'name'),
             'command' => Yii::t('app\attribute', 'command'),
             'rule' => Yii::t('app\attribute', 'rule'),
             'switch' => Yii::t('app\attribute', 'switch'),

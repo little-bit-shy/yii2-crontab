@@ -23,7 +23,7 @@ use yii\web\HttpException;
  */
 class TaskIndexForm extends Model
 {
-    public $command;
+    public $name;
 
     /**
      * 验证规则
@@ -32,10 +32,10 @@ class TaskIndexForm extends Model
     public function rules()
     {
         return [
-            [['command'], 'safe', 'on' => 'index'],
-            [['command'], 'trim', 'on' => 'index'],
-            [['command'], 'string', 'on' => 'index'],
-            [['command'], LikeValidator::className(), 'skipOnEmpty' => true, 'on' => 'index'],
+            [['name'], 'safe', 'on' => 'index'],
+            [['name'], 'trim', 'on' => 'index'],
+            [['name'], 'string', 'on' => 'index'],
+            [['name'], LikeValidator::className(), 'skipOnEmpty' => true, 'on' => 'index'],
         ];
     }
 
@@ -47,7 +47,7 @@ class TaskIndexForm extends Model
     {
         return [
             'index' => [
-                'command',
+                'name',
             ]
         ];
     }
@@ -59,7 +59,7 @@ class TaskIndexForm extends Model
     public function attributeLabels()
     {
         return [
-            'command' => Yii::t('app\attribute', 'command'),
+            'name' => Yii::t('app\attribute', 'name'),
         ];
     }
 
