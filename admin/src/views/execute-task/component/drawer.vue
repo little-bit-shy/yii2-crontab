@@ -101,7 +101,7 @@
                 load: false,
                 row: {},
                 null_result:null,
-                job:null,
+                job:[],
             }
         },
         props: {
@@ -140,7 +140,7 @@
                     let result;
                     result = tmp[this.row.status];
                     this.null_result = result;
-                    setInterval(() => {
+                    this.job[0] = setInterval(() => {
                         ++num;
                         let dian = new Array(num + 1).join('.');
                         if (num % (how + 1) == 0) {
@@ -151,7 +151,7 @@
                         }
                     }, 100);
                 }
-                this.job = setInterval(() => {
+                this.job[1] = setInterval(() => {
                     if(this.old_row._expanded)
                     {
                         if (this.row.status != 4) {
@@ -162,7 +162,9 @@
             });
         },
         beforeDestroy() {
-            clearTimeout(this.job);
+            this.job.map(item=>{
+                clearTimeout(item);
+            });
         }
     };
 </script>
