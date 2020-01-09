@@ -1,6 +1,6 @@
 [<img src="https://avatars0.githubusercontent.com/u/993323"  height="100px">](https://github.com/yiisoft)
 
-#### Yii 2 Restful Api
+#### 定时任务管理系统
 居于yii2开发的restful风格api
 ```bash
 yii2-rest           项目目录
@@ -77,6 +77,6 @@ server {
 }
 ```
 接口系统访问域名`http://localhost/v1/site/login`  
-**内附swoole任务分发系统**  
+**定时任务管理系统启动命令**
 启动命令`php yii_dev server/index`  
 启动命令`php yii_dev client/index`  
