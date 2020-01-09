@@ -122,7 +122,7 @@ class ExecuteTask
             // 执行指定任务
             swoole_async::exec($task['command'], function ($result, $status) use ($task) {
                 // 修改任务状态（处理完成）
-//                self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
+                self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
             });
         });
 

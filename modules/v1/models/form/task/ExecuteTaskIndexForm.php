@@ -72,7 +72,7 @@ class ExecuteTaskIndexForm extends Model
      */
     public static function lists($param)
     {
-        $form = new TaskIndexForm();
+        $form = new ExecuteTaskIndexForm();
         $form->setScenario('index');
         if ($form->load([$form->formName() => $param]) && $form->validate()) {
             $attributes = $form->getAttributes();
