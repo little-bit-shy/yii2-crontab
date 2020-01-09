@@ -16,13 +16,23 @@
         </Row>
 
         <Row>
-            <Col span="6">
+            <Col span="24">
                 <Form ref="searchForm" :model="searchForm">
-                    <FormItem prop="name" label="">
-                        <Input type="text" v-model="searchForm.name" placeholder="输入名称...">
-                        <Icon type="ios-search" slot="prepend"></Icon>
-                        </Input>
+                    <Col span="4" style="max-width:100px;margin-right: 10px">
+                    <FormItem prop="status" label="">
+                        <Select v-model="searchForm.status" clearable>
+                            <Option v-for="(item,i) in statusList" :value="i" :key="i">{{ item }}</Option>
+                        </Select>
                     </FormItem>
+                    </Col>
+
+                    <Col span="6">
+                        <FormItem prop="name" label="">
+                            <Input type="text" v-model="searchForm.name" placeholder="输入名称...">
+                            <Icon type="ios-search" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                    </Col>
                 </Form>
             </Col>
             <Col span="24">
@@ -64,6 +74,13 @@
                 pageSizeOpts: [15, 20, 30, 40, 50],
                 searchForm: {
                     name: null,
+                    status: '1',
+                },
+                statusList:{
+                  1:'准备中',
+                  2:'执行中',
+                  3:'已失败',
+                  4:'已完成',
                 },
                 columns: [
                     {
@@ -164,6 +181,9 @@
             },
             'searchForm.name': function (newV, oldV) {
                 this.getListData();
+            },
+            'searchForm.status': function (newV, oldV) {
+                this.getListData();
             }
         },
         methods: {
@@ -191,7 +211,8 @@
                 }
                 this.async = setTimeout(() => {
                     (new ajax()).send('/v1/execute-task/index?fields=command,complete_time,create_time,execute_time,id,start_time,status,update_time&page=' + this.page + '&per-page=' + this.pageSize, {
-                        'command': this.searchForm.name
+                        'command': this.searchForm.name,
+                        'status': this.searchForm.status
                     }).then((response) => {
                         var data = response.data;
                         this.data = data.data.items;

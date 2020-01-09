@@ -22,6 +22,7 @@ use yii\web\HttpException;
 class ExecuteTaskIndexForm extends Model
 {
     public $command;
+    public $status;
 
     /**
      * 验证规则
@@ -30,10 +31,11 @@ class ExecuteTaskIndexForm extends Model
     public function rules()
     {
         return [
-            [['command'], 'safe', 'on' => 'index'],
+            [['command', 'status'], 'safe', 'on' => 'index'],
             [['command'], 'trim', 'on' => 'index'],
             [['command'], 'string', 'on' => 'index'],
             [['command'], LikeValidator::className(), 'skipOnEmpty' => true, 'on' => 'index'],
+            [['status'], 'in', 'range' => [1, 2, 3, 4], 'on' => 'index'],
         ];
     }
 
@@ -46,6 +48,7 @@ class ExecuteTaskIndexForm extends Model
         return [
             'index' => [
                 'command',
+                'status',
             ]
         ];
     }
@@ -58,6 +61,7 @@ class ExecuteTaskIndexForm extends Model
     {
         return [
             'command' => Yii::t('app\attribute', 'command'),
+            'status' => Yii::t('app\attribute', 'status'),
         ];
     }
 

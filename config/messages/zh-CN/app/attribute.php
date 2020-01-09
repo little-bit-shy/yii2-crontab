@@ -29,4 +29,5 @@ return [
     'password_old' => '旧密码',
     'password_new' => '新密码',
     'captcha' => '验证码',
+    'status' => '状态',
 ];

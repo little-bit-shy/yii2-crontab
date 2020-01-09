@@ -127,6 +127,7 @@ class ExecuteTask extends ActiveRecord implements Linkable
         $activeDataProvider = ActiveRecord::getDb()->cache(function ($db) use ($param) {
             $query = ExecuteTask::find();
             $query->andFilterWhere(['like', 'command', $param['command'], false]);
+            $query->andFilterWhere(['status' => $param['status']]);
 
             $pagination = new Pagination([
                 'defaultPageSize' => 10,

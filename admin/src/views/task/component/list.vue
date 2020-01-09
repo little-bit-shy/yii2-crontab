@@ -45,18 +45,11 @@
                         </Col>
 
                         <Col span="24">
-                        <FormItem prop="name" label="">
-                            <Input type="text" v-model="addForm.name" placeholder="输入名称...">
-                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
-                            </Input>
-                        </FormItem>
-                        </Col>
-
-                        <Col span="24">
-                        <FormItem prop="command" label="">
-                            <Input type="text" v-model="addForm.command" placeholder="输入需要执行的命令...">
-                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
-                            </Input>
+                        <FormItem prop="switch" label="">
+                            <Switch size="large" v-model="addForm.switch" :true-value=1 :false-value=2>
+                                <span slot="open">ON</span>
+                                <span slot="close">OFF</span>
+                            </Switch>
                         </FormItem>
                         </Col>
 
@@ -68,12 +61,19 @@
                         </FormItem>
                         </Col>
 
+                        <Col span="13">
+                        <FormItem prop="name" label="">
+                            <Input type="text" v-model="addForm.name" placeholder="输入名称...">
+                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
                         <Col span="24">
-                        <FormItem prop="switch" label="">
-                            <Switch size="large" v-model="addForm.switch" :true-value=1 :false-value=2>
-                                <span slot="open">ON</span>
-                                <span slot="close">OFF</span>
-                            </Switch>
+                        <FormItem prop="command" label="">
+                            <Input type="textarea" :rows="10" v-model="addForm.command" placeholder="输入需要执行的命令...">
+                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
+                            </Input>
                         </FormItem>
                         </Col>
                     </Row>
@@ -103,18 +103,11 @@
                         </Col>
 
                         <Col span="24">
-                        <FormItem prop="name" label="">
-                            <Input type="text" v-model="updateForm.name" placeholder="输入名称...">
-                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
-                            </Input>
-                        </FormItem>
-                        </Col>
-
-                        <Col span="24">
-                        <FormItem prop="command" label="">
-                            <Input type="text" v-model="updateForm.command" placeholder="输入需要执行的命令...">
-                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
-                            </Input>
+                        <FormItem prop="switch" label="">
+                            <Switch size="large" v-model="updateForm.switch" :true-value=1 :false-value=2>
+                                <span slot="open">ON</span>
+                                <span slot="close">OFF</span>
+                            </Switch>
                         </FormItem>
                         </Col>
 
@@ -126,12 +119,19 @@
                         </FormItem>
                         </Col>
 
+                        <Col span="13">
+                        <FormItem prop="name" label="">
+                            <Input type="text" v-model="updateForm.name" placeholder="输入名称...">
+                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
                         <Col span="24">
-                        <FormItem prop="switch" label="">
-                            <Switch size="large" v-model="updateForm.switch" :true-value=1 :false-value=2>
-                                <span slot="open">ON</span>
-                                <span slot="close">OFF</span>
-                            </Switch>
+                        <FormItem prop="command" label="">
+                            <Input type="textarea" :rows="10" v-model="updateForm.command" placeholder="输入需要执行的命令...">
+                            <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
+                            </Input>
                         </FormItem>
                         </Col>
                     </Row>
