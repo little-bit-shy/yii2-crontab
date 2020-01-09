@@ -34,7 +34,7 @@
                     title="添加数据"
                     v-model="addModal"
                     :loading="true"
-                    :width="600"
+                    :width="60"
                     @on-visible-change="visibleChange()"
                     :closable="true">
 
@@ -71,7 +71,7 @@
 
                         <Col span="24">
                         <FormItem prop="command" label="">
-                            <Input type="textarea" :rows="10" v-model="addForm.command" placeholder="输入需要执行的命令...">
+                            <Input type="textarea" :rows="15" v-model="addForm.command" placeholder="输入需要执行的命令...">
                             <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
@@ -92,7 +92,7 @@
                     title="修改数据"
                     v-model="updateModal"
                     :loading="true"
-                    :width="600"
+                    :width="60"
                     @on-visible-change="visibleChange()"
                     :closable="true">
 
@@ -129,7 +129,7 @@
 
                         <Col span="24">
                         <FormItem prop="command" label="">
-                            <Input type="textarea" :rows="10" v-model="updateForm.command" placeholder="输入需要执行的命令...">
+                            <Input type="textarea" :rows="15" v-model="updateForm.command" placeholder="输入需要执行的命令...">
                             <Icon type="ios-pricetag-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>

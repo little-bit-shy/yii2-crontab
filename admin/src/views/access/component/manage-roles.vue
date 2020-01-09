@@ -159,7 +159,7 @@
 
             <Modal
                     class-name="vertical-center-modal"
-                    title="分配权限"
+                    :title="role"
                     v-model="allotModal"
                     :loading="true"
                     :width="60"
@@ -177,7 +177,7 @@
 
             <Modal
                     class-name="vertical-center-modal"
-                    title="分配角色"
+                    :title="role"
                     v-model="roleModal"
                     :loading="true"
                     :width="60"
