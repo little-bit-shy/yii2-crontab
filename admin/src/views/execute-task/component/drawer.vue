@@ -49,31 +49,31 @@
                 </Col>
             </Row>
             <Row>
-                <Col span="4">
+                <Col span="5">
                 <p class="view-text">
                     计划执行时间: {{row.start_time}}
                 </p>
                 </Col>
-                <Col span="4">
+                <Col span="5">
                 <p class="view-text">
                     修改时间: {{row.update_time}}
                 </p>
                 </Col>
             </Row>
             <Row>
-                <Col span="4">
+                <Col span="5">
                 <p class="view-text">
                     实际执行时间: {{row.execute_time}}
                 </p>
                 </Col>
-                <Col span="4">
+                <Col span="5">
                 <p class="view-text">
                     创建时间: {{row.create_time}}
                 </p>
                 </Col>
             </Row>
             <Row>
-                <Col span="4">
+                <Col span="5">
                 <p class="view-text">
                     实际完成时间: {{row.complete_time}}
                 </p>
@@ -100,20 +100,21 @@
             return {
                 load: false,
                 row: {},
-                null_result:null
+                null_result:null,
+                job:null,
             }
         },
         props: {
-            id: null,
-            old_row: {}
+            old_row: {},
         },
-        watch: {},
+        watch: {
+        },
         methods: {
             async getData(load=true) {
                 if(load) {
                     this.load = true;
                 }
-                await (new ajax()).send('/v1/execute-task/view?id='+this.id+'&fields=*&page=' + this.page + '&per-page=' + this.pageSize, {}).then((response) => {
+                await (new ajax()).send('/v1/execute-task/view?id='+this.old_row.id+'&fields=*&page=' + this.page + '&per-page=' + this.pageSize, {}).then((response) => {
                     var data = response.data;
                     this.row = data.data;
                     this.old_row.status = data.data.status;
@@ -125,7 +126,7 @@
                 });
             }
         },
-        created() {
+        mounted() {
             this.getData().then(($result)=>{
                 if (this.row.result == undefined) {
                     let tmp = {
@@ -150,12 +151,18 @@
                         }
                     }, 100);
                 }
-                setInterval(() => {
-                    if(this.row.status != 4){
-                        this.getData(false);
+                this.job = setInterval(() => {
+                    if(this.old_row._expanded)
+                    {
+                        if (this.row.status != 4) {
+                            this.getData(false);
+                        }
                     }
                 }, 2000);
             });
+        },
+        beforeDestroy() {
+            clearTimeout(this.job);
         }
     };
 </script>

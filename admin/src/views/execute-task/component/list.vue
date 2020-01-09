@@ -26,7 +26,7 @@
                 </Form>
             </Col>
             <Col span="24">
-            <Table border size="small" :loading="loading" :columns="columns" :data="data"></Table>
+            <Table border @on-expand="onExpand" size="small" :loading="loading" :columns="columns" :data="data"></Table>
             </Col>
         </Row>
         <br/>
@@ -72,8 +72,7 @@
                         render: (h, params) => {
                             return h(drawer, {
                                 props: {
-                                    id: params.row.id,
-                                    old_row: params.row
+                                    old_row: this.data[params.index]
                                 }
                             });
                         }
@@ -157,17 +156,26 @@
             };
         },
         watch: {
-            page: function (newPage, oldPage) {
+            page: function (newV, oldV) {
                 this.getListData();
             },
-            pageSize: function (newPageSize, oldPageSize) {
+            pageSize: function (newV, oldV) {
                 this.getListData();
             },
-            'searchForm.name': function (newPageSize, oldPageSize) {
+            'searchForm.name': function (newV, oldV) {
                 this.getListData();
             }
         },
         methods: {
+            onExpand(row,status){
+                this.data.map((item, index) => {
+                    if(item.id == row.id)
+                    {
+                        item._expanded = status;
+                    }
+                    return item;
+                });
+            },
             visibleChange() {
             },
             pageChange(index) {
@@ -189,6 +197,8 @@
                         this.data = data.data.items;
                         this.pageTotal = +data.data._meta.totalCount;
                         this.loading = false;
+                        this.data.splice();
+
                     }).catch((error) => {
                         this.loading = false;
                     });
