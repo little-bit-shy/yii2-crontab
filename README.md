@@ -1,7 +1,6 @@
 [<img src="https://avatars0.githubusercontent.com/u/993323"  height="100px">](https://github.com/yiisoft)
 
-#### 定时任务管理系统
-居于yii2开发的restful风格api
+#### 定时任务管理系统（crontab）
 ```bash
 yii2-rest           项目目录
 ├─commands           Cli脚本目录
@@ -77,6 +76,6 @@ server {
 }
 ```
 接口系统访问域名`http://localhost/v1/site/login`  
-**定时任务管理系统启动命令**
-启动命令`php yii_dev server/index`  
-启动命令`php yii_dev client/index`  
+#### 定时任务管理系统启动命令
+任务分发服务启动`php yii_dev server/index`
+任务代理服务启动`php yii_dev client/index`
