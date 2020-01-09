@@ -25,10 +25,7 @@
                     :menu-list="menuList">
                 <div slot="top" class="logo-con" style="color: white">
                     <p v-show="!shrink" key="max-logo">
-                        数据管理系统
-                    <p/>
-                    <p v-show="shrink" key="min-logo">
-                        管理
+                        定时任务系统
                     <p/>
                 </div>
             </shrinkable-menu>

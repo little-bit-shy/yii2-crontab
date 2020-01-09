@@ -120,7 +120,7 @@ export const appRouter = () => {
             children: [
                 {
                     access: access([]),
-                    path: 'home',
+                    path: 'home_index',
                     title: '首页',
                     name: 'home_index',
                     component: resolve => {
