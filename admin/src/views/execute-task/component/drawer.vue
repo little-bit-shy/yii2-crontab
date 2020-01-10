@@ -34,11 +34,6 @@
             <Row>
                 <Col span="24">
                 <p class="view-text">
-                    命令: {{row.command}}
-                </p>
-                </Col>
-                <Col span="24">
-                <p class="view-text">
                     状态: {{{
                     1: '准备中',
                     2: '执行中',
@@ -77,6 +72,12 @@
                 <p class="view-text">
                     实际完成时间: {{row.complete_time}}
                 </p>
+                </Col>
+                <Col span="24">
+                <p class="view-text">
+                    命令:
+                </p>
+                <pre>{{row.command}}</pre>
                 </Col>
                 <Col span="24">
                 <p class="view-text">

@@ -1,10 +1,10 @@
 <?php
 namespace app\commands\task;
 
-use Swoole\Coroutine;
 use Yii;
 use yii\db\Query;
 use swoole_async;
+use Swoole;
 
 /**
  * 获取需要执行任务数据
@@ -84,7 +84,7 @@ class ExecuteTask
                 'result' => $result
             ]);
         }
-        return Yii::$app->db->createCommand()->update(self::$table, $data, [
+        Yii::$app->db->createCommand()->update(self::$table, $data, [
             'id' => $id
         ])->execute();
     }
@@ -96,12 +96,22 @@ class ExecuteTask
      */
     public static function fail()
     {
+        // 未开始超时任务失败
         $time = date('Y-m-d H:i:s', strtotime('-60 seconds'));
-        return Yii::$app->db->createCommand()->update(self::$table, [
+        Yii::$app->db->createCommand()->update(self::$table, [
             'status' => 3
         ], 'start_time < :start_time AND status = :status')->bindValues([
             ':start_time' => $time,
             ':status' => 1,
+        ])->execute();
+
+        // 未完成超时任务失败
+        $time = date('Y-m-d H:i:s', strtotime('-3600 seconds'));
+        Yii::$app->db->createCommand()->update(self::$table, [
+            'status' => 3
+        ], 'start_time < :start_time AND status = :status')->bindValues([
+            ':start_time' => $time,
+            ':status' => 2,
         ])->execute();
     }
 
@@ -117,12 +127,18 @@ class ExecuteTask
         $after_time_ms = strtotime($task['execute_time']) - time();
         if ($after_time_ms <= 0) return false;
         swoole_timer_after($after_time_ms * 1000, function () use ($task) {
+            echo "----------------------------------------------\r\n";
+            echo "- 内存使用: " . memory_get_usage() . "\r\n";
+            echo "----------------------------------------------\r\n";
             // 修改任务状态（处理中）
             self::update($task['id'], 2, date('Y-m-d H:i:s'));
-            // 执行指定任务
             swoole_async::exec($task['command'], function ($result, $status) use ($task) {
                 // 修改任务状态（处理完成）
-                self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
+                if ($status['code'] == 0) {
+                    self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
+                }else{
+                    self::update($task['id'], 3);
+                }
             });
         });
 
