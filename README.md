@@ -34,6 +34,7 @@ yii2-rest           项目目录
 ```
 
 #### 如何安装
+操作界面脚本在admin目录下，安装依赖（`npm install`）、编译脚本（`npm run build`）
 首先执行`php composer.phar install`命令对项目进行安装操作
 
 #### 运行环境
@@ -63,6 +64,7 @@ server {
             add_header Access-Control-Max-Age 6000;
             return 204;
         }
+        // 根据你的环境使用不同的脚本入口 prod.php、test.php、dev.php
         try_files $uri $uri/ /prod.php?s=$uri&$args;
     }
 
@@ -77,5 +79,14 @@ server {
 ```
 接口系统访问域名`http://localhost/v1/site/login`  
 #### 定时任务管理系统启动命令
-任务分发服务启动`php yii_dev server/index`
-任务代理服务启动`php yii_dev client/index`
+根据你的环境使用不同的脚本入口 yii_prod、yii_test、yii_dev
+任务分发服务启动`php yii_test server/index`
+任务代理服务启动`php yii_test client/index`
+
+#### 效果展示
+初始化账号密码 root/123456
+![img](/help/image/task.png)
+![img](/help/image/exec_task_success.png)
+![img](/help/image/exec_task_fail.png)
+
+
