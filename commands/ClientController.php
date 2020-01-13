@@ -105,7 +105,7 @@ class ClientController extends Controller
         if (isset($data['sign'])) {
             $sign = $data['sign'];
             unset($data['sign']);
-            sort($data);
+            asort($data);
             $tmpSign = serialize($data);
             $checkSign = md5($tmpSign . $this->sign);
             if ($checkSign == $sign) {

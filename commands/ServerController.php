@@ -188,7 +188,7 @@ class ServerController extends Controller
      */
     public function addSign(&$data)
     {
-        sort($data);
+        asort($data);
         $tmpSign = serialize($data);
         $sign = md5($tmpSign . $this->sign);
         $data['sign'] = $sign;
