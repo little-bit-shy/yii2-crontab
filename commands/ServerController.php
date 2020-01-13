@@ -12,6 +12,7 @@ use app\commands\task\Table;
 use yii\console\Controller;
 use swoole_server;
 use swoole_process;
+use Yii;
 
 /**
  * Class ServerController
@@ -19,10 +20,19 @@ use swoole_process;
  */
 class ServerController extends Controller
 {
-    public $host = '127.0.0.1';
-    public $port = 9501;
-    public static $sign = '1gf281f01gf0120gf2101';
+    public $host;
+    public $port;
+    public $sign;
     private $serv;
+
+    public function init()
+    {
+        parent::init();
+        $config = Yii::$app->params['task'];
+        $this->host = $config['server_host'];
+        $this->port = $config['port'];
+        $this->sign = $config['sign'];
+    }
 
     public function actionIndex()
     {
@@ -76,7 +86,7 @@ class ServerController extends Controller
                 foreach (Table::$table as $id => $task) {
                     if ($count > 0) {
                         $remaining = $id % $count;
-                        self::addSign($task);
+                        $this->addSign($task);
                         $serv->send($clientList[$remaining], json_encode($task) . "\r\n");
                         Table::$table->del($id);
                     }
@@ -176,8 +186,11 @@ class ServerController extends Controller
      * 添加签名
      * @param $data
      */
-    public static function addSign(&$data)
+    public function addSign(&$data)
     {
-        $data['sign'] = self::$sign;
+        sort($data);
+        $tmpSign = serialize($data);
+        $sign = md5($tmpSign . $this->sign);
+        $data['sign'] = $sign;
     }
 }

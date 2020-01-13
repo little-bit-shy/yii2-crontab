@@ -12,6 +12,7 @@ use yii\console\Controller;
 use swoole_client;
 use swoole_process;
 use \Swoole\Process;
+use Yii;
 
 /**
  * Class ClientController
@@ -19,11 +20,21 @@ use \Swoole\Process;
  */
 class ClientController extends Controller
 {
-    public $host = '127.0.0.1';
-    public $port = 9501;
-    public static $sign = '1gf281f01gf0120gf2101';
-    public $timeout = 1;
+    public $host;
+    public $port;
+    public $sign;
+    public $timeout;
     private $client;
+
+    public function init()
+    {
+        parent::init();
+        $config = Yii::$app->params['task'];
+        $this->host = $config['client_host'];
+        $this->port = $config['port'];
+        $this->sign = $config['sign'];
+        $this->timeout = $config['timeout'];
+    }
 
     public function actionIndex()
     {
@@ -38,12 +49,11 @@ class ClientController extends Controller
         $this->client->on('Receive', [$this, 'onReceive']);
         $this->client->on('Close', [$this, 'onClose']);
 
-        swoole_process::signal(SIGCHLD, function($sig) {
+        swoole_process::signal(SIGCHLD, function ($sig) {
             //必须为false，非阻塞模式，释放关闭子进程
-            while($ret =  Process::wait(false)) {
+            while ($ret = Process::wait(false)) {
             }
         });
-
         $this->client->connect($this->host, $this->port, $this->timeout);
     }
 
@@ -61,7 +71,7 @@ class ClientController extends Controller
      */
     public function onReceive($cli, $data)
     {
-        if (self::checkSign($data)) {
+        if ($this->checkSign($data)) {
             ExecuteTask::execute($data);
         } else {
             $cli->close();
@@ -89,11 +99,20 @@ class ClientController extends Controller
      * @param $data
      * @return bool
      */
-    public static function checkSign($data)
+    public function checkSign($data)
     {
         $data = json_decode($data, true);
-        if (isset($data['sign']) && $data['sign'] = self::$sign) {
-            return true;
+        if (isset($data['sign'])) {
+            $sign = $data['sign'];
+            unset($data['sign']);
+            sort($data);
+            $tmpSign = serialize($data);
+            $checkSign = md5($tmpSign . $this->sign);
+            if ($checkSign == $sign) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
