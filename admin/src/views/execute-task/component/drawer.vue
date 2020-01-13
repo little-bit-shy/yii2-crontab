@@ -18,11 +18,6 @@
         top: calc(50%);
         left: 100px;
     }
-
-    pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-    }
 </style>
 
 <template>
@@ -77,13 +72,13 @@
                 <p class="view-text">
                     命令:
                 </p>
-                <pre>{{row.command}}</pre>
+                <Itext :textData=row.command :lengthData=20 ></Itext>
                 </Col>
                 <Col span="24">
                 <p class="view-text">
                     任务输出:
-                <pre v-if=!row.result>{{null_result}}</pre>
-                <pre v-else>{{row.result}}</pre>
+                    <Itext v-if=!row.result :textData=null_result :lengthData=100 ></Itext>
+                    <Itext v-else :textData=row.result :lengthData=10 ></Itext>
                 </p>
                 </Col>
             </Row>
@@ -93,14 +88,17 @@
 
 <script>
     import ajax from '../../../libs/ajax';
+    import Itext from './text'
 
     export default {
-        components: {},
+        components: {Itext},
         names: 'drawer',
         data() {
             return {
                 load: false,
-                row: {},
+                row: {
+                    result:null
+                },
                 null_result:null,
                 job:[],
             }
