@@ -48,8 +48,8 @@
         },
         computed: {
             successText: function () {
-                if(!this.text) {
-                    this.text = this.textData;
+                this.text = this.textData;
+                if (this.reallength == 0) {
                     this.textLength = this.lengthData;
                 }
                 if (this.text && this.text.length > this.textLength) {

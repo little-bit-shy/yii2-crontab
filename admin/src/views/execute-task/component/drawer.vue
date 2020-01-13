@@ -72,13 +72,13 @@
                 <p class="view-text">
                     命令:
                 </p>
-                <Itext :textData=row.command :lengthData=20 ></Itext>
+                <Itext :textData=row.command :lengthData=50 ></Itext>
                 </Col>
                 <Col span="24">
                 <p class="view-text">
                     任务输出:
                     <Itext v-if=!row.result :textData=null_result :lengthData=100 ></Itext>
-                    <Itext v-else :textData=row.result :lengthData=10 ></Itext>
+                    <Itext v-else :textData=row.result :lengthData=100 ></Itext>
                 </p>
                 </Col>
             </Row>
