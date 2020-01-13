@@ -4,7 +4,8 @@ namespace app\commands\task;
 use Yii;
 use yii\db\Query;
 use swoole_async;
-use Swoole;
+use swoole_process;
+use Swoole\Process;
 
 /**
  * 获取需要执行任务数据
@@ -127,19 +128,20 @@ class ExecuteTask
         $after_time_ms = strtotime($task['execute_time']) - time();
         if ($after_time_ms <= 0) return false;
         swoole_timer_after($after_time_ms * 1000, function () use ($task) {
-            echo "----------------------------------------------\r\n";
-            echo "- 内存使用: " . memory_get_usage() . "\r\n";
-            echo "----------------------------------------------\r\n";
-            // 修改任务状态（处理中）
-            self::update($task['id'], 2, date('Y-m-d H:i:s'));
-            swoole_async::exec($task['command'], function ($result, $status) use ($task) {
-                // 修改任务状态（处理完成）
-                if ($status['code'] == 0) {
-                    self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
-                }else{
-                    self::update($task['id'], 3);
-                }
-            });
+            $process = new Process(function (Process $childProcess) use ($task) {
+                // 修改任务状态（处理中）
+                self::update($task['id'], 2, date('Y-m-d H:i:s'));
+                swoole_async::exec($task['command'], function ($result, $status) use ($childProcess,$task) {
+                    // 修改任务状态（处理完成）
+                    if ($status['code'] == 0) {
+                        self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
+                    } else {
+                        self::update($task['id'], 3);
+                    }
+                    $childProcess->exit();
+                });
+            },true);
+            $process->start();
         });
 
         return true;

@@ -8,9 +8,10 @@
 namespace app\commands;
 
 use app\commands\task\ExecuteTask;
-use Swoole\Coroutine;
 use yii\console\Controller;
 use swoole_client;
+use swoole_process;
+use \Swoole\Process;
 
 /**
  * Class ClientController
@@ -26,6 +27,7 @@ class ClientController extends Controller
 
     public function actionIndex()
     {
+
         $this->client = new swoole_client(SWOOLE_SOCK_TCP | SWOOLE_SSL, SWOOLE_SOCK_ASYNC);
         $this->client->set([
             'open_eof_split' => true,
@@ -35,6 +37,13 @@ class ClientController extends Controller
         $this->client->on('Connect', [$this, 'onConnect']);
         $this->client->on('Receive', [$this, 'onReceive']);
         $this->client->on('Close', [$this, 'onClose']);
+
+        swoole_process::signal(SIGCHLD, function($sig) {
+            //必须为false，非阻塞模式，释放关闭子进程
+            while($ret =  Process::wait(false)) {
+            }
+        });
+
         $this->client->connect($this->host, $this->port, $this->timeout);
     }
 
