@@ -85,8 +85,8 @@ server {
 
 #### 效果展示
 初始化账号密码 root/123456
-![img](/help/image/task.png)
-![img](/help/image/exec_task_success.png)
-![img](/help/image/exec_task_fail.png)
+![img](/help/image/task.jpg)
+![img](/help/image/exec_task_success.jpg)
+![img](/help/image/exec_task_fail.jpg)
 
 
