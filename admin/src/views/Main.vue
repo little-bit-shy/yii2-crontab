@@ -1,10 +1,6 @@
 <style lang="less">
     @import "./main.less";
 
-    .ivu-avatar-string {
-        position: unset !important;
-    }
-
     .main-header .header-avator-con {
         position: absolute;
         right: 0;
