@@ -1,5 +1,12 @@
 <?php
 
+$redis = require(__DIR__ . '/redis.php');
+$db = require(__DIR__ . '/db.php');
+$kafka = require(__DIR__ . '/kafka.php');
+$aliases = require(__DIR__ . '/aliases.php');
+$params = require(__DIR__ . '/params.php');
+
+
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
@@ -26,13 +33,16 @@ $config = [
                 ],
             ],
         ],
-        'db' => require(__DIR__ . '/db.php'),
+        // 数据库配置
+        'db' => $db,
+        // Redis配置
+        'redis' => $redis,
         // kafka配置
-        'kafka' => require(__DIR__ . '/kafka.php')
+        'kafka' => $kafka
     ],
     // 别名定义
-    'aliases' => require(__DIR__ . '/aliases.php'),
-    'params' => require __DIR__ . '/params.php',
+    'aliases' => $aliases,
+    'params' => $params,
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.

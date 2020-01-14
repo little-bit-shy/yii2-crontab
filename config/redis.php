@@ -8,7 +8,7 @@ if (YII_ENV_PROD) {
     return [
         'class' => \yii\redis\Connection::className(),
         'hostname' => '127.0.0.1',
-        'port' => 6378,
+        'port' => 6379,
         'database' => 0,
     ];
 } else if (YII_ENV_TEST) {

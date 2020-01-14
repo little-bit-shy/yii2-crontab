@@ -19,6 +19,7 @@ $elasticsearch = require(__DIR__ . '/elasticsearch.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'timeZone' => 'Asia/Shanghai',
     // 设置目标语言为中文
     'language' => 'zh-CN',
     // 设置源语言为英语

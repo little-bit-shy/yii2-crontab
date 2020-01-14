@@ -36,10 +36,6 @@ class ServerController extends Controller
 
     public function actionIndex()
     {
-        // 避免内存不够创建Table
-        ini_set('memory_limit', '1024M');
-        // Swoole Table 初始化
-        Table::init();
         $this->serv = new swoole_server($this->host, $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
         $this->serv->set(array(
             'worker_num' => 8,
@@ -66,9 +62,9 @@ class ServerController extends Controller
 
         // 准备任务数据
         $process = new swoole_process(function ($process) use ($serv) {
-            Table::set($serv);
+            Table::set();
             $serv->tick(Table::$limit * 1000, function () use ($serv) {
-                Table::set($serv);
+                Table::set();
             });
         });
         $this->serv->addProcess($process);
@@ -85,12 +81,11 @@ class ServerController extends Controller
                     $start_fd = end($list);
                 }
                 $count = count($clientList);
-                foreach (Table::$table as $id => $task) {
-                    if ($count > 0) {
-                        $remaining = $id % $count;
+                if ($count > 0) {
+                    while ($task = Table::one()) {
+                        $remaining = $task['id'] % $count;
                         $this->addSign($task);
                         $serv->send($clientList[$remaining], json_encode($task) . "\r\n");
-                        Table::$table->del($id);
                     }
                 }
             });
