@@ -3,9 +3,8 @@
     @import './styles/list.less';
 
     .text {
-        /*强制换行*/
+        white-space: pre-wrap;
         word-wrap: break-word;
-        width: 100%;
     }
 
     .show {
