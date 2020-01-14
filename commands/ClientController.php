@@ -11,7 +11,7 @@ use app\commands\task\ExecuteTask;
 use yii\console\Controller;
 use swoole_client;
 use swoole_process;
-use \Swoole\Process;
+use Swoole\Process;
 use Yii;
 
 /**
@@ -38,7 +38,6 @@ class ClientController extends Controller
 
     public function actionIndex()
     {
-
         $this->client = new swoole_client(SWOOLE_SOCK_TCP | SWOOLE_SSL, SWOOLE_SOCK_ASYNC);
         $this->client->set([
             'open_eof_split' => true,

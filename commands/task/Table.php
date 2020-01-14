@@ -19,7 +19,7 @@ class Table
     private static $size = 16384;
     private static $columns = [
         ['id', swoole_table::TYPE_INT, 11],
-        ['command', swoole_table::TYPE_STRING, 255],
+        ['command', swoole_table::TYPE_STRING, 65535],
         ['execute_time', swoole_table::TYPE_STRING, 20]
     ];
 

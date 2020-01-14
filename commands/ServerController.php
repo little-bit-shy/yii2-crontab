@@ -36,6 +36,8 @@ class ServerController extends Controller
 
     public function actionIndex()
     {
+        // 避免内存不够创建Table
+        ini_set('memory_limit', '1024M');
         // Swoole Table 初始化
         Table::init();
         $this->serv = new swoole_server($this->host, $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
