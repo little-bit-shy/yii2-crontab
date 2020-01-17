@@ -20,9 +20,8 @@
                     :open-names="openedSubmenuArr"
                     :menu-list="menuList">
                 <div slot="top" class="logo-con" style="color: white">
-                    <p v-show="!shrink" key="max-logo">
-                        定时任务系统
-                    <p/>
+                    <p v-show="!shrink" key="max-logo">Crontab<p/>
+                    <p v-show="shrink" key="min-logo">T<p/>
                 </div>
             </shrinkable-menu>
         </div>

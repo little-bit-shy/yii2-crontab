@@ -113,7 +113,7 @@ export const appRouter = () => {
     return [
         {
             path: '/home',
-            icon: 'key',
+            icon: 'home',
             name: 'home',
             title: '首页',
             component: Main,
@@ -176,7 +176,7 @@ export const appRouter = () => {
         },
         {
             path: '/task',
-            icon: 'key',
+            icon: 'ios-timer-outline',
             name: 'task',
             title: '任务管理',
             component: Main,

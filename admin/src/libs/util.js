@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 let util = {};
 util.title = function (title) {
-    title = title || 'iView admin';
+    title = title || '定时任务管理系统';
     window.document.title = title;
 };
 
