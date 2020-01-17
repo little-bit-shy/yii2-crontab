@@ -12,12 +12,16 @@
             <div>
 
                 <Row style="padding:20px">
+                    <!--<Col span="24">-->
+                    <!--<Avatar size="large" shape="circle" :src="this.user.head" :style="{-->
+                    <!--marginBottom: '16px'-->
+                <!--}"/>-->
+                    <!--</Col>-->
+                    <Col :xs="24" :sm="24" :md="24" :lg="24">
                     <Col span="24">
-                    <Avatar size="large" shape="circle" :src="this.user.head" :style="{
-                    marginBottom: '16px'
-                }"/>
+                    <span class="expand-key">密码: </span>
+                    <span class="expand-value"><Button style="color: #57a3f3;" type="text" size="small" @click="showEditPassword">修改密码</Button></span>
                     </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="6">
                     <Col span="24">
                     <span class="expand-key">账号名称: </span>
                     <span class="expand-value">{{ this.user.username }}</span>
@@ -30,12 +34,6 @@
                     <span class="expand-key">绑定邮箱: </span>
                     <span class="expand-value">{{ this.user.email }}</span>
                     </Col>
-                    <Col span="24">
-                    <span class="expand-key">密码: </span>
-                    <span class="expand-value"><Button type="text" size="small" @click="showEditPassword">修改密码</Button></span>
-                    </Col>
-                    </Col>
-                    <Col :xs="24" :sm="12" :md="8" :lg="6">
                     <Col span="24">
                     <span class="expand-key">最近登录: </span>
                     <span class="expand-value">{{ this.user.last_login_ip }}</span>
@@ -63,7 +61,7 @@
                 <Col span="24" v-show="editPasswordFormError !== null">
                 <Alert show-icon type="error">{{editPasswordFormError}}</Alert>
                 </Col>
-                <FormItem label="原密码" prop="oldPass" :error="oldPassError">
+                <FormItem label="原密码" prop="oldPass">
                     <Input type="password" v-model="editPasswordForm.oldPass" placeholder="请输入现在使用的密码"></Input>
                 </FormItem>
                 <FormItem label="新密码" prop="newPass">

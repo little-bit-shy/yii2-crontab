@@ -100,7 +100,7 @@ util.setCurrentPath = function (vm, name) {
     } else if ((name.indexOf('_index') >= 0 || isOtherRouter) && name !== 'home_index') {
         currentPathArr = [
             {
-                title: util.handleTitle(vm, util.getRouterObjByName(vm.$store.state.app.routers, 'home_index')),
+                title: '首页',
                 path: '/home',
                 name: 'home_index'
             },
