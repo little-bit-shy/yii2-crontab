@@ -12,7 +12,7 @@
                 </Row>
             </Card>
             <Col span="24">
-            <Table  :show-header=false @on-expand="onExpand" size="small" :loading="loading" :columns="columns" :data="data"></Table>
+            <Table  disabled-hover :show-header=false @on-expand="onExpand" size="small" :loading="loading" :columns="columns" :data="data"></Table>
             </Col>
         </Row>
 </template>
