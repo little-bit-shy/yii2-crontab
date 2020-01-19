@@ -157,17 +157,19 @@
                 this.async = setTimeout(() => {
                     (new ajax()).send('/v1/execute-task/index?fields=command,complete_time,create_time,execute_time,id,start_time,status,update_time&page=' + this.page + '&per-page=' + this.pageSize, {
                     }).then((response) => {
-                        var data = response.data;
-                        data.data.items.map((item,index)=>{
-                            if(!this.data[index])
-                            {
-                                this.data[index] = {};
-                            }
-                            for(let key in item){
-                                this.data[index][key] = item[key];
+                    var data = response.data;
+                    data.data.items.map((item,index)=>{
+                        if(!this.data[index]) this.data[index] = {};
+                        this.data.map((oldItem)=>{
+                            if(oldItem.id == item.id && oldItem._expanded){
+                                item._expanded = oldItem._expanded;
                             }
                         });
-                        this.pageTotal = +data.data._meta.totalCount;
+                        return item;
+                    });
+                    this.data = data.data.items;
+
+                    this.pageTotal = +data.data._meta.totalCount;
                         this.loading = false;
                         this.data.splice();
 
