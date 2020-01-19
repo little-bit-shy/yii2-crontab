@@ -119,7 +119,7 @@ export const appRouter = () => {
             component: Main,
             children: [
                 {
-                    access: access([]),
+                    access: access(['/v1/execute-task/index']),
                     path: 'home_index',
                     title: '首页',
                     name: 'home_index',
