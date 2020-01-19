@@ -9,12 +9,14 @@
 
 namespace v1\controllers;
 
+use app\commands\task\Client;
 use v1\models\form\task\TaskCreateForm;
 use v1\models\form\task\TaskDeleteForm;
 use v1\models\form\task\TaskIndexForm;
 use v1\models\form\task\TaskUpdateForm;
 use v1\models\task\Task;
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\filters\auth\QueryParamAuth;
 
 /**
@@ -45,12 +47,26 @@ class TaskController extends Controller
     protected function verbs()
     {
         return [
+            'client' => ['GET', 'POST', 'HEAD'],
             'index' => ['GET', 'POST', 'HEAD'],
             'view' => ['GET', 'POST', 'HEAD'],
             'create' => ['POST'],
             'update' => ['POST'],
             'delete' => ['POST'],
         ];
+    }
+
+    /**
+     * 返回客户端列表数据
+     * @return \yii\data\ActiveDataProvider
+     */
+    public function actionClient()
+    {
+        $data = Client::get();
+        return new ArrayDataProvider([
+            'models' => $data,
+            'pagination' => false,
+        ]);
     }
 
     /**

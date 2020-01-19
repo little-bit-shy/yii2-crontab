@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use app\commands\task\Client;
 use app\commands\task\ExecuteTask;
 use app\commands\task\Table;
 use yii\console\Controller;
@@ -73,14 +74,17 @@ class ServerController extends Controller
         $process = new swoole_process(function ($process) use ($serv) {
             $serv->tick(500, function () use ($serv) {
                 $clientList = [];
+                $clientListInfo = [];
                 $start_fd = 0;
                 while ($list = $serv->getClientList($start_fd, 100)) {
-                    foreach ($list as $v) {
-                        array_push($clientList, $v);
+                    foreach ($list as $fd) {
+                        array_push($clientList, $fd);
+                        array_push($clientListInfo, $serv->getClientInfo($fd));
                     }
                     $start_fd = end($list);
                 }
                 $count = count($clientList);
+                Client::set($clientListInfo);
                 if ($count > 0) {
                     while ($task = Table::one()) {
                         $remaining = $task['id'] % $count;

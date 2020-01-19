@@ -89,6 +89,7 @@ INSERT INTO `yii2_auth_item` VALUES ('/v1/site/all-permissions', 2, '获取当�
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/captcha', 2, '获取验证码', NULL, NULL, 1521007674, 1521619742);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/login', 2, '用户登录', NULL, NULL, 1521007674, 1521619750);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/*', 2, '任务管理', NULL, NULL, 1541054856, 1541055008);
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/client', '2', '客户端列表', NULL, NULL, 1579423628, 1579423644);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/create', 2, '任务添加', NULL, NULL, 1541054856, 1541055017);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/delete', 2, '删除任务', NULL, NULL, 1542943133, 1543913646);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/index', 2, '任务列表', NULL, NULL, 1541054856, 1541054995);
@@ -152,6 +153,8 @@ INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/site/captcha');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/site/captcha');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/site/login');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/site/login');
+INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/task/client');
+INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/client');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/create');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/task/delete');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/task/index');

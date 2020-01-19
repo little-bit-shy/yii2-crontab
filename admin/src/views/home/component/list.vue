@@ -5,15 +5,19 @@
 <template>
         <Row>
             <Card>
+                <p slot="title">
+                    <Icon type="ios-film-outline"></Icon>
+                    最近任务
+                </p>
                 <Row>
-                    <Col span="24">
+                    <Col span="24" style="margin-bottom: 10px">
                     自动刷新：<Switch v-model="auto" true-color="#13ce66" false-color="#ff4949" />
+                    </Col>
+                    <Col span="24">
+                        <Table  disabled-hover @on-expand="onExpand" size="small" :loading="loading" :columns="columns" :data="data"></Table>
                     </Col>
                 </Row>
             </Card>
-            <Col span="24">
-            <Table  disabled-hover :show-header=false @on-expand="onExpand" size="small" :loading="loading" :columns="columns" :data="data"></Table>
-            </Col>
         </Row>
 </template>
 
