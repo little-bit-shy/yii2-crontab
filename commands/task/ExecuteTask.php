@@ -106,14 +106,14 @@ class ExecuteTask
             ':status' => 1,
         ])->execute();
 
-        // 未完成超时任务失败
-        $time = date('Y-m-d H:i:s', strtotime('-3600 seconds'));
-        Yii::$app->db->createCommand()->update(self::$table, [
-            'status' => 3
-        ], 'start_time < :start_time AND status = :status')->bindValues([
-            ':start_time' => $time,
-            ':status' => 2,
-        ])->execute();
+//        // 未完成超时任务失败
+//        $time = date('Y-m-d H:i:s', strtotime('-3600 seconds'));
+//        Yii::$app->db->createCommand()->update(self::$table, [
+//            'status' => 3
+//        ], 'start_time < :start_time AND status = :status')->bindValues([
+//            ':start_time' => $time,
+//            ':status' => 2,
+//        ])->execute();
     }
 
     /**
