@@ -86,6 +86,27 @@
                         }
                     },
                     {
+                        title: '脚本',
+                                key: 'type',
+                            width: 100,
+                            align: 'center',
+                            ellipsis: true,
+                            render: (h, params) => {
+                                return {
+                                    1: h('p', {
+                                        style: {
+                                            color: 'blue'
+                                        }
+                                    }, 'shell'),
+                                    2: h('p', {
+                                        style: {
+                                            color: 'blue'
+                                        }
+                                    }, 'python')
+                                }[params.row.type];
+                            }
+                    },
+                    {
                         title: '数据创建时间',
                         key: 'create_time',
                         align: 'center',
@@ -137,6 +158,7 @@
         },
         methods: {
             onExpand(row,status){
+                console.log(row.id);
                 this.data.map((item, index) => {
                     if(item.id == row.id)
                     {
@@ -159,13 +181,12 @@
                     this.loading = true;
                 }
                 this.async = setTimeout(() => {
-                    (new ajax()).send('/v1/execute-task/index?fields=command,complete_time,create_time,execute_time,id,start_time,status,update_time&page=' + this.page + '&per-page=' + this.pageSize, {
+                    (new ajax()).send('/v1/execute-task/index?fields=type,command,complete_time,create_time,execute_time,id,start_time,status,update_time&page=' + this.page + '&per-page=' + this.pageSize, {
                     }).then((response) => {
                     var data = response.data;
                     data.data.items.map((item,index)=>{
-                        if(!this.data[index]) this.data[index] = {};
                         this.data.map((oldItem)=>{
-                            if(oldItem.id == item.id && oldItem._expanded){
+                            if(item.id == oldItem.id && oldItem._expanded){
                                 item._expanded = oldItem._expanded;
                             }
                         });

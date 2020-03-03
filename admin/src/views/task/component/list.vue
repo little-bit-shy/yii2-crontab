@@ -53,6 +53,15 @@
                         </FormItem>
                         </Col>
 
+                        <Col span="24">
+                        <FormItem prop="type" label="">
+                            <Select v-model="addForm.type" style="width:100px">
+                                <Option :value="1" :key="1">shell</Option>
+                                <Option :value="2" :key="2">python</Option>
+                            </Select>
+                        </FormItem>
+                        </Col>
+
                         <Col span="12">
                         <FormItem prop="rule" label="">
                             <Input type="text" v-model="addForm.rule" placeholder="输入需要执行的规则...">
@@ -108,6 +117,15 @@
                                 <span slot="open">ON</span>
                                 <span slot="close">OFF</span>
                             </Switch>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="24">
+                        <FormItem prop="type" label="">
+                            <Select v-model="updateForm.type" style="width:100px">
+                                <Option :value="1" :key="1">shell</Option>
+                                <Option :value="2" :key="2">python</Option>
+                            </Select>
                         </FormItem>
                         </Col>
 
@@ -188,7 +206,8 @@
                     name: null,
                     command: null,
                     rule: null,
-                    switch: 1
+                    switch: 1,
+                    type: 1
                 },
                 updateFormError: null,
                 updateFormRule: {
@@ -208,7 +227,8 @@
                     name: null,
                     command: null,
                     rule: null,
-                    switch: 1
+                    switch: 1,
+                    type: 1
                 },
                 addFormError: null,
                 addFormRule: {
@@ -242,6 +262,27 @@
                         key: 'rule',
                         width: 200,
                         ellipsis: true,
+                    },
+                    {
+                        title: '脚本',
+                        key: 'type',
+                        width: 100,
+                        align: 'center',
+                        ellipsis: true,
+                        render: (h, params) => {
+                            return {
+                                1: h('p', {
+                                    style: {
+                                        color: 'blue'
+                                    }
+                                }, 'shell'),
+                                2: h('p', {
+                                    style: {
+                                        color: 'blue'
+                                    }
+                                }, 'python')
+                            }[params.row.type];
+                        }
                     },
                     {
                         title: '开关',
@@ -303,6 +344,7 @@
                                             this.updateForm.command = this.data[index].command;
                                             this.updateForm.rule = this.data[index].rule;
                                             this.updateForm.switch = parseInt(this.data[index].switch);
+                                            this.updateForm.type = parseInt(this.data[index].type);
                                         }
                                     }
                                 }, '修改'),
@@ -403,7 +445,8 @@
                         'name': this.updateForm.name,
                         'command': this.updateForm.command,
                         'rule': this.updateForm.rule,
-                        'switch': this.updateForm.switch
+                        'switch': this.updateForm.switch,
+                        'type': this.updateForm.type
                     }, 'post', false).then((response) => {
                         var data = response.data;
                         switch (data.success) {
@@ -431,7 +474,8 @@
                         'name': this.addForm.name,
                         'command': this.addForm.command,
                         'rule': this.addForm.rule,
-                        'switch': this.addForm.switch
+                        'switch': this.addForm.switch,
+                        'type': this.addForm.type
                     }, 'post', false).then((response) => {
                         var data = response.data;
                         switch (data.success) {

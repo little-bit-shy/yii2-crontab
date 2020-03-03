@@ -27,7 +27,9 @@ class Table
         $tasks = Task::get();
         foreach ($tasks as $task) {
             $interval = null;
-            list($command, $rule) = array_values($task);
+            $command = $task['command'];
+            $rule = $task['rule'];
+            $type = $task['type'];
             $parseCrontab = ParseCrontab::parse($rule, $start_time);
             if ($parseCrontab === false || $parseCrontab === null) {
                 continue;
@@ -38,6 +40,7 @@ class Table
                 $execute_task = [
                     'start_time' => date('Y-m-d H:i:s', $start_time + $value),
                     'command' => $command,
+                    'type' => $type,
                     'create_time' => $date,
                     'update_time' => $date
                 ];
@@ -49,6 +52,7 @@ class Table
                     'id' => $last_insert_id,
                     'execute_time' => date('Y-m-d H:i:s', $start_time + $value),
                     'command' => $command,
+                    'type' => $type,
                 ]);
                 // 添加任务数据到 redis
                 /** @var Connection $redis */

@@ -26,6 +26,7 @@ class TaskCreateForm extends Model
     public $command;
     public $rule;
     public $switch;
+    public $type;
 
     /**
      * 验证规则
@@ -34,12 +35,14 @@ class TaskCreateForm extends Model
     public function rules()
     {
         return [
-            [['name', 'command', 'rule', 'switch'], 'safe', 'on' => 'create'],
+            [['name', 'command', 'rule', 'switch', 'type'], 'safe', 'on' => 'create'],
             [['name', 'command', 'rule'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'create'],
             [['name', 'command'], 'trim', 'on' => 'create'],
             [['name', 'command'], 'string', 'on' => 'create'],
             [['switch'], 'default', 'value' => 1, 'on' => 'create'],
             [['switch'], 'in', 'range' => [1, 2], 'on' => 'create'],
+            [['type'], 'default', 'value' => 1, 'on' => 'create'],
+            [['type'], 'in', 'range' => [1, 2], 'on' => 'create'],
             [['rule'], 'string', 'on' => 'create'],
             [['rule'], 'validateRule', 'on' => 'create'],
         ];
@@ -68,7 +71,8 @@ class TaskCreateForm extends Model
                 'name',
                 'command',
                 'rule',
-                'switch'
+                'switch',
+                'type'
             ]
         ];
     }
@@ -85,6 +89,7 @@ class TaskCreateForm extends Model
             'type' => Yii::t('app\attribute', 'type'),
             'rule' => Yii::t('app\attribute', 'rule'),
             'switch' => Yii::t('app\attribute', 'switch'),
+            'type' => Yii::t('app\attribute', 'type'),
         ];
     }
 

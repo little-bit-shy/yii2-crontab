@@ -20,6 +20,7 @@ use yii\web\NotFoundHttpException;
  * `name` varchar(255) DEFAULT NULL COMMENT '备注',
  * `rule` varchar(30) DEFAULT NULL COMMENT '规则',
  * `switch` enum('1','2') NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
+ * `type` enum('1','2') NOT NULL DEFAULT '1' COMMENT '类型 1/shell 2/python',
  * `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
  * `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',
  * PRIMARY KEY (`id`)
@@ -42,8 +43,8 @@ class Task extends ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['name', 'command', 'rule', 'switch', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
-            [['name', 'command', 'rule', 'switch'], 'safe', 'on' => 'update'],
+            [['name', 'command', 'rule', 'switch', 'type', 'create_time', 'update_time'], 'safe', 'on' => 'create'],
+            [['name', 'command', 'rule', 'switch', 'type'], 'safe', 'on' => 'update'],
         ];
     }
 
@@ -54,8 +55,8 @@ class Task extends ActiveRecord implements Linkable
     public function scenarios()
     {
         return [
-            'create' => ['name', 'command', 'rule', 'create_time', 'update_time', 'switch'],
-            'update' => ['name', 'command', 'rule', 'switch'],
+            'create' => ['name', 'command', 'rule', 'create_time', 'update_time', 'switch', 'type'],
+            'update' => ['name', 'command', 'rule', 'switch', 'type'],
         ];
     }
 

@@ -21,6 +21,7 @@ use yii\web\NotFoundHttpException;
  * `execute_time` datetime DEFAULT NULL COMMENT '任务实际执行时间',
  * `complete_time` datetime DEFAULT NULL COMMENT '任务实际完成时间',
  * `status` enum('1','2','3','4') NOT NULL DEFAULT '1' COMMENT '执行状态 1/准备中 2/执行中 3/任务失败 4/已完成',
+ * `type` enum('1','2') NOT NULL DEFAULT '1' COMMENT '类型 1/shell 2/python',
  * `result` longtext COMMENT '任务输出',
  * `create_time` datetime DEFAULT NULL COMMENT '数据创建时间',
  * `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '数据修改时间',

@@ -13,6 +13,7 @@ class Task
     private static $select = [
         'command',
         'rule',
+        'type',
     ];
     private static $table = 'yii2_task';
     private static $where = [

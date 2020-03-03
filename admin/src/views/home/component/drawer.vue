@@ -39,6 +39,16 @@
                 </Col>
             </Row>
             <Row>
+                <Col span="24">
+                <p class="view-text">
+                    脚本: {{{
+                    1: 'shell',
+                    2: 'python'
+                    }[row.type]}}
+                </p>
+                </Col>
+            </Row>
+            <Row>
                 <Col span="5">
                 <p class="view-text">
                     计划执行时间: {{row.start_time}}

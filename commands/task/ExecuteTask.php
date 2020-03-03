@@ -124,23 +124,38 @@ class ExecuteTask
     public static function execute($task)
     {
         $task = json_decode($task, true);
-        if (empty($task['execute_time']) || empty($task['command']) || empty($task['id'])) return false;
+        if (empty($task['execute_time']) || empty($task['command']) || empty($task['id']) || empty($task['type'])) return false;
         $after_time_ms = strtotime($task['execute_time']) - time();
         if ($after_time_ms <= 0) return false;
         swoole_timer_after($after_time_ms * 1000, function () use ($task) {
-            $process = new Process(function (Process $childProcess) use ($task) {
+            // 创建临时文件
+            $tmpFile = tempnam("/tmp/","task_");
+            file_put_contents($tmpFile, $task['command']);
+
+            $process = new Process(function (Process $childProcess) use ($task, $tmpFile) {
                 // 修改任务状态（处理中）
                 self::update($task['id'], 2, date('Y-m-d H:i:s'));
-                swoole_async::exec($task['command'], function ($result, $status) use ($childProcess,$task) {
+                switch ($task['type']) {
+                    case 1:
+                        $command = "bash $tmpFile";
+                        break;
+                    case 2:
+                        $command = "python $tmpFile";
+                        break;
+                }
+
+                swoole_async::exec($command, function ($result, $status) use ($childProcess, $task, $tmpFile) {
                     // 修改任务状态（处理完成）
                     if ($status['code'] == 0) {
                         self::update($task['id'], 4, null, $result, date('Y-m-d H:i:s'));
                     } else {
                         self::update($task['id'], 3);
                     }
+                    // 删除临时文件
+                    unlink($tmpFile);
                     $childProcess->exit();
                 });
-            },true);
+            }, true);
             $process->start();
         });
 

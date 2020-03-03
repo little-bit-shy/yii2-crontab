@@ -26,6 +26,7 @@ class TaskUpdateForm extends Model
     public $command;
     public $rule;
     public $switch;
+    public $type;
 
     /**
      * 验证规则
@@ -34,12 +35,13 @@ class TaskUpdateForm extends Model
     public function rules()
     {
         return [
-            [['id', 'name', 'command', 'rule', 'switch'], 'safe', 'on' => 'update'],
-            [['id', 'name', 'command', 'rule', 'switch'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'update'],
+            [['id', 'name', 'command', 'rule', 'switch','type'], 'safe', 'on' => 'update'],
+            [['id', 'name', 'command', 'rule', 'switch','type'], 'required', 'message' => '{attribute}' . Yii::t('app\error', 'not null'), 'on' => 'update'],
             [['id'], 'integer', 'on' => 'update'],
             [['name', 'command'], 'trim', 'on' => 'update'],
             [['name', 'command', 'rule'], 'string', 'on' => 'update'],
             [['switch'], 'in', 'range' => [1, 2], 'on' => 'update'],
+            [['type'], 'in', 'range' => [1, 2], 'on' => 'update'],
             [['rule'], 'validateRule', 'on' => 'update'],
             [['id'], 'exist', 'targetClass' => Task::className(), 'targetAttribute' => ['id' => 'id'], 'on' => 'update'],
         ];
@@ -69,7 +71,8 @@ class TaskUpdateForm extends Model
                 'name',
                 'command',
                 'rule',
-                'switch'
+                'switch',
+                'type'
             ]
         ];
     }
@@ -86,6 +89,7 @@ class TaskUpdateForm extends Model
             'command' => Yii::t('app\attribute', 'command'),
             'rule' => Yii::t('app\attribute', 'rule'),
             'switch' => Yii::t('app\attribute', 'switch'),
+            'type' => Yii::t('app\attribute', 'type'),
         ];
     }
 
