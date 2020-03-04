@@ -123,6 +123,7 @@
                 if(load) {
                     this.load = true;
                 }
+
                 await (new ajax()).send('/v1/execute-task/view?id='+this.old_row.id+'&fields=*&page=' + this.page + '&per-page=' + this.pageSize, {}).then((response) => {
                     var data = response.data;
                     this.row = data.data;
@@ -148,17 +149,20 @@
                     let how = 5;
                     let result;
                     result = tmp[this.row.status];
+
                     this.null_result = result;
-                    this.job[0] = setInterval(() => {
-                        ++num;
-                        let dian = new Array(num + 1).join('.');
-                        if (num % (how + 1) == 0) {
-                            num = 0;
-                            this.null_result = result;
-                        } else {
-                            this.null_result = result + dian;
-                        }
-                    }, 100);
+                    if(this.row.status == 1 || this.row.status == 2){
+                        this.job[0] = setInterval(() => {
+                            ++num;
+                            let dian = new Array(num + 1).join('.');
+                            if (num % (how + 1) == 0) {
+                                num = 0;
+                                this.null_result = result;
+                            } else {
+                                this.null_result = result + dian;
+                            }
+                        }, 100);
+                    }
                 }
                 this.job[1] = setInterval(() => {
                     if(this.old_row._expanded)
