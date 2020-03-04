@@ -141,7 +141,7 @@
                     let tmp = {
                         1: '任务待处理，暂无输出',
                         2: '任务处理中，暂无输出',
-                        3: '任务已失败，暂无输出',
+                        3: '任务已失败，没有输出',
                         4: '当前任务没有输出'
                     };
                     let num = 0;
@@ -149,16 +149,18 @@
                     let result;
                     result = tmp[this.row.status];
                     this.null_result = result;
-                    this.job[0] = setInterval(() => {
-                        ++num;
-                        let dian = new Array(num + 1).join('.');
-                        if (num % (how + 1) == 0) {
-                            num = 0;
-                            this.null_result = result;
-                        } else {
-                            this.null_result = result + dian;
-                        }
-                    }, 100);
+                    if(this.row.status == 1 || this.row.status == 2){
+                        this.job[0] = setInterval(() => {
+                            ++num;
+                            let dian = new Array(num + 1).join('.');
+                            if (num % (how + 1) == 0) {
+                                num = 0;
+                                this.null_result = result;
+                            } else {
+                                this.null_result = result + dian;
+                            }
+                        }, 100);
+                    }
                 }
                 this.job[1] = setInterval(() => {
                     if(this.old_row._expanded)
