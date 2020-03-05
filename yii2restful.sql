@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 17/01/2020 14:48:26
+ Date: 04/03/2020 13:41:48
 */
 
 SET NAMES utf8mb4;
@@ -89,7 +89,7 @@ INSERT INTO `yii2_auth_item` VALUES ('/v1/site/all-permissions', 2, '获取当�
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/captcha', 2, '获取验证码', NULL, NULL, 1521007674, 1521619742);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/site/login', 2, '用户登录', NULL, NULL, 1521007674, 1521619750);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/*', 2, '任务管理', NULL, NULL, 1541054856, 1541055008);
-INSERT INTO `yii2_auth_item` VALUES ('/v1/task/client', '2', '客户端列表', NULL, NULL, 1579423628, 1579423644);
+INSERT INTO `yii2_auth_item` VALUES ('/v1/task/client', 2, '客户端列表', NULL, NULL, 1579423628, 1579423644);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/create', 2, '任务添加', NULL, NULL, 1541054856, 1541055017);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/delete', 2, '删除任务', NULL, NULL, 1542943133, 1543913646);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/task/index', 2, '任务列表', NULL, NULL, 1541054856, 1541054995);
@@ -186,6 +186,7 @@ INSERT INTO `yii2_auth_rule` VALUES ('\\v1\\rules\\AuthorRule', 0x4F3A31393A2276
 DROP TABLE IF EXISTS `yii2_execute_task`;
 CREATE TABLE `yii2_execute_task`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `type` enum('1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '类型  1\\shell 2\\python',
   `command` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '需要执行的命令',
   `start_time` datetime(0) NULL DEFAULT NULL COMMENT '任务计划执行时间',
   `execute_time` datetime(0) NULL DEFAULT NULL COMMENT '任务实际执行时间',
@@ -197,7 +198,7 @@ CREATE TABLE `yii2_execute_task`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `asfapf17g12yguyf1g11gf12`(`start_time`, `status`) USING BTREE,
   FULLTEXT INDEX `2141221xd12f12f1f12gv1g21`(`command`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18619 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for yii2_task
@@ -209,16 +210,18 @@ CREATE TABLE `yii2_task`  (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `rule` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '规则',
   `switch` enum('1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '开关 1/开 2/关',
+  `type` enum('1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '类型 1/shell 2/python',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '数据创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '数据修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `2141212fc1vgv13311g13`(`name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yii2_task
 -- ----------------------------
-INSERT INTO `yii2_task` VALUES (14, '# 时间查询\n\ndate', '时间查询', '1,11,21,31,41,51 * * * * *', '1', '2020-01-07 11:23:21', '2020-01-14 08:23:35');
+INSERT INTO `yii2_task` VALUES (14, '# 时间查询\n\ndate', '时间查询', '*/10 * * * * *', '1', '1', '2020-01-07 11:23:21', '2020-03-03 07:31:54');
+INSERT INTO `yii2_task` VALUES (15, '# 23333333333333333\n# -*- coding: UTF-8 -*-\n\nfor letter in \"Python\":     # 第一个实例\n   print \"当前字母 :\", letter\n \nfruits = [\"banana\", \"apple\",  \"mango\"]\nfor fruit in fruits:        # 第二个实例\n   print \"当前水果 :\", fruit\n \nprint \"Good bye!\"', '213', '*/10 * * * * *', '1', '2', '2020-03-03 10:51:59', '2020-03-03 08:05:29');
 
 -- ----------------------------
 -- Table structure for yii2_user
@@ -246,45 +249,8 @@ CREATE TABLE `yii2_user`  (
 -- ----------------------------
 -- Records of yii2_user
 -- ----------------------------
-INSERT INTO `yii2_user` VALUES (1, '15918793994', 'root', NULL, 'O09SSrCnncpO-TdiQdcwiUgJ7N9j4eBg', '$2y$13$ywa27Yqe8MA.BCCjqfcgh.yDRNkTbazwF704lfWcv2NB7.7SqKfwm', '1533356676@qq.com', 1479371680, 1578979399, '192.168.1.254', 1578979380);
+INSERT INTO `yii2_user` VALUES (1, '15918793994', 'root', NULL, 'QkcwI70kuq6HkOwO87F9IUAbrzi4DYM8', '$2y$13$ywa27Yqe8MA.BCCjqfcgh.yDRNkTbazwF704lfWcv2NB7.7SqKfwm', '1533356676@qq.com', 1479371680, 1578979399, '192.168.1.197', 1583202699);
 INSERT INTO `yii2_user` VALUES (2, NULL, 'admin', NULL, 'lD3nnOjCqALB3dkDvN40UaxrmZzcLrbk', '$2y$13$CPOoVtkOvJYgMvimV/AkxOQ0M5tJOnIOJVpf/D4HOONb6Q/2ysZ1K', '3095764452@qq.com', 1479371663, 1479371680, '192.168.1.254', 1578906568);
 INSERT INTO `yii2_user` VALUES (39, NULL, 'test', NULL, '9MYR7KpG3Mkc-ZFckWv_T-oIDiOQeqZL', '$2y$13$CPOoVtkOvJYgMvimV/AkxOQ0M5tJOnIOJVpf/D4HOONb6Q/2ysZ1K', NULL, 1530780629, 1530780629, '120.85.87.197', 1543286683);
-
--- ----------------------------
--- Table structure for yii2_user_copy
--- ----------------------------
-DROP TABLE IF EXISTS `yii2_user_copy`;
-CREATE TABLE `yii2_user_copy`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `phone` char(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机',
-  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户名',
-  `head` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像',
-  `access_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'access-token',
-  `auth_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '自动登录key',
-  `password_hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '加密密码',
-  `password_reset_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '重置密码token',
-  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  `last_login_ip` char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最近登录ip',
-  `last_login_at` int(11) NULL DEFAULT NULL COMMENT '最近登陆时间',
-  `oauth2` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'self' COMMENT 'oauth2',
-  `oauth2_id` int(11) NULL DEFAULT NULL COMMENT 'oauth2_id',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `yii2restful_yii2_user_oauth2_oauth2_id`(`oauth2`, `oauth2_id`) USING BTREE COMMENT 'oauth2唯一索引',
-  UNIQUE INDEX `yii2restful_yii2_user_access_token`(`access_token`) USING BTREE COMMENT 'access_token',
-  UNIQUE INDEX `yii2restful_yii2_user_phone`(`phone`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yii2_user_copy
--- ----------------------------
-INSERT INTO `yii2_user_copy` VALUES (1, '1', 'root', '', '1', '6lgGBSosfvH0c9_nZZP8DY6YiI4ycwDx', '$2y$13$Gmkbp4uYHbUivaxE7x3M0.LRzJUiDMKWCWUAKD763S/vbzJeIt8xe', NULL, '1533356676@qq.com', 1479371680, 1479371680, NULL, NULL, 'self', NULL);
-INSERT INTO `yii2_user_copy` VALUES (2, '2', 'admin', NULL, '2', 'pA7DChvN6X22MWjc6W_9TYALKiduyftD', '$2y$13$gqyTZRup/.lisGkogBT5benIucbEZ4yweD11JKWjHASA4hl9a7oau', NULL, '3095764452@qq.com', 1479371663, 1479371680, NULL, NULL, 'self', NULL);
-INSERT INTO `yii2_user_copy` VALUES (9, '', 'little-bit-shy', 'https://avatars.githubusercontent.com/u/12792446?v=3', '9', NULL, NULL, NULL, NULL, 1484897023, 1479371680, NULL, NULL, 'github', 12792446);
-INSERT INTO `yii2_user_copy` VALUES (10, '15918793994', NULL, NULL, 'y0gZlbBXGxOo4K--4_4jDNa_Byw2I-8V', NULL, '$2y$13$MpWF3HZWwe1CrcvpbwDLR.k2bRnr9VyvKCPYGaNjv8..S8Z.rkliS', NULL, NULL, 1485158903, 1485158903, '127.0.0.1', 1485160819, 'self', NULL);
-INSERT INTO `yii2_user_copy` VALUES (12, '15918793991', 'fUrXC2rT', NULL, '6l4nL9fP7X7EXTw5ecedHjUhH9Kv12iv', NULL, '$2y$13$nLc17UBNeDhaRu5bFnJr8uAh2vyOt1/xYMmIVAuUNeLVmose7MkKm', NULL, NULL, 1485160893, 1485160893, NULL, NULL, 'self', NULL);
-INSERT INTO `yii2_user_copy` VALUES (13, '15918793992', 'mK0wLev6', NULL, 'inORraxmoIqYOaaDL9qe6MqBZaf-C9Pl', NULL, '$2y$13$HghCFt1JWLsduv5bLQ13w.z/6W3Fzgz70qmgypNEFKlJH9P8b3xOy', NULL, NULL, 1485161033, 1485161033, NULL, NULL, 'self', NULL);
-INSERT INTO `yii2_user_copy` VALUES (14, '15918793993', 'BWko4Fiu', NULL, '0SqyoC7enijE3sDlTAVy1jmP8D9Krb2P', NULL, '$2y$13$fAbDXAo6MJ/uGCPeUcdExeQDQvZBYlCsfa23UUkS8lzv3/NufI2Lm', NULL, NULL, 1485161050, 1485161050, NULL, NULL, 'self', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -44,10 +44,11 @@ class ServerController extends Controller
             'task_worker_num' => 4,
             'open_eof_split' => true,
             'package_eof' => "\r\n",
-            'ssl_cert_file' => __DIR__ . '/task/ssl/server.crt',
-            'ssl_key_file' => __DIR__ . '/task/ssl/server.key',
             'ssl_verify_peer' => true,
             'ssl_allow_self_signed' => true,
+            'ssl_cert_file' => __DIR__ . '/task/ca/server/server.crt',
+            'ssl_key_file' => __DIR__ . '/task/ca/server/server.key',
+            'ssl_client_cert_file' => __DIR__ . '/task/ca/private/ca.crt',
             'ssl_verify_depth' => 10,
         ));
 

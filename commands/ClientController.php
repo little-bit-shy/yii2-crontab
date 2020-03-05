@@ -42,6 +42,15 @@ class ClientController extends Controller
         $this->client->set([
             'open_eof_split' => true,
             'package_eof' => "\r\n",
+//            'ssl_allow_self_signed' => true,
+//            'ssl_verify_peer' => true,
+//            'ssl_cert_file' => __DIR__ . '/task/ca/users/client.crt',
+//            'ssl_key_file' => __DIR__ . '/task/ca/users/client.key',
+//            'ssl_host_name' => '',
+//            'ssl_cert_file' => __DIR__ . '/task/ca/users/cer.pem',
+//            'ssl_key_file' => __DIR__ . '/task/ca/users/key.pem',
+//            'ssl_cafile' => __DIR__ . '/task/ca/server/server.crt',
+//            'ssl_capath' => __DIR__ . '/task/ca/server',
         ]);
         $this->client->on('Error', [$this, 'onError']);
         $this->client->on('Connect', [$this, 'onConnect']);
