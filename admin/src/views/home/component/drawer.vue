@@ -165,11 +165,8 @@
                     }
                 }
                 this.job[1] = setInterval(() => {
-                    if(this.old_row._expanded)
-                    {
-                        if (this.row.status != 4) {
-                            this.getData(false);
-                        }
+                    if (this.row.status != 3 || this.row.status != 4) {
+                        this.getData(false);
                     }
                 }, 2000);
             });
