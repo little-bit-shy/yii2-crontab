@@ -175,6 +175,7 @@
             });
         },
         beforeDestroy() {
+            this.old_row._expanded = false;
             this.job.map(item=>{
                 clearTimeout(item);
             });
