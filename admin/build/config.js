@@ -9,8 +9,8 @@ if(process.env.NODE_ENV === 'development') {
 }else if(process.env.NODE_ENV === 'production'){
     config = {
         env: process.env.NODE_ENV,
-        ajaxUrl: 'https://crontab.sayingdata.com',
-        url: 'https://crontab.sayingdata.com'
+        ajaxUrl: 'https://api.t.sayingdata.com/crontab',
+        url: 'https://api.t.sayingdata.com/crontab'
     };
 }
 module.exports = config;

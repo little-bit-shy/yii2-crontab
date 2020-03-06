@@ -155,21 +155,9 @@
             pageSize: function (newV, oldV) {
                 this.getListData();
             },
-            auto: function (newV, oldV) {
-                if(newV == true){
-                    this.data.map((item, index) => {
-                        item._expanded = status;
-                        return item;
-                    });
-                    this.data.splice();
-                }
-            },
         },
         methods: {
             onExpand(row,status){
-                if(status == true){
-                    this.auto = false;
-                }
             },
             visibleChange() {
             },
@@ -188,6 +176,14 @@
                     (new ajax()).send('/v1/execute-task/index?fields=type,command,complete_time,create_time,execute_time,id,start_time,status,update_time&page=' + this.page + '&per-page=' + this.pageSize, {
                     }).then((response) => {
                         var data = response.data;
+                        data.data.items.map((item,index)=>{
+                            this.data.map((oldItem)=>{
+                                if(item.id == oldItem.id && oldItem._expanded){
+                                    item._expanded = true;
+                                }
+                            });
+                            return item;
+                        });
                         this.data = data.data.items;
                         this.pageTotal = +data.data._meta.totalCount;
                         this.loading = false;

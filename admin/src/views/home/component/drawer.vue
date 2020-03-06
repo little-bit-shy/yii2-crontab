@@ -127,9 +127,12 @@
                 await (new ajax()).send('/v1/execute-task/view?id='+this.old_row.id+'&fields=*&page=' + this.page + '&per-page=' + this.pageSize, {}).then((response) => {
                     var data = response.data;
                     this.row = data.data;
+                    this.old_row._expanded = true;
                     this.old_row.status = data.data.status;
                     this.old_row.complete_time = data.data.complete_time;
                     this.old_row.execute_time = data.data.execute_time;
+                    this.old_row.splice();
+
                     this.load = false;
                 }).catch((error) => {
                     this.load = false;
