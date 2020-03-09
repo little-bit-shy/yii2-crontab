@@ -168,7 +168,7 @@
                     }
                 }
                 this.job[1] = setInterval(() => {
-                    if (this.row.status != 3 || this.row.status != 4) {
+                    if (this.row.status == 1 && this.row.status == 2) {
                         this.getData(false);
                     }
                 }, 2000);

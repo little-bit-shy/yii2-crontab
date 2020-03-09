@@ -36,8 +36,9 @@ yii2-rest           项目目录
 ```
 
 #### 如何安装
-操作界面脚本在admin目录下，安装依赖（`npm install`）、编译脚本（`npm run build`）
-首先执行`php composer.phar install`命令对项目进行安装操作
+操作界面脚本在admin目录下，安装依赖（`npm install`）、修改配置文件接口链接、编译脚本（`npm run build`）
+
+执行`php composer.phar install`命令对项目进行依赖安装操作
 
 #### 运行环境
 Php 7.2.7  
@@ -87,8 +88,11 @@ server {
 
 #### 效果展示
 初始化账号密码 root/123456
-![img](/help/image/task.jpg)
-![img](/help/image/exec_task_success.jpg)
-![img](/help/image/exec_task_fail.jpg)
+
+![img](/help/image/1.jpg)
+![img](/help/image/2.jpg)
+![img](/help/image/3.jpg)
+![img](/help/image/4.jpg)
+![img](/help/image/5.jpg)
 
 
