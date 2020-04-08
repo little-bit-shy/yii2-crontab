@@ -37,9 +37,6 @@ class ServerController extends Controller
 
     public function actionIndex()
     {
-        ExecuteTask::warning();
-
-        exit;
         $this->serv = new swoole_server($this->host, $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
         $this->serv->set(array(
             'worker_num' => 8,
