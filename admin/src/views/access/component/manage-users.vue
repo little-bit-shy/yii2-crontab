@@ -89,6 +89,89 @@
 
             <Modal
                     class-name="vertical-center-modal"
+                    title="修改数据"
+                    v-model="updateModal"
+                    :loading="true"
+                    :width="50"
+                    @on-visible-change="visibleChange()"
+                    :closable="true">
+
+                <Form ref="updateForm" :model="updateForm" :rules="updateFormRule">
+                    <Row :gutter="16">
+                        <Col span="24" v-show="updateFormError !== null">
+                        <Alert show-icon type="error">{{updateFormError}}</Alert>
+                        </Col>
+
+                        <Col span="24">
+                        <FormItem prop="warning" label="预警通知">
+                            <Switch size="large" v-model="updateForm.warning" true-value='1' false-value='2'>
+                                <span slot="open">ON</span>
+                                <span slot="close">OFF</span>
+                            </Switch>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="12">
+                        <FormItem prop="phone" label="手机号">
+                            <Input type="text" v-model="updateForm.phone" placeholder="输入手机号...">
+                            <Icon type="iphone" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="12">
+                        <FormItem prop="email" label="邮箱">
+                            <Input type="text" v-model="updateForm.email" placeholder="输入邮箱...">
+                            <Icon type="email" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="12">
+                        <FormItem prop="created_at" label="修改时间">
+                            <Input disabled type="text" v-model="updateForm.created_at" placeholder="输入创建时间...">
+                            <Icon type="ios-clock-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="12">
+                        <FormItem prop="updated_at" label="修改时间">
+                            <Input disabled type="text" v-model="updateForm.updated_at" placeholder="输入修改时间...">
+                            <Icon type="ios-clock-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="12">
+                        <FormItem prop="last_login_ip" label="输入最后一次登陆IP">
+                            <Input disabled type="text" v-model="updateForm.last_login_ip" placeholder="输入最后一次登陆IP...">
+                            <Icon type="ios-clock-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                        <Col span="12">
+                        <FormItem prop="last_login_at" label="最后一次登陆时间">
+                            <Input disabled type="text" v-model="updateForm.last_login_at" placeholder="输入最后一次登陆时间...">
+                            <Icon type="ios-clock-outline" slot="prepend"></Icon>
+                            </Input>
+                        </FormItem>
+                        </Col>
+
+                    </Row>
+                </Form>
+
+                <div slot="footer">
+                    <Button type="success" size="large" :loading="updateModalLoading" @click="updateData()">
+                        确认修改
+                    </Button>
+                    <Button type="error" size="large" @click="updateModal = false">关闭</Button>
+                </div>
+            </Modal>
+
+            <Modal
+                    class-name="vertical-center-modal"
                     title="分配角色"
                     v-model="allotModal"
                     :loading="true"
@@ -165,6 +248,24 @@
                         {required: true, message: '用户密码不能为空', trigger: 'blur'}
                     ]
                 },
+                updateModal: false,
+                updateModalLoading: false,
+                updateForm: {
+                    id: null,
+                    warning: null,
+                    email: null,
+                    phone: null,
+                    created_at: null,
+                    updatew_at: null,
+                    last_login_ip: null,
+                    last_login_at: null,
+                },
+                updateFormError: null,
+                updateFormRule: {
+                    name: [
+
+                    ]
+                },
                 searchForm: {
                     name: null,
                 },
@@ -173,6 +274,12 @@
                         title: '名称',
                         key: 'username',
                         minWidth: 180,
+                        ellipsis: true
+                    },
+                    {
+                        title: '手机',
+                        key: 'phone',
+                        width: 180,
                         ellipsis: true
                     },
                     {
@@ -208,15 +315,9 @@
                         ellipsis: true
                     },
                     {
-                        title: '令牌',
-                        key: 'access_token',
-                        minWidth: 200,
-                        ellipsis: true
-                    },
-                    {
                         title: '操作',
                         key: 'action',
-                        width: 100,
+                        width: 120,
                         align: 'center',
                         ellipsis: true,
                         render: (h, params) => {
@@ -236,7 +337,30 @@
                                             this.userId = this.data[index].id;
                                         }
                                     }
-                                }, '分配')
+                                }, '分配'),
+                                h('Button', {
+                                    props: {
+                                        type: 'success',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.updateModal = true;
+                                            let index = params.index;
+                                            this.updateForm.id = this.data[index].id;
+                                            this.updateForm.email = this.data[index].email;
+                                            this.updateForm.phone = this.data[index].phone;
+                                            this.updateForm.warning = this.data[index].warning;
+                                            this.updateForm.created_at = this.data[index].created_at;
+                                            this.updateForm.updated_at = this.data[index].updated_at;
+                                            this.updateForm.last_login_ip = this.data[index].last_login_ip;
+                                            this.updateForm.last_login_at = this.data[index].last_login_at;
+                                        }
+                                    }
+                                }, '修改'),
                             ]);
                         }
                     }
@@ -321,6 +445,34 @@
                     }).finally(function (callee) {
                     });
                 }, 1000);
+            },
+            updateData () {
+                this.updateModalLoading = true;
+                this.async = setTimeout(() => {
+                        (new ajax()).send('/v1/auth-item/update-user', {
+                            'id': this.updateForm.id,
+                            'phone': this.updateForm.phone,
+                            'email': this.updateForm.email,
+                            'warning': this.updateForm.warning
+                        }, 'post', false).then((response) => {
+                            var data = response.data;
+                switch (data.success) {
+                    case true:
+                        this.getListData(false, 1);
+                        this.updateFormError = null;
+                        message.success('修改成功');
+                        break;
+                    case false:
+                        this.updateFormError = data.data.message;
+                        break;
+                }
+                this.updateModalLoading = false;
+            }).catch((error) => {
+                    this.updateModalLoading = false;
+                this.updateFormError = error.message;
+            }).finally(function (callee) {
+                });
+            }, 1000);
             },
             getAddModal () {
                 this.addModal = true;

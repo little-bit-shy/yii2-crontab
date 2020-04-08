@@ -11,7 +11,7 @@
  Target Server Version : 50728
  File Encoding         : 65001
 
- Date: 04/03/2020 13:41:48
+ Date: 08/04/2020 11:13:55
 */
 
 SET NAMES utf8mb4;
@@ -80,6 +80,7 @@ INSERT INTO `yii2_auth_item` VALUES ('/v1/auth-item/project-directory', 2, '项�
 INSERT INTO `yii2_auth_item` VALUES ('/v1/auth-item/remove-permissions', 2, '移除权限', NULL, NULL, 1520165332, 1520236664);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/auth-item/reset-psw-user', 2, '密码重置', NULL, NULL, 1543913588, 1543913607);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/auth-item/update-permissions', 2, '修改权限', NULL, NULL, 1520165332, 1520423740);
+INSERT INTO `yii2_auth_item` VALUES ('/v1/auth-item/update-user', 2, '修改用户', NULL, NULL, 1586313335, 1586313353);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/auth-item/user-lists', 2, '获取用户列表', NULL, NULL, 1522503205, 1522504171);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/execute-task/*', 2, '执行任务', NULL, NULL, 1542943133, 1543913617);
 INSERT INTO `yii2_auth_item` VALUES ('/v1/execute-task/index', 2, '任务列表', NULL, NULL, 1542943133, 1543913635);
@@ -140,6 +141,7 @@ INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/remove-permiss
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/reset-psw-user');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/reset-psw-user');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/update-permissions');
+INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/update-user');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/auth-item/user-lists');
 INSERT INTO `yii2_auth_item_child` VALUES ('root', '/v1/auth-item/user-lists');
 INSERT INTO `yii2_auth_item_child` VALUES ('ordinaryUser', '/v1/execute-task/index');
@@ -198,7 +200,11 @@ CREATE TABLE `yii2_execute_task`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `asfapf17g12yguyf1g11gf12`(`start_time`, `status`) USING BTREE,
   FULLTEXT INDEX `2141221xd12f12f1f12gv1g21`(`command`)
-) ENGINE = InnoDB AUTO_INCREMENT = 18619 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of yii2_execute_task
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for yii2_task
@@ -220,8 +226,8 @@ CREATE TABLE `yii2_task`  (
 -- ----------------------------
 -- Records of yii2_task
 -- ----------------------------
-INSERT INTO `yii2_task` VALUES (14, '# 时间查询\n\ndate', '时间查询', '*/10 * * * * *', '1', '1', '2020-01-07 11:23:21', '2020-03-03 07:31:54');
-INSERT INTO `yii2_task` VALUES (15, '# 23333333333333333\n# -*- coding: UTF-8 -*-\n\nfor letter in \"Python\":     # 第一个实例\n   print \"当前字母 :\", letter\n \nfruits = [\"banana\", \"apple\",  \"mango\"]\nfor fruit in fruits:        # 第二个实例\n   print \"当前水果 :\", fruit\n \nprint \"Good bye!\"', '213', '*/10 * * * * *', '1', '2', '2020-03-03 10:51:59', '2020-03-03 08:05:29');
+INSERT INTO `yii2_task` VALUES (14, '# 时间查询\n\ndate', '时间查询', '*/5 * * * * *', '2', '1', '2020-01-07 11:23:21', '2020-03-06 06:00:11');
+INSERT INTO `yii2_task` VALUES (15, '# 23333333333333333\n# -*- coding: UTF-8 -*-\n\nfor letter in \"Python\":     # 第一个实例\n   print \"当前字母 :\", letter\n \nfruits = [\"banana\", \"apple\",  \"mango\"]\nfor fruit in fruits:        # 第二个实例\n   print \"当前水果 :\", fruit\n \nprint \"Good bye!\"', '213', '*/5 * * * * *', '1', '2', '2020-03-03 10:51:59', '2020-03-06 06:00:02');
 
 -- ----------------------------
 -- Table structure for yii2_user
@@ -235,6 +241,7 @@ CREATE TABLE `yii2_user`  (
   `access_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'access-token',
   `password_hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '加密密码',
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `warning` enum('1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '2' COMMENT '是否接受预警信息 1/是 2/否',
   `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   `last_login_ip` char(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '最近登录ip',
@@ -249,8 +256,8 @@ CREATE TABLE `yii2_user`  (
 -- ----------------------------
 -- Records of yii2_user
 -- ----------------------------
-INSERT INTO `yii2_user` VALUES (1, '15918793994', 'root', NULL, 'QkcwI70kuq6HkOwO87F9IUAbrzi4DYM8', '$2y$13$ywa27Yqe8MA.BCCjqfcgh.yDRNkTbazwF704lfWcv2NB7.7SqKfwm', '1533356676@qq.com', 1479371680, 1578979399, '192.168.1.197', 1583202699);
-INSERT INTO `yii2_user` VALUES (2, NULL, 'admin', NULL, 'lD3nnOjCqALB3dkDvN40UaxrmZzcLrbk', '$2y$13$CPOoVtkOvJYgMvimV/AkxOQ0M5tJOnIOJVpf/D4HOONb6Q/2ysZ1K', '3095764452@qq.com', 1479371663, 1479371680, '192.168.1.254', 1578906568);
-INSERT INTO `yii2_user` VALUES (39, NULL, 'test', NULL, '9MYR7KpG3Mkc-ZFckWv_T-oIDiOQeqZL', '$2y$13$CPOoVtkOvJYgMvimV/AkxOQ0M5tJOnIOJVpf/D4HOONb6Q/2ysZ1K', NULL, 1530780629, 1530780629, '120.85.87.197', 1543286683);
+INSERT INTO `yii2_user` VALUES (1, '15918793994', 'root', NULL, 'XtXthloFqZP5qllg42HahvaFlJTDqAvt', '$2y$13$ywa27Yqe8MA.BCCjqfcgh.yDRNkTbazwF704lfWcv2NB7.7SqKfwm', '1533356676@qq.com', '1', 1479371680, 1586315111, '192.168.1.197', 1586312087);
+INSERT INTO `yii2_user` VALUES (2, NULL, 'admin', NULL, 'lD3nnOjCqALB3dkDvN40UaxrmZzcLrbk', '$2y$13$CPOoVtkOvJYgMvimV/AkxOQ0M5tJOnIOJVpf/D4HOONb6Q/2ysZ1K', '3095764452@qq.com', '1', 1479371663, 1586315459, '192.168.1.254', 1578906568);
+INSERT INTO `yii2_user` VALUES (39, NULL, 'test', NULL, '9MYR7KpG3Mkc-ZFckWv_T-oIDiOQeqZL', '$2y$13$CPOoVtkOvJYgMvimV/AkxOQ0M5tJOnIOJVpf/D4HOONb6Q/2ysZ1K', '1@qq.com', '2', 1530780629, 1586315249, '120.85.87.197', 1543286683);
 
 SET FOREIGN_KEY_CHECKS = 1;

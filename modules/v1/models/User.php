@@ -27,6 +27,7 @@ use yii\web\Request;
  * `access_token` varchar(255) DEFAULT NULL COMMENT 'access-token',
  * `password_hash` varchar(255) NOT NULL COMMENT '加密密码',
  * `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+ * `warning` enum('1','2') NOT NULL DEFAULT '2' COMMENT '是否接受预警信息 1/是 2/否',
  * `created_at` int(11) DEFAULT NULL COMMENT '创建时间',
  * `updated_at` int(11) DEFAULT NULL COMMENT '更新时间',
  * `last_login_ip` char(20) DEFAULT NULL COMMENT '最近登录ip',
@@ -36,7 +37,7 @@ use yii\web\Request;
  * UNIQUE KEY `yii2restful_yii2_user_access_token` (`access_token`) USING BTREE COMMENT 'access_token',
  * UNIQUE KEY `yii2restful_yii2_user_phone` (`phone`),
  * UNIQUE KEY `yii2restful_yii2_user_email` (`email`)
- * ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COMMENT='用户表';
+ * ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='用户表';
  *
  * Class User
  * @package v1\models
@@ -55,7 +56,7 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
     public function rules()
     {
         return [
-            [['id', 'phone', 'username', 'head', 'access_token', 'password_hash', 'email', 'created_at', 'updated_at', 'last_login_ip', 'last_login_at'], 'safe'],
+            [['id', 'phone', 'username', 'head', 'access_token', 'password_hash', 'email', 'warning', 'created_at', 'updated_at', 'last_login_ip', 'last_login_at'], 'safe'],
         ];
     }
 
@@ -194,6 +195,30 @@ class User extends ActiveRecord implements Linkable, IdentityInterface, RateLimi
             'phone' => $phone,
             'email' => $email,
             'created_at' => $time,
+            'updated_at' => $time,
+        ]]);
+        return $user->save();
+    }
+
+    /**
+     * 修改用户
+     * @param $id
+     * @param $warning
+     * @param $phone
+     * @param $email
+     * @return bool
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function updateUser($id, $warning, $phone, $email)
+    {
+        $time = time();
+        $user = User::findOne([
+            'id' => $id
+        ]);
+        $user->load([$user->formName() => [
+            'warning' => $warning,
+            'phone' => $phone,
+            'email' => $email,
             'updated_at' => $time,
         ]]);
         return $user->save();

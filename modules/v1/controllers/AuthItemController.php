@@ -25,6 +25,7 @@ use v1\models\form\rbac\AuthItemIndexForm;
 use v1\models\form\rbac\AuthItemRemovePermissionsForm;
 use v1\models\form\rbac\AuthItemResetPswUserForm;
 use v1\models\form\rbac\AuthItemUpdatePermissionsForm;
+use v1\models\form\rbac\AuthItemUpdateUserForm;
 use v1\models\form\rbac\AuthItemUserListForm;
 use \v1\models\form\rbac\AuthItemAddRoleRoleForm;
 use v1\models\form\rbac\AuthItemAllRoleWithRoleForm;
@@ -294,6 +295,16 @@ class AuthItemController extends Controller
     public function actionAddUser()
     {
         return AuthItemAddUserForm::addUser(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 修改用户数据
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionUpdateUser()
+    {
+        return AuthItemUpdateUserForm::updateUser(Yii::$app->request->getBodyParams());
     }
 
     /**

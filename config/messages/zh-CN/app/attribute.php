@@ -30,4 +30,5 @@ return [
     'password_new' => '新密码',
     'captcha' => '验证码',
     'status' => '状态',
+    'warning' => '预警',
 ];
