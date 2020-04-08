@@ -1,9 +1,10 @@
 <?php
 
 $task = require(__DIR__ . '/task.php');
+$mailer = require(__DIR__ . '/mailer.php');
 
 return [
-    'adminEmail' => '1533356676@qq.com',
+    'adminEmail' => $mailer['transport']['username'],
     'task' => $task
 ];
 
