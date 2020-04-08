@@ -37,6 +37,9 @@ class ServerController extends Controller
 
     public function actionIndex()
     {
+        ExecuteTask::warning();
+
+        exit;
         $this->serv = new swoole_server($this->host, $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
         $this->serv->set(array(
             'worker_num' => 8,
@@ -104,6 +107,14 @@ class ServerController extends Controller
                 ExecuteTask::fail();
             });
         });
+
+        // 处理异常任务预警通知
+        $process = new swoole_process(function ($process) use ($serv) {
+            $serv->tick(60000, function () use ($serv) {
+                ExecuteTask::warning();
+            });
+        });
+
         $this->serv->addProcess($process);
 
         $this->serv->start();

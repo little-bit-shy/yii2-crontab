@@ -15,6 +15,7 @@ $authManager = require(__DIR__. '/authManager.php');
 $params = require(__DIR__ . '/params.php');
 $session = require(__DIR__ . '/session.php');
 $elasticsearch = require(__DIR__ . '/elasticsearch.php');
+$mailer = require(__DIR__ . '/mailer.php');
 
 $config = [
     'id' => 'basic',
@@ -36,13 +37,6 @@ $config = [
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
-        ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
         ],
         'log' => [
             'traceLevel' => 0,
@@ -80,6 +74,8 @@ $config = [
                 ],
             ],
         ],
+        //邮件配置
+        'mailer' => $mailer,
         //路由配置
         'urlManager' => $urlManager,
         //Oauth 2 相关配置

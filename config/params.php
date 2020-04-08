@@ -3,7 +3,7 @@
 $task = require(__DIR__ . '/task.php');
 
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => '1533356676@qq.com',
     'task' => $task
 ];
 

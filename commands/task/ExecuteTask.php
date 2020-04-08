@@ -18,6 +18,7 @@ class ExecuteTask
         'command',
         'start_time',
     ];
+    private static $user_table = 'yii2_user';
     private static $table = 'yii2_execute_task';
     private static $where = [
         'status' => 1
@@ -117,6 +118,72 @@ class ExecuteTask
     }
 
     /**
+     * 处理异常任务预警通知
+     * @return int
+     * @throws \yii\db\Exception
+     */
+    public static function warning()
+    {
+        // 组装邮件内容
+        $warningtTasks = (new Query())->from(self::$table)
+            ->where([
+                'status' => 3,
+                'warning' => 2,
+            ])
+            ->all();
+        $a = Yii::t('app/message', 'id');
+        $b = Yii::t('app/message', 'error task');
+        $c = Yii::t('app/message', 'plan execute time');
+        $d = Yii::t('app/message', 'practical execute time');
+        $body = "";
+        $ids = [];
+        foreach ($warningtTasks as $task) {
+            $ids[] = $task['id'];
+            $body .= <<<TEXT
+{$a}：{$task['id']}
+{$c}：{$task['start_time']}
+{$d}：{$task['execute_time']}
+{$b}：
+{$task['command']}
+--------------------------------------------------------------------
+
+TEXT;
+        }
+
+        // 组件邮件接收人
+        $messages = [];
+        if (!empty($body)) {
+            $users = (new Query())->from(self::$user_table)
+                ->select(['email'])
+                ->where([
+                    'warning' => 1
+                ])
+                ->all();
+            foreach ($users as $user) {
+                if (!empty($user['email'])) {
+                    $messages[] = Yii::$app->mailer->compose()
+                        ->setFrom(Yii::$app->params['adminEmail'])
+                        ->setSubject(Yii::t('app/message', 'system warning'))
+                        ->setTextBody($body)
+                        ->setTo($user['email']);
+                }
+            }
+        }
+        // 异常捕获
+        try {
+            Yii::$app->mailer->sendMultiple($messages);
+        } catch (\Exception $e) {
+
+        }
+        // 标记预警状态
+        Yii::$app->db->createCommand()->update(self::$table, [
+            'warning' => 1
+        ], [
+            'in', 'id', $ids
+        ])->execute();
+    }
+
+    /**
      * 代理服务器执行任务
      * @param $task
      * @return bool
@@ -129,7 +196,7 @@ class ExecuteTask
         if ($after_time_ms <= 0) return false;
         swoole_timer_after($after_time_ms * 1000, function () use ($task) {
             // 创建临时文件
-            $tmpFile = tempnam("/tmp/","task_");
+            $tmpFile = tempnam("/tmp/", "task_");
             file_put_contents($tmpFile, $task['command']);
 
             $process = new Process(function (Process $childProcess) use ($task, $tmpFile) {

@@ -5,7 +5,8 @@ $db = require(__DIR__ . '/db.php');
 $kafka = require(__DIR__ . '/kafka.php');
 $aliases = require(__DIR__ . '/aliases.php');
 $params = require(__DIR__ . '/params.php');
-
+$i18n = require(__DIR__ . '/i18n.php');
+$mailer = require(__DIR__ . '/mailer.php');
 
 $config = [
     'id' => 'basic-console',
@@ -33,12 +34,16 @@ $config = [
                 ],
             ],
         ],
+        //邮件配置
+        'mailer' => $mailer,
         // 数据库配置
         'db' => $db,
         // Redis配置
         'redis' => $redis,
         // kafka配置
-        'kafka' => $kafka
+        'kafka' => $kafka,
+        //国际化处理
+        'i18n' => $i18n,
     ],
     // 别名定义
     'aliases' => $aliases,
