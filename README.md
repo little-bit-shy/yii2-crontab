@@ -36,7 +36,8 @@ yii2-rest           项目目录
 ```
 
 #### 如何安装
-操作界面脚本在admin目录下，安装依赖（`npm install`）、修改配置文件接口链接、编译脚本（`npm run build`）
+操作界面脚本在admin目录下，安装依赖（`npm install`）
+修改配置文件接口链接、编译脚本（`npm run build`）
 
 执行`php composer.phar install`命令对项目进行依赖安装操作
 
@@ -83,16 +84,38 @@ server {
 接口系统访问域名`http://localhost/v1/site/login`  
 #### 定时任务管理系统启动命令
 根据你的环境使用不同的脚本入口 yii_prod、yii_test、yii_dev
+
 任务分发服务启动`php yii_test server/index`
+
 任务代理服务启动`php yii_test client/index`
+
+系统带有预警邮件通知功能
+
+使用预警功能前只需修改指定配置文件即可
+
+![img](/help/image/8.jpg)
+
+只需在后台指定接收通知的用户即可
+
+![img](/help/image/7.jpg)
+
+邮件效果展示
+
+![img](/help/image/6.jpg)
+
 
 #### 效果展示
 初始化账号密码 root/123456
 
 ![img](/help/image/1.jpg)
+
 ![img](/help/image/2.jpg)
+
 ![img](/help/image/3.jpg)
+
 ![img](/help/image/4.jpg)
+
 ![img](/help/image/5.jpg)
+
 
 
