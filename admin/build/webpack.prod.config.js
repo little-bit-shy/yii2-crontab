@@ -75,7 +75,7 @@ module.exports = merge(webpackBaseConfig, {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: 'iView admin v' + package.version,
+            title: '',
             favicon: './td_icon.ico',
             filename: '../index.html',
             template: './src/template/index.ejs',
