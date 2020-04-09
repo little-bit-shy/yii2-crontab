@@ -6,6 +6,7 @@ use yii\db\Query;
 use swoole_async;
 use swoole_process;
 use Swoole\Process;
+use yii\swiftmailer\Mailer;
 
 /**
  * 获取需要执行任务数据
@@ -149,7 +150,8 @@ class ExecuteTask
 
 TEXT;
         }
-
+        // Cli模式不使用单例模式，避免超时
+        $mailer = new Mailer(Yii::$app->params['mailer']);
         // 组件邮件接收人
         $messages = [];
         if (!empty($body)) {
@@ -161,7 +163,7 @@ TEXT;
                 ->all();
             foreach ($users as $user) {
                 if (!empty($user['email'])) {
-                    $messages[] = Yii::$app->mailer->compose()
+                    $messages[] = $mailer->compose()
                         ->setFrom(Yii::$app->params['adminEmail'])
                         ->setSubject(Yii::t('app/message', 'system warning'))
                         ->setTextBody($body)
@@ -171,7 +173,7 @@ TEXT;
         }
         // 异常捕获
         try {
-            Yii::$app->mailer->sendMultiple($messages);
+            $mailer->sendMultiple($messages);
         } catch (\Exception $e) {
 
         }
