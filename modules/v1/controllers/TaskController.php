@@ -12,6 +12,7 @@ namespace v1\controllers;
 use app\commands\task\Client;
 use v1\models\form\task\TaskCreateForm;
 use v1\models\form\task\TaskDeleteForm;
+use v1\models\form\task\TaskExecForm;
 use v1\models\form\task\TaskIndexForm;
 use v1\models\form\task\TaskUpdateForm;
 use v1\models\task\Task;
@@ -52,6 +53,7 @@ class TaskController extends Controller
             'view' => ['GET', 'POST', 'HEAD'],
             'create' => ['POST'],
             'update' => ['POST'],
+            'exec' => ['POST'],
             'delete' => ['POST'],
         ];
     }
@@ -99,6 +101,16 @@ class TaskController extends Controller
     public function actionCreate()
     {
         return TaskCreateForm::create(Yii::$app->request->getBodyParams());
+    }
+
+    /**
+     * 任务入队
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\web\HttpException
+     */
+    public function actionExec()
+    {
+        return TaskExecForm::exec(Yii::$app->request->getBodyParams());
     }
 
     /**

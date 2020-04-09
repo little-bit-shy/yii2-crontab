@@ -12,6 +12,8 @@ if (YII_ENV_PROD) {
         'sign' => '1gf281f01gf0120gf2101',
         // 连接超时时间
         'timeout' => 1,
+        // Redis任务队列
+        'key' => 'swoole_task_list',
     ];
 } else if (YII_ENV_TEST) {
     return [
@@ -25,6 +27,8 @@ if (YII_ENV_PROD) {
         'sign' => '1gf281f01gf0120gf2101',
         // 连接超时时间
         'timeout' => 1,
+        // Redis任务队列
+        'key' => 'swoole_task_list',
     ];
 } else if (YII_ENV_DEV) {
     return [
@@ -38,6 +42,8 @@ if (YII_ENV_PROD) {
         'sign' => '1gf281f01gf0120gf2101',
         // 连接超时时间
         'timeout' => 1,
+        // Redis任务队列
+        'key' => 'swoole_task_list',
     ];
 }
 

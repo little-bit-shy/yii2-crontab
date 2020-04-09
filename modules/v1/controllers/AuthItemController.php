@@ -72,6 +72,7 @@ class AuthItemController extends Controller
             'delete-user-role' => ['POST'],
             'all-role-with-user' => ['POST'],
             'add-user' => ['POST'],
+            'update-user' => ['POST'],
             'reset-psw-user' => ['POST'],
             'all-role-with-role' => ['POST'],
             'add-role-role' => ['POST'],

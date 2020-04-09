@@ -163,6 +163,39 @@
                 </div>
             </Modal>
 
+            <Modal
+                    class-name="vertical-center-modal"
+                    title="执行任务"
+                    v-model="execModal"
+                    :loading="true"
+                    :width="50"
+                    @on-visible-change="visibleChange()"
+                    :closable="true">
+
+                    <Row :gutter="16">
+                        <Col span="24" v-show="execError !== null">
+                            <Alert show-icon type="error">{{execError}}</Alert>
+                        </Col>
+
+                        <Col span="24" v-if="execId !== null">
+                            <drawer :execId="execId"></drawer>
+                        </Col>
+                        <Col span="24" v-else>
+                            <Itext v-if="execForm.type == 1" textData="脚本类型：shell" :lengthData=100 ></Itext>
+                            <Itext v-if="execForm.type == 2" textData="脚本类型：python" :lengthData=100 ></Itext>
+                            脚本代码：
+                            <Itext :textData="execForm.command" :lengthData=100 ></Itext>
+                        </Col>
+                    </Row>
+
+                <div slot="footer">
+                    <Button v-show="execId == null" type="success" size="large" :loading="execModalLoading" @click="exec('execForm')">
+                        确认执行
+                    </Button>
+                    <Button type="error" size="large" @click="execModal = false">关闭</Button>
+                </div>
+            </Modal>
+
             </Col>
         </Row>
         <br/>
@@ -188,9 +221,12 @@
 <script>
     import ajax from '../../../libs/ajax';
     import message from '../../../libs/message';
+    import drawer from './drawer';
+    import Itext from './text'
+
 
     export default {
-        components: {},
+        components: {drawer,Itext},
         names: 'list',
         data() {
             return {
@@ -199,6 +235,15 @@
                 pageSize: 15,
                 pageTotal: 0,
                 pageSizeOpts: [15, 20, 30, 40, 50],
+                execModal: false,
+                execModalLoading: false,
+                execForm: {
+                    command: null,
+                    type: 1
+                },
+                execError: null,
+                execId: null,
+                execSuccessButton: true,
                 updateModal: false,
                 updateModalLoading: false,
                 updateForm: {
@@ -322,11 +367,28 @@
                     {
                         title: '操作',
                         key: 'action',
-                        width: 150,
+                        width: 200,
                         align: 'center',
                         ellipsis: true,
                         render: (h, params) => {
                             return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'success',
+                                        size: 'small'
+                                    },
+                                    style: {
+                                        marginRight: '5px'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.execModal = true;
+                                            let index = params.index;
+                                            this.execForm.command = this.data[index].command;
+                                            this.execForm.type = parseInt(this.data[index].type);
+                                        }
+                                    }
+                                }, '立即运行'),
                                 h('Button', {
                                     props: {
                                         type: 'success',
@@ -395,6 +457,8 @@
             visibleChange() {
                 this.addFormError = null;
                 this.updateFormError = null;
+                this.execError = null;
+                this.execId = null;
             },
             pageChange(index) {
                 this.page = index;
@@ -408,6 +472,9 @@
                         this.updateData();
                     }
                 });
+            },
+            exec(name) {
+                this.execData();
             },
             add(name) {
                 this.$refs[name].validate((valid) => {
@@ -493,6 +560,33 @@
                     }).catch((error) => {
                         this.addModalLoading = false;
                         this.addFormError = error.message;
+                    }).finally(function (callee) {
+                    });
+                }, 1000);
+            },
+            execData(name) {
+                this.execModalLoading = true;
+                this.async = setTimeout(() => {
+                    (new ajax()).send('/v1/task/exec', {
+                        'command': this.execForm.command,
+                        'type': this.execForm.type
+                    }, 'post', false).then((response) => {
+                        var data = response.data;
+                        console.log(data);
+                        switch (data.success) {
+                            case true:
+                                this.execError = null;
+                                message.success('入队成功');
+                                this.execId = data.data.id;
+                                break;
+                            case false:
+                                this.execError = data.data.message;
+                                break;
+                            }
+                        this.execModalLoading = false;
+                    }).catch((error) => {
+                        this.execModalLoading = false;
+                        this.execError = error.message;
                     }).finally(function (callee) {
                     });
                 }, 1000);

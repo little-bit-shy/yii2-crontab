@@ -6,6 +6,7 @@ use yii\db\Query;
 use swoole_async;
 use swoole_process;
 use Swoole\Process;
+use yii\redis\Connection;
 use yii\swiftmailer\Mailer;
 
 /**
@@ -55,6 +56,41 @@ class ExecuteTask
     {
         $data = Yii::$app->db->createCommand('SELECT LAST_INSERT_ID() last_insert_id')->queryOne();
         return $data['last_insert_id'];
+    }
+
+    /**
+     * 添加需要执行任务数据（写入Mysql、Redis）
+     * @param $start_time
+     * @param $command
+     * @param $type
+     */
+    public static function pushTask($start_time, $command, $type)
+    {
+        $date = date('Y-m-d H:i:s');
+        $execute_task = [
+            'start_time' => $start_time,
+            'command' => $command,
+            'type' => $type,
+            'create_time' => $date,
+            'update_time' => $date
+        ];
+        // 添加任务数据到MySQL
+        ExecuteTask::set($execute_task);
+
+        $last_insert_id = ExecuteTask::getInsertId();
+        $execute_task = json_encode([
+            'id' => $last_insert_id,
+            'execute_time' => $start_time,
+            'command' => $command,
+            'type' => $type,
+        ]);
+        // 添加任务数据到 redis
+        /** @var Connection $redis */
+        $redis = Yii::$app->redis;
+        $config = Yii::$app->params['task'];
+        $key = $config['key'];
+        $redis->lpush($key, $execute_task);
+        return $last_insert_id;
     }
 
     /**
@@ -195,7 +231,7 @@ TEXT;
         $task = json_decode($task, true);
         if (empty($task['execute_time']) || empty($task['command']) || empty($task['id']) || empty($task['type'])) return false;
         $after_time_ms = strtotime($task['execute_time']) - time();
-        if ($after_time_ms <= 0) return false;
+        if ($after_time_ms <= 0) $after_time_ms = 0.001;
         swoole_timer_after($after_time_ms * 1000, function () use ($task) {
             // 创建临时文件
             $tmpFile = tempnam("/tmp/", "task_");

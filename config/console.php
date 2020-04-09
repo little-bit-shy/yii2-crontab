@@ -10,6 +10,7 @@ $i18n = require(__DIR__ . '/i18n.php');
 $config = [
     'id' => 'basic-console',
     'basePath' => dirname(__DIR__),
+    'timeZone' => 'Asia/Shanghai',
     // 设置目标语言为中文
     'language' => 'zh-CN',
     // 设置源语言为英语

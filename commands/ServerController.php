@@ -65,7 +65,7 @@ class ServerController extends Controller
         // 准备任务数据
         $process = new swoole_process(function ($process) use ($serv) {
             Table::set();
-            $serv->tick(Table::$limit * 1000, function () use ($serv) {
+            $serv->tick(60000, function () use ($serv) {
                 Table::set();
             });
         });
@@ -104,6 +104,7 @@ class ServerController extends Controller
                 ExecuteTask::fail();
             });
         });
+        $this->serv->addProcess($process);
 
         // 处理异常任务预警通知
         $process = new swoole_process(function ($process) use ($serv) {
@@ -111,7 +112,6 @@ class ServerController extends Controller
                 ExecuteTask::warning();
             });
         });
-
         $this->serv->addProcess($process);
 
         $this->serv->start();

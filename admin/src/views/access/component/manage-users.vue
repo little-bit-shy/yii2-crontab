@@ -163,7 +163,7 @@
                 </Form>
 
                 <div slot="footer">
-                    <Button type="success" size="large" :loading="updateModalLoading" @click="updateData()">
+                    <Button type="success" size="large" :loading="updateModalLoading" @click="update('updateForm')">
                         确认修改
                     </Button>
                     <Button type="error" size="large" @click="updateModal = false">关闭</Button>
@@ -385,6 +385,7 @@
             visibleChange () {
                 this.allotFormError = null;
                 this.addFormError = null;
+                this.updateFormError = null;
             },
             pageChange (index) {
                 this.page = index;
@@ -396,6 +397,13 @@
                 this.$refs[name].validate((valid) => {
                     if (valid) {
                         this.addData(name);
+                    }
+                });
+            },
+            update (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.updateData(name);
                     }
                 });
             },
@@ -446,33 +454,33 @@
                     });
                 }, 1000);
             },
-            updateData () {
+            updateData (name) {
                 this.updateModalLoading = true;
                 this.async = setTimeout(() => {
-                        (new ajax()).send('/v1/auth-item/update-user', {
-                            'id': this.updateForm.id,
-                            'phone': this.updateForm.phone,
-                            'email': this.updateForm.email,
-                            'warning': this.updateForm.warning
-                        }, 'post', false).then((response) => {
-                            var data = response.data;
-                switch (data.success) {
-                    case true:
-                        this.getListData(false, 1);
-                        this.updateFormError = null;
-                        message.success('修改成功');
-                        break;
-                    case false:
-                        this.updateFormError = data.data.message;
-                        break;
-                }
-                this.updateModalLoading = false;
-            }).catch((error) => {
-                    this.updateModalLoading = false;
-                this.updateFormError = error.message;
-            }).finally(function (callee) {
-                });
-            }, 1000);
+                    (new ajax()).send('/v1/auth-item/update-user', {
+                        'id': this.updateForm.id,
+                        'phone': this.updateForm.phone,
+                        'email': this.updateForm.email,
+                        'warning': this.updateForm.warning
+                    }, 'post', false).then((response) => {
+                        var data = response.data;
+                        switch (data.success) {
+                            case true:
+                                this.getListData(false, 1);
+                                this.updateFormError = null;
+                                message.success('修改成功');
+                                break;
+                            case false:
+                                this.updateFormError = data.data.message;
+                                break;
+                        }
+                        this.updateModalLoading = false;
+                    }).catch((error) => {
+                        this.updateModalLoading = false;
+                        this.updateFormError = error.message;
+                    }).finally(function (callee) {
+                    });
+                }, 1000);
             },
             getAddModal () {
                 this.addModal = true;
