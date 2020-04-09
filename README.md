@@ -117,7 +117,7 @@ server {
 
 ![img](/help/image/5.jpg)
 
-![img](/help/image/9.jpg)
+![img](/help/image/9.png)
 
 ![img](/help/image/10.jpg)
 
