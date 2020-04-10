@@ -37,9 +37,14 @@ yii2-rest           项目目录
 
 #### 如何安装
 操作界面脚本在admin目录下，安装依赖（`npm install`）
-修改配置文件接口链接、编译脚本（`npm run build`）
 
-执行`php composer.phar install`命令对项目进行依赖安装操作
+修改配置文件接口链接`/admin/build/config.js`，ajaxUrl（后端链接）url（前端链接）
+
+编译脚本（`npm run build`）
+
+服务端项目，安装依赖(`php composer.phar install`)
+
+修改后端配置文件`/config/db.php`、`/config/redis.php`、`/config/mailer.php`
 
 #### 运行环境
 Php 7.2.7  
@@ -60,14 +65,6 @@ server {
 
     #直接输入域名进入的目录和默认解析的文件
     location / {
-        if ( $request_method = 'OPTIONS' ) {
-            add_header Access-Control-Allow-Origin *;
-            add_header Access-Control-Allow-Credentials true;
-            add_header Access-Control-Allow-Methods 'GET,POST,OPTIONS';
-            add_header 'Access-Control-Allow-Headers' 'x-access-token,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,X-Custom-Header';
-            add_header Access-Control-Max-Age 6000;
-            return 204;
-        }
         // 根据你的环境使用不同的脚本入口 prod.php、test.php、dev.php
         try_files $uri $uri/ /prod.php?s=$uri&$args;
     }
@@ -81,13 +78,16 @@ server {
     }
 }
 ```
-接口系统访问域名`http://localhost/v1/site/login`  
+接口系统访问域名`http://localhost/v1/site/login`
+
 #### 定时任务管理系统启动命令
 根据你的环境使用不同的脚本入口 yii_prod、yii_test、yii_dev
 
 任务分发服务启动`php yii_test server/index`
 
 任务代理服务启动`php yii_test client/index`
+
+代理服务可开启多个，看个人需求
 
 系统带有预警邮件通知功能
 
