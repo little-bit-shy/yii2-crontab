@@ -33,8 +33,8 @@ class Table
             }
             // 当前任务需要在self::$limit秒后的1分钟内执行
             foreach ($parseCrontab as $value) {
-                $start_time = date('Y-m-d H:i:s', $start_time + $value);
-                ExecuteTask::pushTask($start_time, $command, $type);
+                $time = date('Y-m-d H:i:s', $start_time + $value);
+                ExecuteTask::pushTask($time, $command, $type);
             }
         }
     }
