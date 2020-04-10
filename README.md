@@ -44,7 +44,7 @@ yii2-rest           项目目录
 
 服务端项目，安装依赖(`php composer.phar install`)
 
-修改后端配置文件`/config/db.php`、`/config/redis.php`、`/config/mailer.php`
+修改后端配置文件`/config/db.php`、`/config/redis.php`、`/config/mailer.php`、`/config/task.php`
 
 #### 运行环境
 Php 7.2.7  
@@ -89,6 +89,168 @@ server {
 
 代理服务可开启多个，看个人需求
 
+`注意：`
+分发服务和代理服务通讯的证书在`/commands/task/ca`下面，这里建议替换自己的证书
+
+生成证书方法在`/help/buildCa`下面
+
+```bash
+[root@localhost buildCa]# ll
+total 5
+-rwxrwxrwx. 1 root root  700 Apr 10 11:38 build.sh
+-rwxrwxrwx. 1 root root  333 Apr 10 10:52 new_ca.sh
+-rwxrwxrwx. 1 root root  635 Apr 10 11:33 new_client.sh
+-rwxrwxrwx. 1 root root  263 Apr 10 10:54 new_server.sh
+-rwxrwxrwx. 1 root root 1155 Mar  5 10:36 openssl.conf
+[root@localhost buildCa]# bash build.sh
+Usage: build.sh (start|clear)
+        start 构建证书
+        clear 清除构建证书产生的资源（所有）文件
+
+```
+
+构建证书示例
+
+```bash
+[root@localhost buildCa]# bash build.sh start
+开始构建Ca
+Generating RSA private key, 2048 bit long modulus
+....................................+++
+..................................+++
+e is 65537 (0x10001)
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:aa
+State or Province Name (full name) []:aa
+Locality Name (eg, city) [Default City]:aa
+Organization Name (eg, company) [Default Company Ltd]:aa
+Organizational Unit Name (eg, section) []:aa
+Common Name (eg, your name or your server's hostname) []:
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+Signature ok
+subject=/C=aa/ST=aa/L=aa/O=aa/OU=aa
+Getting Private key
+Using configuration from ./openssl.conf
+开始构建Server
+Generating RSA private key, 2048 bit long modulus
+................................+++
+........................................................................+++
+e is 65537 (0x10001)
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:aa
+State or Province Name (full name) []:aa
+Locality Name (eg, city) [Default City]:aa
+Organization Name (eg, company) [Default Company Ltd]:aa
+Organizational Unit Name (eg, section) []:aa
+Common Name (eg, your name or your server's hostname) []:
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+Using configuration from ./openssl.conf
+Check that the request matches the signature
+Signature ok
+The Subject's Distinguished Name is as follows
+countryName           :PRINTABLE:'aa'
+stateOrProvinceName   :ASN.1 12:'aa'
+localityName          :ASN.1 12:'aa'
+organizationName      :ASN.1 12:'aa'
+organizationalUnitName:ASN.1 12:'aa'
+Certificate is to be certified until Apr 10 03:52:40 2021 GMT (365 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+开始构建Client
+Generating RSA private key, 1024 bit long modulus
+.................................................++++++
+.................++++++
+e is 65537 (0x10001)
+Enter pass phrase for .//users/client.key:
+Verifying - Enter pass phrase for .//users/client.key:
+Enter pass phrase for .//users/client.key:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [XX]:aa
+State or Province Name (full name) []:aa
+Locality Name (eg, city) [Default City]:aa
+Organization Name (eg, company) [Default Company Ltd]:aa
+Organizational Unit Name (eg, section) []:aa
+Common Name (eg, your name or your server's hostname) []:
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+Using configuration from ./openssl.conf
+Check that the request matches the signature
+Signature ok
+The Subject's Distinguished Name is as follows
+countryName           :PRINTABLE:'aa'
+stateOrProvinceName   :ASN.1 12:'aa'
+localityName          :ASN.1 12:'aa'
+organizationName      :ASN.1 12:'aa'
+organizationalUnitName:ASN.1 12:'aa'
+Certificate is to be certified until Apr 10 03:53:05 2021 GMT (365 days)
+Sign the certificate? [y/n]:y
+
+
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+Enter pass phrase for .//users/client.key:
+Enter Export Password:
+Verifying - Enter Export Password:
+Enter Import Password:
+MAC verified OK
+Enter Import Password:
+MAC verified OK
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+[root@localhost buildCa]# ll
+total 8
+-rwxrwxrwx. 1 root root  700 Apr 10 11:38 build.sh
+-rwxrwxrwx. 1 root root  116 Apr 10 11:53 index.txt
+-rwxrwxrwx. 1 root root   20 Apr 10 11:53 index.txt.attr
+-rwxrwxrwx. 1 root root   20 Apr 10 11:52 index.txt.attr.old
+-rwxrwxrwx. 1 root root   58 Apr 10 11:52 index.txt.old
+-rwxrwxrwx. 1 root root  333 Apr 10 10:52 new_ca.sh
+drwxrwxrwx. 1 root root    0 Apr 10 11:53 newcerts
+-rwxrwxrwx. 1 root root  635 Apr 10 11:33 new_client.sh
+-rwxrwxrwx. 1 root root  263 Apr 10 10:54 new_server.sh
+-rwxrwxrwx. 1 root root 1155 Mar  5 10:36 openssl.conf
+drwxrwxrwx. 1 root root    0 Apr 10 11:52 private
+-rwxrwxrwx. 1 root root    5 Apr 10 11:53 serial
+-rwxrwxrwx. 1 root root    5 Apr 10 11:52 serial.old
+drwxrwxrwx. 1 root root    0 Apr 10 11:52 server
+drwxrwxrwx. 1 root root    0 Apr 10 11:53 users
+```
 系统带有预警邮件通知功能
 
 使用预警功能前只需修改指定配置文件即可
