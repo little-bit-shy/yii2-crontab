@@ -275,34 +275,31 @@ drwxrwxrwx. 1 root root    0 Apr 10 11:53 users
 
 使用预警功能前只需修改指定配置文件即可
 
-![img](https://oscimg.oschina.net/oscnet/up-5717a310aa58234b9ba8abffc920e6783be.png)
+![img](/help/image/8.jpg)
 
 只需在后台指定接收通知的用户即可
 
-![img](https://oscimg.oschina.net/oscnet/up-ab7e33b8dcedd403c1dc5e21f923b905fdb.png)
+![img](/help/image/7.jpg)
 
 邮件效果展示
 
-![img](https://oscimg.oschina.net/oscnet/up-0958b9d1ae3512900957bd57538a80ebe97.png)
+![img](/help/image/6.jpg)
 
 
 #### 效果展示
 初始化账号密码 root/123456
 
-![img](https://oscimg.oschina.net/oscnet/up-77f8522e3194737bd9d798bd61c74c72424.png)
+![img](/help/image/1.jpg)
 
-![img](https://oscimg.oschina.net/oscnet/up-a6b3ea64123c0e1358c2b1c70a21a6fd4ba.png)
+![img](/help/image/2.jpg)
 
-![img](https://oscimg.oschina.net/oscnet/up-f4e202dfa1a12f49960250c7bc62dc7581b.png)
+![img](/help/image/3.jpg)
 
-![img](https://oscimg.oschina.net/oscnet/up-74af3e32ae924aba97f57783edeff9901ac.png)
+![img](/help/image/4.jpg)
 
-![img](https://oscimg.oschina.net/oscnet/up-acd0face54bdd60665f4d1152b72d8b5ea8.png)
+![img](/help/image/5.jpg)
 
-![img](https://oscimg.oschina.net/oscnet/up-5edc2fafa7ad1bbfe33d717f194d28d4258.png)
+![img](/help/image/9.png)
 
-![img](https://oscimg.oschina.net/oscnet/up-21d29e48b636bc905dc091ba6a5091616ea.png)
-
-
-
+![img](/help/image/10.jpg)
 
