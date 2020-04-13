@@ -11,7 +11,6 @@ namespace app\commands;
 
 use app\components\Kafka;
 use app\models\DynamicModel;
-use yii\console\Controller;
 use yii\console\Exception;
 use yii\helpers\Console;
 

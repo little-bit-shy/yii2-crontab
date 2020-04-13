@@ -8,14 +8,15 @@
 namespace app\commands;
 
 use app\commands\task\ExecuteTask;
-use yii\console\Controller;
 use swoole_client;
 use swoole_process;
 use Swoole\Process;
 use Yii;
+use yii\console\Exception;
+use yii\console\ExitCode;
 
 /**
- * Class ClientController
+ * 异步任务代理端
  * @package app\commands
  */
 class ClientController extends Controller
@@ -38,6 +39,11 @@ class ClientController extends Controller
 
     public function actionIndex()
     {
+        $this->checkSome();
+        if ($this->some == 'stop') {
+            return ExitCode::OK;
+        }
+
         $this->client = new swoole_client(SWOOLE_SOCK_TCP | SWOOLE_SSL, SWOOLE_SOCK_ASYNC);
         $this->client->set([
             'open_eof_split' => true,
@@ -91,7 +97,10 @@ class ClientController extends Controller
      */
     public function onClose($cli)
     {
+        sleep(1);
         echo "Client close connection\n";
+        // 重连
+        $this->client->connect($this->host, $this->port, $this->timeout);
     }
 
     /**
@@ -99,7 +108,10 @@ class ClientController extends Controller
      */
     public function onError($cli)
     {
+        sleep(1);
         echo "Client error\n";
+        // 重连
+        $this->client->connect($this->host, $this->port, $this->timeout);
     }
 
     /**

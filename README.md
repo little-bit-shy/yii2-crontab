@@ -83,11 +83,11 @@ server {
 #### 定时任务管理系统启动命令
 根据你的环境使用不同的脚本入口 yii_prod、yii_test、yii_dev
 
-任务分发服务启动`php yii_test server/index`
+任务分发服务启动`php yii_test server/index [-s start|stop|restart]`
 
-任务代理服务启动`php yii_test client/index`
+任务代理服务启动`php yii_test client/index [-s start|stop|restart]`
 
-代理服务可开启多个，看个人需求
+代理服务可在多个服务器上开启，看个人需求
 
 `注意：`
 分发服务和代理服务通讯的证书在`/commands/task/ca`下面，这里建议替换自己的证书

@@ -10,13 +10,14 @@ namespace app\commands;
 use app\commands\task\Client;
 use app\commands\task\ExecuteTask;
 use app\commands\task\Table;
-use yii\console\Controller;
 use swoole_server;
 use swoole_process;
 use Yii;
+use yii\console\Exception;
+use yii\console\ExitCode;
 
 /**
- * Class ServerController
+ * 异步任务服务端
  * @package app\commands
  */
 class ServerController extends Controller
@@ -37,6 +38,11 @@ class ServerController extends Controller
 
     public function actionIndex()
     {
+        $this->checkSome();
+        if ($this->some == 'stop') {
+            return ExitCode::OK;
+        }
+
         $this->serv = new swoole_server($this->host, $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP | SWOOLE_SSL);
         $this->serv->set(array(
             'worker_num' => 8,
